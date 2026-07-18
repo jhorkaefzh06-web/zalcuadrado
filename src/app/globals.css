@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f8fafc;
+  --color-brand-100: #f1f5f9;
+  --color-brand-200: #e2e8f0;
+  --color-brand-300: #cbd5e1;
+  --color-brand-400: #94a3b8;
+  --color-brand-500: #64748b;
+  --color-brand-600: #475569;
+  --color-brand-700: #334155;
+  --color-brand-800: #1e293b;
+  --color-brand-900: #0f172a;
+  --color-brand-950: #020617;
+
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-900: #312e81;
+
+  --color-accent-pink: #ec4899;
+  --color-accent-rose: #f43f5e;
+  --color-accent-amber: #f59e0b;
+
+  --font-sans: var(--font-geist-sans), Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-border: rgba(226, 232, 240, 0.8);
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-border: rgba(30, 41, 59, 0.8);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+}
+
+/* Swiper.js premium styles overrides */
+.swiper-button-next,
+.swiper-button-prev {
+  --swiper-navigation-size: 12px !important;
+  color: var(--color-primary-600) !important;
+  background: rgba(255, 255, 255, 0.9);
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: all 0.2s ease;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+body .swiper-button-next:after,
+body .swiper-button-prev:after {
+  font-size: 12px !important;
+  font-weight: bold;
+  line-height: 1 !important;
+}
+
+/* Fix: el SVG interno de Swiper tiene width/height:100% por defecto,
+   lo que lo estira hasta los 44px del contenedor. Se fija a 20px. */
+body .swiper-button-next svg,
+body .swiper-button-prev svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: var(--color-primary-600) !important;
+  color: white !important;
+  transform: scale(1.1);
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--color-primary-600) !important;
+  width: 24px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-300);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-brand-700);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-500);
+}
