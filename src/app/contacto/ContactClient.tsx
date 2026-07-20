@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle2, Clock, AlertTriangle, Wine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -32,7 +32,7 @@ export default function ContactClient() {
         setFormData((prev) => ({
           ...prev,
           subject: `Cotización: ${selectedService.name}`,
-          message: `Hola ZetaCorp,\n\nMe interesa solicitar una cotización formal y obtener más detalles sobre el servicio de "${selectedService.name}". Quedo atento a su respuesta.\n\nSaludos.`,
+          message: `Hola Zeta Spirits,\n\nMe interesa solicitar una cotización sobre el servicio de "${selectedService.name}". Quedo atento a su respuesta.\n\nSaludos.`,
         }));
       }
     }
@@ -82,21 +82,21 @@ export default function ContactClient() {
     <div className="w-full pb-20">
       {/* 1. Header Banner */}
       <section className="relative h-[30vh] md:h-[40vh] bg-brand-900 flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-brand-950/70 z-10" />
+        <div className="absolute inset-0 bg-brand-950/75 z-10" />
         <img
-          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1600&auto=format&fit=crop"
-          alt="Contacto ZetaCorp"
+          src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
+          alt="Contacto Zeta Spirits"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 z-20 flex flex-col justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
-          <span className="text-xs uppercase tracking-widest text-primary-400 font-semibold mb-2">
-            Estamos para Ayudarte
+          <span className="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2">
+            Atención al Cliente & Cava
           </span>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
             Contáctanos
           </h1>
           <p className="text-lg text-brand-300 max-w-xl mt-4">
-            Escríbenos tus dudas o cotizaciones y un especialista te responderá en menos de 24 horas.
+            Escríbenos tus consultas sobre pedidos express, cotizaciones para eventos o asesoría de sommeliers.
           </p>
         </div>
       </section>
@@ -109,10 +109,10 @@ export default function ContactClient() {
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold tracking-tight text-brand-900 dark:text-white">
-                Información de Contacto
+                Información de Cava
               </h2>
               <p className="text-xs sm:text-sm text-brand-500 dark:text-brand-400 leading-relaxed">
-                ¿Prefieres hablar directamente? Escríbenos a nuestro correo corporativo o llámanos a nuestras líneas de atención.
+                ¿Deseas atención inmediata para un pedido? Escríbenos directamente o visítanos en nuestra cava boutique.
               </p>
             </div>
 
@@ -120,36 +120,36 @@ export default function ContactClient() {
             <div className="space-y-4">
               {/* Address */}
               <div className="flex items-start space-x-4 p-5 glass rounded-2xl">
-                <div className="p-3 bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400 rounded-xl">
+                <div className="p-3 bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 rounded-xl">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Nuestra Oficina</h4>
-                  <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">Av. Innovación 101, Piso 5, San Isidro, Lima - Perú</p>
+                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Cava Principal</h4>
+                  <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">Av. Las Cavas 450, Miraflores, Lima - Perú</p>
                 </div>
               </div>
 
               {/* Phones */}
               <div className="flex items-start space-x-4 p-5 glass rounded-2xl">
-                <div className="p-3 bg-accent-pink/10 text-accent-pink rounded-xl">
+                <div className="p-3 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 rounded-xl">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Teléfonos de Atención</h4>
-                  <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">+51 (1) 400-9876 / +51 987 654 321</p>
+                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Teléfonos & WhatsApp 24/7</h4>
+                  <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">+51 987 654 321 / +51 (1) 400-9876</p>
                 </div>
               </div>
 
               {/* Email */}
               <div className="flex items-start space-x-4 p-5 glass rounded-2xl">
-                <div className="p-3 bg-accent-amber/10 text-accent-amber rounded-xl">
+                <div className="p-3 bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 rounded-xl">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Correo Electrónico</h4>
+                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Correo de Pedidos</h4>
                   <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">
-                    <a href="mailto:hola@zetacorp.com" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                      hola@zetacorp.com
+                    <a href="mailto:pedidos@zetaspirits.com" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+                      pedidos@zetaspirits.com
                     </a>
                   </p>
                 </div>
@@ -161,22 +161,21 @@ export default function ContactClient() {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Horario de Operaciones</h4>
-                  <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+                  <h4 className="text-sm font-bold text-brand-900 dark:text-white">Horario de Atención</h4>
+                  <p className="text-xs text-brand-500 dark:text-brand-400 mt-1">Delivery Express: 24 Horas / 7 Días a la semana</p>
                 </div>
               </div>
             </div>
 
             {/* Google map iframe with premium styling filter */}
             <div className="w-full h-64 rounded-3xl overflow-hidden shadow-md border border-brand-200/50 dark:border-brand-850 relative">
-              {/* Map container with filter applying automatically */}
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.37894263155!2d-77.0319717!3d-12.0861183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c865fa55e8c1%3A0x7d6f5cfa4ff819c9!2sSan%20Isidro%2C%20Lima!5e0!3m2!1ses-419!2spe!4v1680000000000!5m2!1ses-419!2spe"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.37894263155!2d-77.0319717!3d-12.0861183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c865fa55e8c1%3A0x7d6f5cfa4ff819c9!2sMiraflores%2C%20Lima!5e0!3m2!1ses-419!2spe!4v1680000000000!5m2!1ses-419!2spe"
                 className="w-full h-full border-0 dark:brightness-[0.85] dark:contrast-[1.1] dark:hue-rotate-[180deg] dark:invert"
                 allowFullScreen={false}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Mapa de San Isidro"
+                title="Mapa de Miraflores"
               ></iframe>
             </div>
 
@@ -186,8 +185,8 @@ export default function ContactClient() {
           <div className="lg:col-span-7">
             <div className="glass p-8 md:p-10 rounded-3xl space-y-6">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400">
-                  <MessageSquare className="w-5 h-5" />
+                <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                  <Wine className="w-5 h-5" />
                 </div>
                 <h3 className="text-xl font-bold text-brand-900 dark:text-white">Envíanos un Mensaje</h3>
               </div>
@@ -208,8 +207,8 @@ export default function ContactClient() {
                       value={formData.name}
                       onChange={handleChange}
                       disabled={status === 'submitting'}
-                      placeholder="Ej. Juan Pérez"
-                      className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 text-brand-850 dark:text-brand-200 disabled:opacity-50"
+                      placeholder="Ej. Carlos Mendoza"
+                      className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-brand-850 dark:text-brand-200 disabled:opacity-50"
                     />
                   </div>
 
@@ -226,17 +225,17 @@ export default function ContactClient() {
                       value={formData.email}
                       onChange={handleChange}
                       disabled={status === 'submitting'}
-                      placeholder="Ej. juan@correo.com"
-                      className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 text-brand-850 dark:text-brand-200 disabled:opacity-50"
+                      placeholder="tu@email.com"
+                      className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-brand-850 dark:text-brand-200 disabled:opacity-50"
                     />
                   </div>
                 </div>
 
-                {/* Subject input */}
+                {/* Subject */}
                 <div className="space-y-1.5">
                   <label htmlFor="contact-subject" className="text-xs font-bold text-brand-500 dark:text-brand-400 uppercase tracking-wide">
                     Asunto *
-                    </label>
+                  </label>
                   <input
                     type="text"
                     id="contact-subject"
@@ -245,12 +244,12 @@ export default function ContactClient() {
                     value={formData.subject}
                     onChange={handleChange}
                     disabled={status === 'submitting'}
-                    placeholder="Ej. Cotización de Equipos / Consulta Técnica"
-                    className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 text-brand-850 dark:text-brand-200 disabled:opacity-50"
+                    placeholder="Ej. Consulta de cata privada / Cotización de evento"
+                    className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-brand-850 dark:text-brand-200 disabled:opacity-50"
                   />
                 </div>
 
-                {/* Message input */}
+                {/* Message */}
                 <div className="space-y-1.5">
                   <label htmlFor="contact-message" className="text-xs font-bold text-brand-500 dark:text-brand-400 uppercase tracking-wide">
                     Mensaje *
@@ -263,8 +262,8 @@ export default function ContactClient() {
                     value={formData.message}
                     onChange={handleChange}
                     disabled={status === 'submitting'}
-                    placeholder="Escribe tu mensaje o detalles de cotización..."
-                    className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 text-brand-850 dark:text-brand-200 disabled:opacity-50 resize-y"
+                    placeholder="Escribe tu consulta o detalles del pedido..."
+                    className="w-full px-4 py-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-brand-850 dark:text-brand-200 disabled:opacity-50 resize-y"
                   ></textarea>
                 </div>
 
@@ -287,10 +286,10 @@ export default function ContactClient() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="p-4 rounded-xl bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-400 text-xs font-semibold flex items-center space-x-2.5"
+                      className="p-4 rounded-xl bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-400 text-xs font-semibold flex items-center space-x-2"
                     >
                       <CheckCircle2 className="w-4 h-4 shrink-0" />
-                      <span>¡Mensaje enviado con éxito! Nos comunicaremos contigo muy pronto.</span>
+                      <span>¡Mensaje enviado con éxito! Un sommelier se pondrá en contacto pronto.</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -299,21 +298,17 @@ export default function ContactClient() {
                 <button
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="w-full py-3.5 bg-gradient-to-r from-primary-600 to-accent-pink hover:from-primary-700 hover:to-accent-rose text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:scale-100 transition-all flex items-center justify-center space-x-2"
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700 text-white font-bold text-sm shadow-md flex items-center justify-center space-x-2 disabled:opacity-50 transition-all hover:scale-[1.01] active:scale-[0.99]"
                 >
                   {status === 'submitting' ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Enviando...</span>
-                    </>
+                    <span>Enviando mensaje...</span>
                   ) : (
                     <>
+                      <span>Enviar Mensaje a Cava</span>
                       <Send className="w-4 h-4" />
-                      <span>Enviar Mensaje</span>
                     </>
                   )}
                 </button>
-
               </form>
             </div>
           </div>

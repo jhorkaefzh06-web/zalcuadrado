@@ -1,35 +1,35 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Target, Compass, Users, Trophy, Award, Heart, Sparkles } from 'lucide-react';
+import { Target, Compass, Users, Trophy, Award, Heart, Wine } from 'lucide-react';
 
 const METRICS = [
-  { id: 1, val: '10+', label: 'Años de Trayectoria', desc: 'Liderando el mercado corporativo y minorista.', icon: Trophy },
-  { id: 2, val: '15k+', label: 'Clientes Felices', desc: 'Profesionales y empresas de todo el país.', icon: Users },
-  { id: 3, val: '120+', label: 'Productos Premium', desc: 'Dispositivos y mobiliario homologado.', icon: Award },
-  { id: 4, val: '99.8%', label: 'Soporte Exitoso', desc: 'Índice de satisfacción en instalaciones.', icon: Heart },
+  { id: 1, val: '15+', label: 'Años en la Industria', desc: 'Seleccionando las mejores etiquetas de todo el mundo.', icon: Trophy },
+  { id: 2, val: '50k+', label: 'Botellas Descorchadas', desc: 'Entregadas con la garantía de conservación en cava.', icon: Users },
+  { id: 3, val: '300+', label: 'Etiquetas Exclusivas', desc: 'Single Malts, Gran Reserva y Champagnes AOC.', icon: Award },
+  { id: 4, val: '45 min', label: 'Delivery Express', desc: 'Promedio de entrega fría lista para celebrar.', icon: Heart },
 ];
 
 const TEAM = [
   {
     id: 1,
-    name: 'Alejandro Rossi',
-    role: 'Director General & Fundador',
-    bio: 'Más de 15 años liderando proyectos de transformación digital y desarrollo de mobiliario ergonómico en Latinoamérica.',
+    name: 'Jean-Luc Moreau',
+    role: 'Master Sommelier & Director de Cava',
+    bio: 'Sommelier certificado internacionalmente con 18 años de experiencia en viñedos de Burdeos, Escocia y Mendoza.',
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop',
   },
   {
     id: 2,
-    name: 'Valeria Benítez',
-    role: 'Directora de UX y Ergonomía',
-    bio: 'Especialista en medicina ocupacional y diseño de interfaces físicas. Apasionada por mejorar la salud en el trabajo.',
+    name: 'Valeria Sotomayor',
+    role: 'Head Mixologist & Directora de Catas',
+    bio: 'Campeona nacional de mixología. Diseñadora de cartas de tragos de autor y directora de catas privadas.',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop',
   },
   {
     id: 3,
-    name: 'Mateo Shin',
-    role: 'Director de Innovación Tecnológica',
-    bio: 'Ingeniero de sistemas enfocado en domótica integrada, IoT y optimización de redes inteligentes para el hogar.',
+    name: 'Alejandro Rossi',
+    role: 'Fundador & Especialista en Destilados',
+    bio: 'Coleccionista de whiskies raros y apasionado por la cultura de los destilados artesanales de alta gama.',
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop',
   },
 ];
@@ -40,19 +40,19 @@ export default function QuienesSomos() {
       
       {/* 1. Header Banner */}
       <section className="relative h-[35vh] md:h-[45vh] bg-brand-900 flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-brand-950/70 z-10" />
+        <div className="absolute inset-0 bg-brand-950/75 z-10" />
         <img
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1600&auto=format&fit=crop"
-          alt="Corporativo"
+          src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
+          alt="Cava de vinos"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 z-20 flex flex-col justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
           <motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-xs uppercase tracking-widest text-primary-400 font-semibold mb-2"
+            className="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2"
           >
-            Nuestra Esencia
+            Nuestra Historia
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -60,7 +60,7 @@ export default function QuienesSomos() {
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-5xl font-extrabold tracking-tight"
           >
-            Quiénes Somos
+            Nuestra Cava & Tradición
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ export default function QuienesSomos() {
             transition={{ delay: 0.2 }}
             className="text-lg text-brand-300 max-w-xl mt-4"
           >
-            Conoce el origen, los valores y el equipo humano detrás de ZetaCorp.
+            Conoce la pasión por los destilados finos, los vinos de autor y el equipo detrás de Zeta Spirits.
           </motion.p>
         </div>
       </section>
@@ -83,17 +83,17 @@ export default function QuienesSomos() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="inline-flex p-3 rounded-xl bg-primary-100 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400">
-              <Sparkles className="w-6 h-6" />
+            <div className="inline-flex p-3 rounded-xl bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
+              <Wine className="w-6 h-6" />
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              Nuestra Trayectoria e Historia
+              Una Pasión por la Alta Coctelería y Enología
             </h2>
             <p className="text-brand-600 dark:text-brand-300 leading-relaxed text-sm">
-              Fundada en 2016, ZetaCorp nació de una premisa fundamental: el entorno físico y tecnológico influye directamente en nuestro bienestar mental y físico. Comenzamos como una pequeña consultora de ergonomía en Lima y rápidamente evolucionamos al ver la necesidad de productos de alta fidelidad que se ajustaran a las exigencias modernas del trabajo remoto e híbrido.
+              Zeta Spirits nació con el objetivo de elevar la experiencia de compra de bebidas alcohólicas y licores de alta gama. Lo que inició como una cava privada de vinos y whiskies escoceses de colección en Miraflores se convirtió rápidamente en la plataforma referente de licores premium y delivery express en frío.
             </p>
             <p className="text-brand-600 dark:text-brand-300 leading-relaxed text-sm">
-              Hoy en día, somos un referente regional en el equipamiento de oficinas y hogares inteligentes. No nos limitamos a vender muebles o gadgets; diseñamos ecosistemas completos integrando tecnologías de domótica de bajo consumo con soluciones de postura corporal premium, garantizando confort duradero y eficiencia óptima.
+              No vendemos simples botellas; brindamos momentos inolvidables. Cada etiqueta en nuestro catálogo pasa por un estricto proceso de selección llevado a cabo por nuestros sommeliers, garantizando la perfecta procedencia, temperatura óptima de almacenamiento y autenticidad del producto.
             </p>
           </motion.div>
 
@@ -103,12 +103,12 @@ export default function QuienesSomos() {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary-400/10 rounded-full filter blur-3xl" />
-            <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-accent-pink/10 rounded-full filter blur-3xl" />
+            <div className="absolute -top-4 -left-4 w-72 h-72 bg-amber-500/10 rounded-full filter blur-3xl" />
+            <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-red-600/10 rounded-full filter blur-3xl" />
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-brand-200/50 dark:border-brand-850">
               <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop"
-                alt="Colaboradores ZetaCorp"
+                src="https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop"
+                alt="Cava de Whiskies"
                 className="w-full h-[400px] object-cover"
               />
             </div>
@@ -129,12 +129,12 @@ export default function QuienesSomos() {
               viewport={{ once: true }}
               className="glass p-8 md:p-10 rounded-3xl space-y-4"
             >
-              <div className="p-3 rounded-2xl bg-primary-100 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 w-fit">
+              <div className="p-3 rounded-2xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 w-fit">
                 <Target className="w-6 h-6" />
               </div>
               <h3 className="text-2xl font-bold tracking-tight">Nuestra Misión</h3>
               <p className="text-brand-600 dark:text-brand-300 text-sm leading-relaxed">
-                Empoderar a profesionales y organizaciones proporcionando herramientas ergonómicas de vanguardia y tecnologías inteligentes integradas que fomenten la salud, incrementen la eficiencia laboral y transformen los espacios cotidianos en lugares inspiradores.
+                Conectar a los amantes del buen beber con las botellas más exclusivas de todo el mundo, brindando un servicio de delivery ultra veloz en frío, asesoría personalizada de sommelier y experiencias de cata memorables.
               </p>
             </motion.div>
 
@@ -146,12 +146,12 @@ export default function QuienesSomos() {
               transition={{ delay: 0.15 }}
               className="glass p-8 md:p-10 rounded-3xl space-y-4"
             >
-              <div className="p-3 rounded-2xl bg-accent-pink/10 text-accent-pink w-fit">
+              <div className="p-3 rounded-2xl bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 w-fit">
                 <Compass className="w-6 h-6" />
               </div>
               <h3 className="text-2xl font-bold tracking-tight">Nuestra Visión</h3>
               <p className="text-brand-600 dark:text-brand-300 text-sm leading-relaxed">
-                Ser la marca líder y referente absoluto en soluciones integradas de bienestar ergonómico y tecnología para el hogar en Latinoamérica, destacando por nuestro compromiso constante con la innovación, el ecodiseño y el soporte técnico especializado.
+                Convertirnos en la cava digital de licores luxury más importante y confiable del país, reconocida por nuestro estándar de calidad, innovación en maridaje y compromiso con la cultura enológica.
               </p>
             </motion.div>
 
@@ -173,10 +173,10 @@ export default function QuienesSomos() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center space-y-2.5 p-6 rounded-2xl hover:bg-brand-100/50 dark:hover:bg-brand-900/10 transition-colors"
               >
-                <div className="p-4 rounded-full bg-brand-100 dark:bg-brand-900 text-primary-600 dark:text-primary-400 w-fit mx-auto shadow-sm">
+                <div className="p-4 rounded-full bg-brand-100 dark:bg-brand-900 text-amber-600 dark:text-amber-400 w-fit mx-auto shadow-sm">
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-4xl font-extrabold text-brand-900 dark:text-white pt-2 bg-gradient-to-r from-primary-600 to-accent-pink bg-clip-text text-transparent">
+                <h3 className="text-4xl font-extrabold text-brand-900 dark:text-white pt-2 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
                   {metric.val}
                 </h3>
                 <h4 className="text-sm font-bold tracking-tight text-brand-800 dark:text-brand-200">
@@ -195,14 +195,14 @@ export default function QuienesSomos() {
       <section className="bg-brand-100 dark:bg-brand-900/30 py-16 md:py-24 border-t border-brand-200/50 dark:border-brand-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">
-              Liderazgo
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+              Expertos en Cava
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mt-2">
-              Nuestro Equipo Directivo
+              Nuestro Equipo de Sommeliers & Mixólogos
             </h2>
             <p className="text-brand-500 dark:text-brand-400 mt-3">
-              Conoce a las mentes innovadoras que dirigen la estrategia de ZetaCorp hacia el futuro.
+              Conoce a los profesionales encargados de curar nuestra cava y garantizar la máxima excelencia.
             </p>
           </div>
 
@@ -227,7 +227,7 @@ export default function QuienesSomos() {
                   <h3 className="text-lg font-bold text-brand-900 dark:text-white">
                     {member.name}
                   </h3>
-                  <span className="inline-block text-xs font-semibold px-2.5 py-1 bg-primary-100 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 rounded-lg">
+                  <span className="inline-block text-xs font-semibold px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 rounded-lg">
                     {member.role}
                   </span>
                   <p className="text-xs text-brand-600 dark:text-brand-400 leading-relaxed pt-2">

@@ -13,16 +13,16 @@
   --color-brand-900: #0f172a;
   --color-brand-950: #020617;
 
-  --color-primary-50: #eef2ff;
-  --color-primary-100: #e0e7ff;
-  --color-primary-500: #6366f1;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --color-primary-900: #312e81;
+  --color-primary-50: #fffbeb;
+  --color-primary-100: #fef3c7;
+  --color-primary-500: #f59e0b;
+  --color-primary-600: #d97706;
+  --color-primary-700: #b45309;
+  --color-primary-900: #78350f;
 
-  --color-accent-pink: #ec4899;
-  --color-accent-rose: #f43f5e;
-  --color-accent-amber: #f59e0b;
+  --color-accent-pink: #dc2626;
+  --color-accent-rose: #991b1b;
+  --color-accent-amber: #d97706;
 
   --font-sans: var(--font-geist-sans), Arial, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
@@ -81,8 +81,6 @@ body .swiper-button-prev:after {
   line-height: 1 !important;
 }
 
-/* Fix: el SVG interno de Swiper tiene width/height:100% por defecto,
-   lo que lo estira hasta los 44px del contenedor. Se fija a 20px. */
 body .swiper-button-next svg,
 body .swiper-button-prev svg {
   width: 20px !important;
@@ -124,4 +122,32 @@ body .swiper-button-prev svg {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-500);
+}
+
+/* --- EFECTO 3D BOTELLA PARALLAX --- */
+.contenedor-3d {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.botella-3d {
+  border-radius: 20px;
+  animation: flotar 5s ease-in-out infinite;
+  transition: transform 0.1s ease-out;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(245, 158, 11, 0.2);
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+@keyframes flotar {
+  0%, 100% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotateZ(1.5deg);
+  }
 }

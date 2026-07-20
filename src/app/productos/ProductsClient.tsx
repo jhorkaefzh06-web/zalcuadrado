@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, FreeMode } from 'swiper/modules';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -133,16 +134,16 @@ export default function ProductsClient() {
     <div className="w-full pb-16">
       {/* 1. Sutil Header Banner (Not very tall) */}
       <section className="relative h-[20vh] bg-brand-900 flex items-center overflow-hidden border-b border-brand-850">
-        <div className="absolute inset-0 bg-brand-950/60 z-10" />
+        <div className="absolute inset-0 bg-brand-950/70 z-10" />
         <img
-          src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1600&auto=format&fit=crop"
-          alt="Banner Productos"
+          src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
+          alt="Cava de Licores"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 z-20 flex items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-white">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Catálogo de Productos</h1>
-            <p className="text-xs sm:text-sm text-brand-300 mt-1">Explora mobiliario y accesorios optimizados para tu espacio.</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Catálogo de Licores & Cava</h1>
+            <p className="text-xs sm:text-sm text-brand-300 mt-1">Explora nuestra selección exclusiva de whiskies, vinos, rones y licores premium.</p>
           </div>
         </div>
       </section>
@@ -153,8 +154,8 @@ export default function ProductsClient() {
         {/* 2. Horizontal Categories Carousel (Swiper.js) */}
         <section id="categories-carousel" className="mb-10 w-full relative">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-brand-500 dark:text-brand-400">Categorías</h3>
-            <span className="text-xs text-primary-600 dark:text-primary-400 font-semibold md:hidden">Desliza para ver más →</span>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Categorías</h3>
+            <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold md:hidden">Desliza para ver más →</span>
           </div>
 
           <Swiper
@@ -174,12 +175,12 @@ export default function ProductsClient() {
                 }}
                 className={`flex items-center space-x-2 px-5 py-3 rounded-2xl text-sm font-semibold transition-all border shadow-sm ${
                   selectedCategory === 'todos'
-                    ? 'bg-gradient-to-r from-primary-600 to-accent-pink text-white border-transparent'
+                    ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-transparent'
                     : 'bg-white dark:bg-brand-900 border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-brand-850'
                 }`}
               >
                 <Icons.Grid className="w-4 h-4" />
-                <span>Todos los Productos</span>
+                <span>Todos los Licores</span>
               </button>
             </SwiperSlide>
 
@@ -192,7 +193,7 @@ export default function ProductsClient() {
                   }}
                   className={`flex items-center space-x-2 px-5 py-3 rounded-2xl text-sm font-semibold transition-all border shadow-sm ${
                     selectedCategory === cat.id
-                      ? 'bg-gradient-to-r from-primary-600 to-accent-pink text-white border-transparent'
+                      ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-transparent'
                       : 'bg-white dark:bg-brand-900 border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-brand-850'
                   }`}
                 >
@@ -451,24 +452,26 @@ export default function ProductsClient() {
                       transition={{ duration: 0.3 }}
                       className="glass rounded-3xl overflow-hidden flex flex-col hover:shadow-lg transition-all border border-brand-200/50 dark:border-brand-800/50"
                     >
-                      {/* Image header */}
-                      <div className="relative aspect-square w-full bg-brand-100 dark:bg-brand-900/50 overflow-hidden">
-                        {product.isPromo && (
-                          <span className="absolute top-3 left-3 z-10 px-2.5 py-1 text-xs font-bold text-white bg-accent-rose rounded-lg shadow-sm">
-                            -{discount}%
-                          </span>
-                        )}
-                        {product.countInStock <= 5 && (
-                          <span className="absolute top-3 right-3 z-10 px-2 py-0.5 text-[10px] font-bold text-white bg-accent-amber rounded-lg shadow-sm">
-                            Solo {product.countInStock} disp.
-                          </span>
-                        )}
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
+                      {/* Image header — clickable */}
+                      <Link href={`/productos/${product.id}`} className="block">
+                        <div className="relative aspect-square w-full bg-brand-100 dark:bg-brand-900/50 overflow-hidden">
+                          {product.isPromo && (
+                            <span className="absolute top-3 left-3 z-10 px-2.5 py-1 text-xs font-bold text-white bg-accent-rose rounded-lg shadow-sm">
+                              -{discount}%
+                            </span>
+                          )}
+                          {product.countInStock <= 5 && (
+                            <span className="absolute top-3 right-3 z-10 px-2 py-0.5 text-[10px] font-bold text-white bg-accent-amber rounded-lg shadow-sm">
+                              Solo {product.countInStock} disp.
+                            </span>
+                          )}
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      </Link>
 
                       {/* Info details */}
                       <div className="p-5 flex-grow flex flex-col justify-between space-y-4">
@@ -476,9 +479,11 @@ export default function ProductsClient() {
                           <span className="text-xs uppercase font-bold text-brand-400 tracking-wider">
                             {product.brand}
                           </span>
-                          <h4 className="text-base font-bold text-brand-900 dark:text-white line-clamp-1">
-                            {product.name}
-                          </h4>
+                          <Link href={`/productos/${product.id}`}>
+                            <h4 className="text-base font-bold text-brand-900 dark:text-white line-clamp-1 hover:text-primary-500 transition-colors">
+                              {product.name}
+                            </h4>
+                          </Link>
                           <p className="text-xs text-brand-500 dark:text-brand-400 line-clamp-2 pt-1 h-8">
                             {product.description}
                           </p>
@@ -508,13 +513,13 @@ export default function ProductsClient() {
                               </span>
                             )}
                           </div>
-                          <button
-                            onClick={() => alert(`Añadiste "${product.name}" al carrito (Demostración)`)}
-                            className="p-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white transition-colors"
-                            aria-label="Agregar al carrito"
+                          <Link
+                            href={`/productos/${product.id}`}
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors"
                           >
-                            <Icons.ShoppingCart className="w-4 h-4" />
-                          </button>
+                            Ver ficha
+                            <Icons.ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
                         </div>
                       </div>
                     </motion.div>

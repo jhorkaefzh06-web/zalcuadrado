@@ -3,17 +3,28 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Sun, Moon, Sparkles } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
   { name: 'Inicio', path: '/' },
   { name: 'Quiénes Somos', path: '/quienes-somos' },
-  { name: 'Productos', path: '/productos' },
-  { name: 'Servicios', path: '/servicios' },
-  { name: 'Noticias', path: '/noticias' },
-  { name: 'Contacto', path: '/contacto' },
+  { name: 'Hielos', path: '/productos?category=hielos' },
+  { name: 'Bebidas', path: '/productos?category=bebidas' },
+  { name: 'Promociones', path: '/productos?filter=promo' },
 ];
+
+export function BrandLogo({ className = "" }: { className?: string }) {
+  return (
+    <Link href="/" className={`flex items-center group shrink-0 ${className}`}>
+      <img
+        src="/logo.png"
+        alt="Hielos & Bebidas Z² - Delivery las 24 Horas"
+        className="h-16 sm:h-20 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(245,158,11,0.35)]"
+      />
+    </Link>
+  );
+}
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -65,34 +76,27 @@ export default function Navbar() {
       id="main-navbar"
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? 'glass shadow-lg py-3 bg-white/70 dark:bg-brand-950/70 border-b border-brand-200/50 dark:border-brand-800/50'
-          : 'bg-transparent py-5'
+          ? 'shadow-md py-3 bg-white dark:bg-brand-950 border-b border-brand-200 dark:border-brand-800'
+          : 'bg-brand-950/90 backdrop-blur-md py-3.5 border-b border-brand-800/40'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between min-h-[64px]">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="p-2 rounded-xl bg-gradient-to-r from-primary-500 to-accent-pink text-white shadow-md shadow-primary-500/20 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-brand-900 to-primary-600 dark:from-white dark:to-primary-400 bg-clip-text text-transparent">
-              ZetaCorp
-            </span>
-          </Link>
+          <BrandLogo />
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
             {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.path;
+              const isActive = pathname === item.path || (item.path.includes('?') && pathname === item.path.split('?')[0]);
               return (
                 <Link
                   key={item.path}
                   href={item.path}
                   id={`nav-link-${item.name.toLowerCase().replace(' ', '-')}`}
-                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                     isActive
-                      ? 'text-primary-600 dark:text-primary-400 font-semibold'
+                      ? 'text-amber-600 dark:text-amber-400'
                       : 'text-brand-600 hover:text-brand-900 dark:text-brand-300 dark:hover:text-white'
                   }`}
                 >
@@ -100,7 +104,7 @@ export default function Navbar() {
                   {isActive && (
                     <motion.span
                       layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-primary-500 to-accent-pink rounded-full"
+                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-amber-500 to-amber-700 rounded-full"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -120,12 +124,6 @@ export default function Navbar() {
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <Link
-              href="/contacto"
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-primary-600 to-accent-pink hover:from-primary-700 hover:to-accent-rose text-white shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
-            >
-              Comenzar
-            </Link>
           </div>
 
           {/* Mobile Menu & Theme Toggle */}
@@ -157,7 +155,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-brand-200/50 dark:border-brand-800/50 bg-white/95 dark:bg-brand-950/95 overflow-hidden"
+            className="md:hidden border-t border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-950 overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
               {NAV_ITEMS.map((item) => {
@@ -169,7 +167,7 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                       isActive
-                        ? 'bg-primary-50 text-primary-600 dark:bg-primary-950/40 dark:text-primary-400 font-semibold'
+                        ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 font-semibold'
                         : 'text-brand-600 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-900/50'
                     }`}
                   >
@@ -177,15 +175,6 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-              <div className="pt-4 px-4">
-                <Link
-                  href="/contacto"
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full text-center py-3 rounded-xl font-semibold bg-gradient-to-r from-primary-600 to-accent-pink text-white shadow-md"
-                >
-                  Comenzar Ahora
-                </Link>
-              </div>
             </div>
           </motion.div>
         )}

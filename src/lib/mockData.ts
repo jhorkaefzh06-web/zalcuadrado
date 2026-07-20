@@ -53,267 +53,321 @@ export interface Category {
 
 export const CATEGORIES: Category[] = [
   {
-    id: "tecnologia",
-    name: "Tecnología",
-    description: "Dispositivos de última generación y gadgets inteligentes.",
-    icon: "Cpu",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800&auto=format&fit=crop"
+    id: "hielos",
+    name: "Hielos & Hielo Gourmet",
+    description: "Hielo cristalino en esferas, cubos macizos, escamas y hielo seco para cócteles.",
+    icon: "Sparkles",
+    image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=800&auto=format&fit=crop"
   },
   {
-    id: "hogar",
-    name: "Hogar y Decoración",
-    description: "Muebles modernos y decoración minimalista.",
-    icon: "Home",
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop"
+    id: "bebidas",
+    name: "Bebidas & Licores",
+    description: "Whiskies, Vinos reservas, Rones, Tequilas, Ginebras y Cervezas de especialidad.",
+    icon: "Wine",
+    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop"
   },
   {
-    id: "deportes",
-    name: "Deportes y Bienestar",
-    description: "Equipamiento de alto rendimiento para entrenar en casa o fuera.",
-    icon: "Activity",
-    image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop"
+    id: "whiskies",
+    name: "Whiskies & Bourbon",
+    description: "Single Malts escoceses, Bourbons añejados y ediciones limitadas.",
+    icon: "Flame",
+    image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop"
   },
   {
-    id: "oficina",
-    name: "Oficina y Productividad",
-    description: "Optimiza tu espacio de trabajo remoto con estilo.",
-    icon: "Briefcase",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop"
+    id: "vinos",
+    name: "Vinos & Champagnes",
+    description: "Tintos Gran Reserva, Blancos jóvenes, Cavas y Champagnes franceses.",
+    icon: "Wine",
+    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop"
   },
   {
-    id: "audio",
-    name: "Audio y Sonido",
-    description: "Auriculares premium y altavoces inalámbricos de alta fidelidad.",
-    icon: "Headphones",
-    image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop"
+    id: "rones-tequilas",
+    name: "Rones & Tequilas",
+    description: "Rones Solera, Tequilas 100% Agave Reposados y Mezcales artesanales.",
+    icon: "GlassWater",
+    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "ginebras",
+    name: "Ginebras & Gin",
+    description: "Ginebras premium infusionadas con botánicos exóticos de todo el mundo.",
+    icon: "Sparkles",
+    image: "https://images.unsplash.com/photo-1560512823-829485b8bf24?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "cervezas-licores",
+    name: "Cervezas & Licores Finos",
+    description: "Cervezas artesanales IPA/Stout, aperitivos digestivos y cremas.",
+    icon: "Beer",
+    image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=800&auto=format&fit=crop"
   }
 ];
 
 export const PRODUCTS: Product[] = [
   {
-    id: "p1",
-    name: "Auriculares Inalámbricos Pro ANC",
-    price: 189.99,
-    description: "Auriculares inalámbricos con cancelación activa de ruido premium, 30 horas de autonomía y sonido envolvente de alta resolución.",
-    category: "audio",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600&auto=format&fit=crop",
-    rating: 4.8,
-    brand: "SonicWave",
-    features: ["Cancelación de Ruido Activa", "Batería de 30h", "Bluetooth 5.2", "Audio de Alta Resolución"],
+    id: "ph1",
+    name: "Hielo Gourmet Esferas de Cristal (Pack x12)",
+    price: 15.00,
+    description: "Esferas de hielo cristalino de fusión ultra lenta (60mm), ideales para Whiskies Single Malt y coctelería de autor.",
+    category: "hielos",
+    image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=600&auto=format&fit=crop",
+    rating: 5.0,
+    brand: "Z² Ice",
+    features: ["Fusión Ultra Lenta", "Agua Filtrada por Ósmosis", "Cero Burbujas / Cristalino", "Set de 12 Unidades"],
     isPromo: true,
-    promoPrice: 149.99,
-    countInStock: 25
+    promoPrice: 12.00,
+    countInStock: 50
+  },
+  {
+    id: "ph2",
+    name: "Hielo Purificado en Cubos Macizos (Bolsa 5 Kg)",
+    price: 8.00,
+    description: "Cubos de hielo macizo purificado sin sabor ni olor. El complemento indispensable para tus reuniones y fiestas.",
+    category: "hielos",
+    image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4e?q=80&w=600&auto=format&fit=crop",
+    rating: 4.9,
+    brand: "Z² Ice",
+    features: ["Bolsa de 5 Kilos", "Triple Filtración UV", "Cubos Macizos", "Empaque Térmico Sellado"],
+    isPromo: false,
+    countInStock: 100
+  },
+  {
+    id: "p1",
+    name: "Whisky The Macallan 12 Años Double Cask",
+    price: 119.99,
+    description: "Un equilibrado Single Malt elaborado en barricas de roble americano y europeo sazonadas con jerez. Notas de miel, cítricos y roble equilibrado.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=600&auto=format&fit=crop",
+    rating: 4.9,
+    brand: "The Macallan",
+    features: ["12 Años de Añejamiento", "Single Malt Escocés", "40% Vol. Alcohol", "Estuche de Colección"],
+    isPromo: true,
+    promoPrice: 99.99,
+    countInStock: 18
   },
   {
     id: "p2",
-    name: "Reloj Inteligente Horizon Fit",
-    price: 249.99,
-    description: "Monitor de ritmo cardíaco, GPS integrado, pantalla AMOLED de 1.4 pulgadas y sumergible hasta 50 metros.",
-    category: "tecnologia",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600&auto=format&fit=crop",
-    rating: 4.6,
-    brand: "Horizon",
-    features: ["GPS Integrado", "Pantalla AMOLED", "Sensor SpO2", "Resistente al agua 50m"],
+    name: "Champagne Moët & Chandon Brut Impérial",
+    price: 79.99,
+    description: "El icónico Champagne francés caracterizado por su brillante frutalidad, un paladar seductor y una madurez elegante.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?q=80&w=600&auto=format&fit=crop",
+    rating: 4.8,
+    brand: "Moët & Chandon",
+    features: ["Denominación Champagne AOC", "Pinot Noir, Chardonnay", "12% Vol. Alcohol", "Servir a 8°C - 10°C"],
     isPromo: false,
-    countInStock: 15
+    countInStock: 25
   },
   {
     id: "p3",
-    name: "Teclado Mecánico Compacto RGB",
-    price: 129.99,
-    description: "Teclado mecánico en formato 65% con switches brown silenciosos, retroiluminación RGB personalizada y conexión triple (cable/wireless/bluetooth).",
-    category: "oficina",
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=600&auto=format&fit=crop",
-    rating: 4.7,
-    brand: "KeyForge",
-    features: ["Switches Mecánicos Brown", "Diseño Compacto 65%", "Conexión Triple", "Iluminación RGB"],
+    name: "Tequila Don Julio 1942 Añejo Extra",
+    price: 220.00,
+    description: "Tequila artesanal producido en pequeños lotes, añejado durante un mínimo de dos años y medio en barricas de roble blanco estadounidense.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop",
+    rating: 5.0,
+    brand: "Don Julio",
+    features: ["100% Agave Azul", "2.5 Años en Barrica", "Edición Icono Luxury", "Notas de Vainilla y Caramelo"],
     isPromo: true,
-    promoPrice: 99.99,
-    countInStock: 8
+    promoPrice: 189.99,
+    countInStock: 10
   },
   {
     id: "p4",
-    name: "Silla de Oficina Ergonómica Aura",
-    price: 349.99,
-    description: "Silla ergonómica de malla transpirable, soporte lumbar dinámico 3D y reposabrazos ajustables para un máximo confort diario.",
-    category: "oficina",
-    image: "https://images.unsplash.com/photo-1505797149-43b0069ec26b?q=80&w=600&auto=format&fit=crop",
+    name: "Vino Tinto Vega Sicilia Valbuena 5º Año",
+    price: 195.00,
+    description: "Uno de los tintos emblemáticos de Ribera del Duero. Expresión pura de la variedad Tinto Fino con una crianza impecable de 5 años.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=600&auto=format&fit=crop",
     rating: 4.9,
-    brand: "ErgoComfort",
-    features: ["Soporte Lumbar 3D", "Malla Premium Transpirable", "Base de Aluminio", "Reposacabezas Ajustable"],
+    brand: "Vega Sicilia",
+    features: ["DO Ribera del Duero", "Tinto Fino / Cabernet Sauvignon", "5 Años Crianza", "Gran Potencial de Guarda"],
     isPromo: false,
     countInStock: 12
   },
   {
     id: "p5",
-    name: "Mesa de Escritorio Ajustable en Altura",
-    price: 499.99,
-    description: "Escritorio elevable eléctrico con doble motor, 4 perfiles de memoria y tablero de madera natural ecológica de 140x70cm.",
-    category: "oficina",
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=600&auto=format&fit=crop",
-    rating: 4.7,
-    brand: "ErgoComfort",
-    features: ["Doble Motor Silencioso", "4 Memorias de Altura", "Tablero de Madera Ecológica", "Capacidad 100kg"],
+    name: "Ron Zacapa Centenario XO Solera Gran Reserva",
+    price: 135.00,
+    description: "Ron de alta montaña guatemalteca elaborado mediante el sistema Solera y terminado en barricas de coñac francés.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?q=80&w=600&auto=format&fit=crop",
+    rating: 4.9,
+    brand: "Zacapa",
+    features: ["Añejamiento 6 a 25 Años", "Añejado a 2300m de Altura", "Acabado en Barrica de Coñac", "Notas de Especias y Chocolate"],
     isPromo: false,
-    countInStock: 5
+    countInStock: 15
   },
   {
     id: "p6",
-    name: "Lámpara de Escritorio Inteligente LED",
-    price: 79.99,
-    description: "Lámpara LED con control de temperatura de color, ajuste de brillo automático basado en la luz ambiental y puerto de carga USB.",
-    category: "hogar",
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=600&auto=format&fit=crop",
-    rating: 4.5,
-    brand: "Lumina",
-    features: ["Ajuste de Brillo Automático", "5 Modos de Temperatura", "Puerto de Carga USB", "Diseño Flexible"],
+    name: "Gin Hendrick's Orbium Botanical Edition",
+    price: 54.99,
+    description: "Una reinterpretación del clásico Hendrick's con infusión adicional de quinina, ajenjo y flor de loto azul para un perfil complejo e inigualable.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1560512823-829485b8bf24?q=80&w=600&auto=format&fit=crop",
+    rating: 4.7,
+    brand: "Hendrick's",
+    features: ["Infusión de Pepino y Rosa", "Quinina y Ajenjo", "Destilado en Escocia", "Botella Estilo Apoteca"],
     isPromo: true,
-    promoPrice: 59.99,
-    countInStock: 30
+    promoPrice: 44.99,
+    countInStock: 22
   },
   {
     id: "p7",
-    name: "Maceta Geométrica Minimalista (Set de 3)",
-    price: 45.00,
-    description: "Set de 3 macetas de cerámica esmaltada con base de bambú natural. Perfectas para suculentas y plantas pequeñas de interior.",
-    category: "hogar",
-    image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=600&auto=format&fit=crop",
-    rating: 4.4,
-    brand: "Lumina",
-    features: ["Cerámica de Alta Calidad", "Plato de Bambú Natural", "Agujero de Drenaje", "Estilo Nórdico"],
+    name: "Whisky Johnnie Walker Blue Label",
+    price: 249.99,
+    description: "Una obra maestra inigualable. Una combinación extraordinaria de los whiskies más raros y excepcionales de toda Escocia.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop",
+    rating: 4.9,
+    brand: "Johnnie Walker",
+    features: ["1 de cada 10,000 barricas elegida", "Suavidad Terciopelada", "Botella Numerada", "Presentación de Regalo VIP"],
     isPromo: false,
-    countInStock: 40
+    countInStock: 8
   },
   {
     id: "p8",
-    name: "Mochila Impermeable Urban Travel",
-    price: 95.00,
-    description: "Mochila de viaje urbana impermeable de 25L con compartimiento acolchado para portátil de hasta 16 pulgadas y bolsillos de acceso rápido ocultos.",
-    category: "deportes",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop",
-    rating: 4.6,
-    brand: "Vanguard",
-    features: ["Material Impermeable IPX4", "Portátil 16 pulgadas", "Capacidad de 25 Litros", "Espaldar Acolchado"],
+    name: "Pack Cervezas Artesanales IPA & Imperial Stout (Set 6)",
+    price: 29.99,
+    description: "Selección especial de microcervecerías galardonadas: 3 Double Dry-Hopped IPAs y 3 Imperial Russian Stouts añejadas en barrica.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=600&auto=format&fit=crop",
+    rating: 4.8,
+    brand: "Craft Masters",
+    features: ["Cerveza 100% Artesanal", "Sin Filtrar ni Pasteurizar", "Lúpulos Frescos de Origen", "Pack Regalo de Colección"],
     isPromo: true,
-    promoPrice: 75.00,
-    countInStock: 18
+    promoPrice: 24.99,
+    countInStock: 35
   },
   {
     id: "p9",
-    name: "Botella Térmica de Acero Inoxidable",
-    price: 35.00,
-    description: "Botella de doble pared aislada al vacío que mantiene el frío por 24 horas y el calor por 12 horas. Libre de BPA y ecológica.",
-    category: "deportes",
-    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop",
-    rating: 4.9,
-    brand: "Vanguard",
-    features: ["Aislamiento al Vacío", "Acero Inoxidable 18/8", "Libre de BPA", "Mantiene frío 24h/calor 12h"],
+    name: "Licor Baileys Irish Cream Original (1L)",
+    price: 28.00,
+    description: "La perfecta unión del mejor whisky irlandés con crema de leche fresca, cacao puro y vainilla. El digestivo favorito en todo el mundo.",
+    category: "bebidas",
+    image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=600&auto=format&fit=crop",
+    rating: 4.8,
+    brand: "Baileys",
+    features: ["Whisky Irlandés Auténtico", "Crema de Leche Natural", "Ideal con Hielo o en Café", "Contenido 1000ml"],
     isPromo: false,
-    countInStock: 50
+    countInStock: 40
   }
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: "t1",
-    name: "Laura Martínez",
-    role: "Diseñadora UX/UI Freelance",
-    feedback: "La silla de oficina Aura cambió mi vida laboral. Ya no tengo dolores de espalda después de jornadas de 8 horas. El servicio al cliente fue excepcional y la entrega superó las expectativas.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop"
-  },
-  {
-    id: "t2",
-    name: "Carlos Mendoza",
-    role: "Líder Técnico de Software",
-    feedback: "Compré el teclado mecánico y los auriculares Pro ANC. El sonido de los auriculares es increíblemente nítido, ideal para concentrarse en la oficina abierta. Altamente recomendable.",
+    name: "Fernando Ruiz",
+    role: "Sommelier & Coleccionista",
+    feedback: "Impresionante catálogo de whiskies y vinos reserva. Compré varias botellas exclusivas y bolsas de hielo gourmet; la presentación y temperatura fueron impecables.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
   },
   {
+    id: "t2",
+    name: "Mariana Alarcón",
+    role: "Organizadora de Eventos",
+    feedback: "El servicio de Hielos & Bebidas Z² salvó la fiesta de nuestra empresa. Nos trajeron el hielo gourmet en esferas, champagne y las cervezas en menos de 35 minutos.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop"
+  },
+  {
     id: "t3",
-    name: "Ana Sofía Ramos",
-    role: "Emprendedora",
-    feedback: "Excelente relación calidad-precio. La mesa de altura ajustable funciona de maravilla y el motor es súper silencioso. Un antes y un después en mi oficina en casa.",
-    rating: 4,
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
+    name: "Roberto Gaxiola",
+    role: "Cliente VIP",
+    feedback: "Excelente atención de delivery 24/7. Las bebidas frías y el hielo purificado llegaron justo a tiempo para nuestra reunión de fin de semana.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop"
   }
 ];
 
 export const SERVICES: Service[] = [
   {
     id: "s1",
-    name: "Asesoría en Ergonomía",
-    description: "Ayudamos a configurar tu espacio de trabajo de manera ergonómica para optimizar tu salud, confort y productividad diaria.",
+    name: "Delivery Express 24/7 de Hielos & Bebidas",
+    description: "Entregamos hielos gourmet y tus botellas favoritas a la temperatura perfecta para servir en tu puerta en menos de 45 minutos.",
     details: [
-      "Evaluación personalizada de postura e iluminación.",
-      "Recomendación detallada de equipos (mesas, sillas, accesorios).",
-      "Guías de pausa activa y estiramientos corporales.",
-      "Seguimiento posconfiguración en línea."
+      "Envío en empaques térmicos especializados.",
+      "Garantía de hielo cristalino y bebidas heladas.",
+      "Seguimiento en tiempo real del repartidor.",
+      "Atención nocturna todos los días."
     ],
-    icon: "ShieldAlert",
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=800&auto=format&fit=crop"
+    icon: "Truck",
+    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "s2",
-    name: "Instalación y Configuración Smart Home",
-    description: "Configuración profesional de tu red y dispositivos del hogar inteligente: luces, asistentes, seguridad y sensores.",
+    name: "Sommelier Privado & Catas a Domicilio",
+    description: "Vive una cata guiada por sommeliers profesionales en tu hogar o empresa, degustando seleccionados whiskies, vinos reservas o ginebras finas.",
     details: [
-      "Estudio de cobertura Wi-Fi y optimización de routers.",
-      "Configuración de asistentes virtuales (Alexa, Google Home).",
-      "Automatización de iluminación inteligente y eficiencia energética.",
-      "Capacitación básica del sistema en el sitio."
+      "Catas personalizadas temáticas (Francia, Escocia, México).",
+      "Maridaje con carnes, quesos maduros y chocolates finos.",
+      "Incluye cristalería técnica y material de cata.",
+      "Sesiones interactivas para grupos pequeños y grandes."
     ],
-    icon: "Wifi",
-    image: "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=800&auto=format&fit=crop"
+    icon: "GlassWater",
+    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "s3",
-    name: "Soporte Técnico Especializado",
-    description: "Mantenimiento preventivo, optimización de sistemas operativos y resolución de problemas de hardware y periféricos.",
+    name: "Regalos Corporativos & Packs VIP",
+    description: "Impresiona a tus clientes, ejecutivos o seres queridos con cajas de madera de lujo grabadas, botellas de edición limitada y hielos cristalinos.",
     details: [
-      "Diagnóstico remoto e instalación de software corporativo.",
-      "Limpieza física y optimización interna de PCs y laptops.",
-      "Configuración avanzada de sonido y periféricos gaming.",
-      "Respaldo y migración segura de datos sensibles."
+      "Personalización de estuches de madera con tu marca o nombre.",
+      "Incluye accesorios de acero inoxidable y copas de cristal.",
+      "Notas de agradecimiento escritas a mano.",
+      "Envíos masivos coordinados a múltiples direcciones."
     ],
-    icon: "Settings",
-    image: "https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=800&auto=format&fit=crop"
+    icon: "Gift",
+    image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "s4",
+    name: "Catering de Bebidas para Bodas & Eventos",
+    description: "Planificación completa de la barra de tu boda o fiesta. Suministro de bebidas, barras de trago y servicio de hielo continuo.",
+    details: [
+      "Suministro a consignación (devuelves lo que no consumas).",
+      "Bartenders profesionales y mixólogos expertos.",
+      "Suministro de hielos gourmet en esferas y cubos.",
+      "Precios especiales por volumen al por mayor."
+    ],
+    icon: "PartyPopper",
+    image: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?q=80&w=800&auto=format&fit=crop"
   }
 ];
 
 export const NEWS: NewsItem[] = [
   {
     id: "n1",
-    title: "El auge del trabajo híbrido y la importancia de la ergonomía",
-    excerpt: "Descubre cómo el diseño de tu espacio de trabajo puede impactar radicalmente en tu rendimiento laboral y bienestar general.",
-    content: "En los últimos años, el trabajo remoto e híbrido ha dejado de ser un beneficio ocasional para convertirse en una modalidad estándar. Sin embargo, muchos profesionales siguen trabajando en mesas inadecuadas y sillas de comedor. Este artículo analiza los efectos a largo plazo en la columna vertebral y la productividad, y propone pequeños cambios ergonómicos accesibles para cualquier persona. Desde la altura de la pantalla hasta la posición de las muñecas, detallamos los secretos de un setup saludable.",
-    category: "Bienestar",
-    date: "12 Jul 2026",
-    author: "Dr. Marcos Valdés",
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop",
-    readTime: "5 min de lectura"
+    title: "El secreto del Hielo Gourmet: Por qué la pureza y fusión lenta cambian tu trago",
+    excerpt: "Descubre por qué una esfera de hielo cristalino sin aire evita aguar tu whisky o cóctel favorito.",
+    content: "El hielo no es simplemente agua congelada; es el ingrediente clave en el 90% de los cócteles. El hielo gourmet elaborado mediante congelación direccional elimina todo el aire atrapado y las sales minerales, logrando una densidad perfecta que se derrite hasta cuatro veces más lento que el hielo común de nevera. Aprende cómo mantener las notas originales de tu Single Malt o Gin Tonic sin aguar la preparación.",
+    category: "Hielos & Mixología",
+    date: "19 Jul 2026",
+    author: "Z² Ice Lab",
+    image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=800&auto=format&fit=crop",
+    readTime: "4 min de lectura"
   },
   {
     id: "n2",
-    title: "Tendencias tecnológicas 2026: El hogar ultra inteligente",
-    excerpt: "Los sensores inteligentes y la automatización integrada de bajo consumo están redefiniendo el significado de confort doméstico.",
-    content: "La domótica ha dado un salto gigante en el último año gracias a los avances en la interconectividad nativa y la eficiencia energética. En esta entrega, exploramos cómo los nuevos asistentes de voz coordinan sistemas climatizadores pasivos, cortinas inteligentes de respuesta solar y optimizadores de consumo eléctrico en tiempo real. La tecnología invisible ya no es ciencia ficción, es una inversión en comodidad y sostenibilidad ambiental para tu hogar.",
-    category: "Tecnología",
-    date: "05 Jul 2026",
-    author: "Elena Rostova",
-    image: "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=800&auto=format&fit=crop",
-    readTime: "7 min de lectura"
+    title: "Guía de Maridaje: Cómo elegir el vino perfecto para cada ocasión",
+    excerpt: "Aprende las reglas de oro para combinar vinos tintos, blancos y espumantes con carnes, mariscos y postres.",
+    content: "El maridaje de vinos y gastronomía es un arte accesible para todos. En este artículo, nuestros sommeliers desglosan las combinaciones clásicas e innovadoras: desde la acidez de un Sauvignon Blanc acompañando mariscos frescos, hasta la estructura tánica de un Cabernet Sauvignon maduro junto a cortes de carne a la parrilla.",
+    category: "Cultura del Vino",
+    date: "18 Jul 2026",
+    author: "Jean-Luc Moreau (Sommelier)",
+    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop",
+    readTime: "5 min de lectura"
   },
   {
     id: "n3",
-    title: "Cómo elegir los auriculares con cancelación de ruido ideales",
-    excerpt: "Una guía de compra técnica para entender qué buscar en tus próximos auriculares de cara a concentrarte en el trabajo.",
-    content: "No toda la cancelación activa de ruido (ANC) es igual. Algunos sistemas son ideales para aislar sonidos continuos de baja frecuencia como motores, mientras que otros atenúan conversaciones humanas. Esta guía explica el funcionamiento técnico de los micrófonos de retroalimentación en auriculares, las ventajas de los códecs de transmisión de audio Bluetooth de alta tasa de transferencia (LDAC, aptX Adaptive) y cómo el ajuste anatómico influye drásticamente en el aislamiento pasivo.",
-    category: "Audio",
-    date: "28 Jun 2026",
-    author: "Carlos Mendoza",
-    image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop",
-    readTime: "4 min de lectura"
+    title: "El arte del Whisky Single Malt: Añejamiento en barricas de Jerez",
+    excerpt: "Descubre cómo las barricas de roble europeo sazonadas con vino de Jerez aportan las notas de miel y especias al whisky.",
+    content: "Más del 60% del sabor de un whisky proviene de la madera durante su maduración. Exploramos el fascinante proceso artesanal en las destilerías de las Highlands escocesas.",
+    category: "Whiskies",
+    date: "10 Jul 2026",
+    author: "Douglas MacGregor",
+    image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?q=80&w=800&auto=format&fit=crop",
+    readTime: "6 min de lectura"
   }
 ];

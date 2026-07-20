@@ -1,61 +1,21 @@
 import Link from 'next/link';
-import { Sparkles, Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, ShieldAlert } from 'lucide-react';
+import { BrandLogo } from '@/components/Navbar';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer id="main-footer" className="bg-brand-900 text-brand-300 dark:bg-brand-950 dark:text-brand-400 border-t border-brand-800">
+    <footer id="main-footer" className="bg-brand-950 text-brand-300 border-t border-brand-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           
           {/* Column 1: Brand Info */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="p-2 rounded-xl bg-gradient-to-r from-primary-500 to-accent-pink text-white">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                ZetaCorp
-              </span>
-            </Link>
-            <p className="text-sm text-brand-400">
-              Creando soluciones tecnológicas avanzadas y diseño ergonómico premium para optimizar tu bienestar y productividad en la era digital.
+            <BrandLogo />
+            <p className="text-sm text-brand-400 leading-relaxed pt-2">
+              Hielo gourmet en esferas, cubos macizos, whiskies de colección, vinos reservas y licores de alta gama con delivery express las 24 horas.
             </p>
-            <div className="flex items-center space-x-3 pt-2">
-              {/* Facebook SVG */}
-              <a href="#" className="p-2 rounded-lg bg-brand-800 hover:bg-primary-600 hover:text-white transition-colors" aria-label="Facebook">
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                </svg>
-              </a>
-              {/* Twitter X SVG */}
-              <a href="#" className="p-2 rounded-lg bg-brand-800 hover:bg-primary-600 hover:text-white transition-colors" aria-label="Twitter">
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              {/* Instagram SVG */}
-              <a href="#" className="p-2 rounded-lg bg-brand-800 hover:bg-primary-600 hover:text-white transition-colors" aria-label="Instagram">
-                <svg className="w-4 h-4 stroke-current fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              {/* LinkedIn SVG */}
-              <a href="#" className="p-2 rounded-lg bg-brand-800 hover:bg-primary-600 hover:text-white transition-colors" aria-label="LinkedIn">
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
-                </svg>
-              </a>
-              {/* GitHub SVG */}
-              <a href="#" className="p-2 rounded-lg bg-brand-800 hover:bg-primary-600 hover:text-white transition-colors" aria-label="GitHub">
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </a>
-            </div>
           </div>
 
           {/* Column 2: Navigation Links */}
@@ -63,61 +23,61 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Navegación</h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
+                <Link href="/" className="hover:text-amber-400 transition-colors">Inicio</Link>
               </li>
               <li>
-                <Link href="/quienes-somos" className="hover:text-white transition-colors">Quiénes Somos</Link>
+                <Link href="/quienes-somos" className="hover:text-amber-400 transition-colors">Quiénes Somos</Link>
               </li>
               <li>
-                <Link href="/productos" className="hover:text-white transition-colors">Productos</Link>
+                <Link href="/productos?category=hielos" className="hover:text-amber-400 transition-colors">Hielos</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-white transition-colors">Servicios</Link>
+                <Link href="/productos?category=bebidas" className="hover:text-amber-400 transition-colors">Bebidas</Link>
               </li>
               <li>
-                <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
+                <Link href="/productos?filter=promo" className="hover:text-amber-400 transition-colors">Promociones</Link>
               </li>
               <li>
-                <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
+                <Link href="/contacto" className="hover:text-amber-400 transition-colors">Contacto</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 3: Featured Services */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Servicios</h3>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Servicios & Delivery</h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link href="/servicios" className="hover:text-white transition-colors">Asesoría Ergonómica</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Delivery Express 24/7 en Frío</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-white transition-colors">Instalación Smart Home</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Hielos Gourmet para Eventos</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-white transition-colors">Soporte Técnico VIP</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Sommelier & Catas Privadas</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-white transition-colors">Consultoría de Espacios</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Catering para Bodas & Fiestas</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 4: Contact details */}
           <div className="space-y-3.5">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contacto</h3>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Atención & Pedidos</h3>
             <ul className="space-y-3.5 text-sm text-brand-400">
               <li className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
-                <span>Av. Innovación 101, Piso 5<br />San Isidro, Lima - Perú</span>
+                <MapPin className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                <span>Av. Las Cavas 450, Miraflores<br />Lima - Perú</span>
               </li>
               <li className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-primary-500 shrink-0" />
-                <span>+51 (1) 400-9876</span>
+                <Phone className="w-5 h-5 text-amber-500 shrink-0" />
+                <span>+51 987 654 321 (Atención 24/7)</span>
               </li>
               <li className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-primary-500 shrink-0" />
-                <a href="mailto:hola@zetacorp.com" className="hover:text-white transition-colors">
-                  hola@zetacorp.com
+                <Mail className="w-5 h-5 text-amber-500 shrink-0" />
+                <a href="mailto:pedidos@zetaspirits.com" className="hover:text-amber-400 transition-colors">
+                  pedidos@zetaspirits.com
                 </a>
               </li>
             </ul>
@@ -125,12 +85,20 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-brand-800 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-500">
-          <p>&copy; {currentYear} ZetaCorp S.A.C. Todos los derechos reservados.</p>
+        {/* Legal Disclaimer (+18 Warning) */}
+        <div className="mt-10 p-4 rounded-2xl bg-amber-950/40 border border-amber-800/40 text-amber-300 text-xs flex items-center justify-center space-x-2 text-center">
+          <ShieldAlert className="w-4 h-4 shrink-0 text-amber-400" />
+          <p className="font-semibold">
+            TOMAR BEBIDAS ALCOHÓLICAS EN EXCESO ES DAÑINO. PROHIBIDA LA VENTA DE BEBIDAS ALCOHÓLICAS A MENORES DE 18 AÑOS.
+          </p>
+        </div>
+
+        <div className="border-t border-brand-800/80 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-400">
+          <p>&copy; {currentYear} Hielos & Bebidas Z². Todos los derechos reservados.</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a href="#" className="hover:text-white transition-colors">Políticas de Privacidad</a>
-            <a href="#" className="hover:text-white transition-colors">Términos del Servicio</a>
-            <a href="#" className="hover:text-white transition-colors">Cookies</a>
+            <a href="#" className="hover:text-white transition-colors">Términos de Compra</a>
+            <a href="#" className="hover:text-white transition-colors">Política de Envíos</a>
+            <a href="#" className="hover:text-white transition-colors">Libro de Reclamaciones</a>
           </div>
         </div>
       </div>
