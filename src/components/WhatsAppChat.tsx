@@ -12,11 +12,6 @@ export default function WhatsAppChat() {
   const [showPulse, setShowPulse] = useState(true);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Hide pulse after first open
-  useEffect(() => {
-    if (isOpen) setShowPulse(false);
-  }, [isOpen]);
-
   // Auto-focus textarea when chat opens
   useEffect(() => {
     if (isOpen && textareaRef.current) {
@@ -118,7 +113,7 @@ export default function WhatsAppChat() {
                   <button
                     id="whatsapp-send-btn"
                     onClick={handleSend}
-                    className="absolute bottom-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                    className="btn-spotlight absolute bottom-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95"
                     style={{ background: 'linear-gradient(135deg, #25d366, #128c7e)' }}
                     aria-label="Enviar mensaje por WhatsApp"
                   >
@@ -138,9 +133,12 @@ export default function WhatsAppChat() {
       {/* Floating Button */}
       <motion.button
         id="whatsapp-float-btn"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+          setShowPulse(false);
+        }}
         aria-label="Abrir chat de WhatsApp"
-        className="fixed bottom-4 right-4 sm:right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-green-400/50"
+        className="btn-spotlight fixed bottom-4 right-4 sm:right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-green-400/50"
         style={{ background: 'linear-gradient(135deg, #25d366 0%, #128c7e 100%)' }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

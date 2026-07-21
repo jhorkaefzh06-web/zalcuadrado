@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Sparkles, Wine, ShieldAlert } from 'lucide-react';
 
+import SpotlightButton from '@/components/SpotlightButton';
+
 export default function UnicornStudioHero() {
   return (
     <section className="relative w-full py-20 md:py-32 flex items-center justify-center select-none overflow-hidden">
@@ -52,21 +54,23 @@ export default function UnicornStudioHero() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="pt-4 flex flex-wrap items-center gap-4 justify-center sm:justify-start"
           >
-            <Link
+            <SpotlightButton
               href="/productos?category=hielos"
-              className="px-8 py-4 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white shadow-xl shadow-amber-500/30 hover:scale-[1.03] active:scale-[0.97] transition-all flex items-center space-x-2"
+              variant="primary"
+              size="lg"
+              icon={<Sparkles className="w-5 h-5 text-amber-200" />}
             >
-              <Sparkles className="w-5 h-5 text-amber-200" />
-              <span>Pedir Hielos Gourmet</span>
-            </Link>
+              Pedir Hielos Gourmet
+            </SpotlightButton>
 
-            <Link
+            <SpotlightButton
               href="/productos?category=bebidas"
-              className="px-8 py-4 rounded-xl font-bold text-sm bg-brand-900/80 hover:bg-brand-800 text-amber-300 border border-amber-500/40 backdrop-blur-md shadow-lg hover:scale-[1.03] active:scale-[0.97] transition-all flex items-center space-x-2"
+              variant="secondary"
+              size="lg"
+              icon={<Wine className="w-5 h-5 text-amber-400" />}
             >
-              <Wine className="w-5 h-5 text-amber-400" />
-              <span>Catálogo de Bebidas</span>
-            </Link>
+              Catálogo de Bebidas
+            </SpotlightButton>
           </motion.div>
 
         </div>

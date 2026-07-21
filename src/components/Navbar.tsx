@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,6 +25,130 @@ export function BrandLogo({ className = "" }: { className?: string }) {
     </Link>
   );
 }
+
+function checkIsActive(itemPath: string, pathname: string, searchParams: URLSearchParams | null) {
+  if (itemPath.includes('?')) {
+    const [basePath, searchString] = itemPath.split('?');
+    if (pathname !== basePath) return false;
+    
+    if (!searchParams) return false;
+    const itemParams = new URLSearchParams(searchString);
+    for (const [key, value] of itemParams.entries()) {
+      if (searchParams.get(key) !== value) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return pathname === itemPath;
+}
+
+function DesktopNavLinks({ pathname }: { pathname: string }) {
+  const searchParams = useSearchParams();
+  
+  return (
+    <>
+      {NAV_ITEMS.map((item) => {
+        const isActive = checkIsActive(item.path, pathname, searchParams);
+        return (
+          <Link
+            key={item.path}
+            href={item.path}
+            id={`nav-link-${item.name.toLowerCase().replace(' ', '-')}`}
+            className={`btn-spotlight relative px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+              isActive
+                ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10'
+                : 'text-brand-600 hover:text-brand-900 dark:text-brand-300 dark:hover:text-white hover:bg-white/5'
+            }`}
+          >
+            {item.name}
+            {isActive && (
+              <motion.span
+                layoutId="activeNavIndicator"
+                className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-amber-500 to-amber-700 rounded-full"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
+
+function DesktopNavFallback({ pathname }: { pathname: string }) {
+  return (
+    <>
+      {NAV_ITEMS.map((item) => {
+        const isActive = item.path === pathname;
+        return (
+          <div
+            key={item.path}
+            className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+              isActive
+                ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10'
+                : 'text-brand-600 dark:text-brand-300 opacity-50'
+            }`}
+          >
+            {item.name}
+            {isActive && (
+              <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-amber-500 to-amber-700 rounded-full" />
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: (open: boolean) => void }) {
+  const searchParams = useSearchParams();
+  
+  return (
+    <>
+      {NAV_ITEMS.map((item) => {
+        const isActive = checkIsActive(item.path, pathname, searchParams);
+        return (
+          <Link
+            key={item.path}
+            href={item.path}
+            onClick={() => setIsOpen(false)}
+            className={`btn-spotlight block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+              isActive
+                ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 font-semibold'
+                : 'text-brand-600 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-900/50'
+            }`}
+          >
+            {item.name}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
+
+function MobileNavFallback({ pathname }: { pathname: string }) {
+  return (
+    <>
+      {NAV_ITEMS.map((item) => {
+        const isActive = item.path === pathname;
+        return (
+          <div
+            key={item.path}
+            className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+              isActive
+                ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 font-semibold'
+                : 'text-brand-600 dark:text-brand-300 opacity-50'
+            }`}
+          >
+            {item.name}
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -51,6 +175,7 @@ export default function Navbar() {
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (theme === 'dark' || (!theme && systemPrefersDark)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsDarkMode(true);
       document.documentElement.classList.add('dark');
     } else {
@@ -87,30 +212,9 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.path || (item.path.includes('?') && pathname === item.path.split('?')[0]);
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  id={`nav-link-${item.name.toLowerCase().replace(' ', '-')}`}
-                  className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                    isActive
-                      ? 'text-amber-600 dark:text-amber-400'
-                      : 'text-brand-600 hover:text-brand-900 dark:text-brand-300 dark:hover:text-white'
-                  }`}
-                >
-                  {item.name}
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-amber-500 to-amber-700 rounded-full"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
+            <Suspense fallback={<DesktopNavFallback pathname={pathname} />}>
+              <DesktopNavLinks pathname={pathname} />
+            </Suspense>
           </nav>
 
           {/* Actions */}
@@ -119,10 +223,10 @@ export default function Navbar() {
             <button
               id="theme-toggle-desktop"
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
+              className="btn-spotlight p-2.5 rounded-xl text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
               aria-label="Toggle dark mode"
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDarkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
 
@@ -131,15 +235,15 @@ export default function Navbar() {
             <button
               id="theme-toggle-mobile"
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
+              className="btn-spotlight p-2.5 rounded-xl text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
               aria-label="Toggle dark mode"
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDarkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
             <button
               id="mobile-menu-btn"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
+              className="btn-spotlight p-2.5 rounded-xl text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
               aria-label="Menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -158,23 +262,9 @@ export default function Navbar() {
             className="md:hidden border-t border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-950 overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
-              {NAV_ITEMS.map((item) => {
-                const isActive = pathname === item.path;
-                return (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    onClick={() => setIsOpen(false)}
-                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                      isActive
-                        ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 font-semibold'
-                        : 'text-brand-600 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-900/50'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
+              <Suspense fallback={<MobileNavFallback pathname={pathname} />}>
+                <MobileNavLinks pathname={pathname} setIsOpen={setIsOpen} />
+              </Suspense>
             </div>
           </motion.div>
         )}

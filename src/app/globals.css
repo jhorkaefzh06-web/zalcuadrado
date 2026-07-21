@@ -58,6 +58,107 @@ body {
   border: 1px solid var(--card-border);
 }
 
+/* ==========================================================================
+   BUTTON SPOTLIGHT & HOVER ANIMATION SYSTEM
+   ========================================================================== */
+
+/* Universal button & spotlight interactive effect */
+button,
+a.btn,
+.btn,
+.btn-spotlight,
+[data-spotlight] {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              background-color 0.25s ease;
+  will-change: transform;
+}
+
+/* Hover elevation and subtle scale micro-animation */
+button:not(:disabled):hover,
+a.btn:hover,
+.btn:hover,
+.btn-spotlight:hover,
+[data-spotlight]:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25), 0 4px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Tactile press effect when clicked */
+button:not(:disabled):active,
+a.btn:active,
+.btn:active,
+.btn-spotlight:active,
+[data-spotlight]:active {
+  transform: translateY(0px) scale(0.97);
+  box-shadow: 0 2px 8px -2px rgba(245, 158, 11, 0.2);
+}
+
+/* Radial Spotlight Cursor Follow Overlay on hover */
+button::before,
+a.btn::before,
+.btn::before,
+.btn-spotlight::before,
+[data-spotlight]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    140px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(245, 158, 11, 0.3),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+button:hover::before,
+a.btn:hover::before,
+.btn:hover::before,
+.btn-spotlight:hover::before,
+[data-spotlight]:hover::before {
+  opacity: 1;
+}
+
+/* Glowing Border Trace Effect following cursor */
+.btn-glow-border {
+  position: relative;
+}
+
+.btn-glow-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(251, 191, 36, 0.7),
+    transparent 70%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.btn-glow-border:hover::after {
+  opacity: 1;
+}
+
 /* Swiper.js premium styles overrides */
 .swiper-button-next,
 .swiper-button-prev {

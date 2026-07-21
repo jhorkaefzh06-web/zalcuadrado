@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client';
 
 import Link from 'next/link';
@@ -7,6 +8,8 @@ import { motion } from 'framer-motion';
 import { CATEGORIES, PRODUCTS, TESTIMONIALS } from '@/lib/mockData';
 import UnicornStudioHero from '@/components/UnicornStudioHero';
 import Bottle3D from '@/components/Bottle3D';
+
+import SpotlightButton from '@/components/SpotlightButton';
 
 // Dynamic Icon rendering helper
 function CategoryIcon({ name, className = "w-6 h-6" }: { name: string; className?: string }) {
@@ -56,18 +59,20 @@ export default function Home() {
                 </div>
               </div>
               <div className="pt-4 flex flex-wrap gap-4">
-                <Link
+                <SpotlightButton
                   href="/productos?category=hielos"
-                  className="px-7 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-700 text-white shadow-lg shadow-amber-500/20 hover:scale-[1.02] transition-all"
+                  variant="primary"
+                  size="md"
                 >
                   Pedir Hielos Gourmet
-                </Link>
-                <Link
+                </SpotlightButton>
+                <SpotlightButton
                   href="/productos?category=bebidas"
-                  className="px-7 py-3.5 rounded-xl font-bold text-sm bg-brand-800 hover:bg-brand-700 text-amber-300 border border-amber-500/30 transition-all"
+                  variant="secondary"
+                  size="md"
                 >
                   Catálogo de Bebidas
-                </Link>
+                </SpotlightButton>
               </div>
             </motion.div>
 

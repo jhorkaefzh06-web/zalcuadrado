@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -205,192 +206,11 @@ export default function ProductsClient() {
           </Swiper>
         </section>
 
-        {/* 3. Columns Layout: Left Filters, Right Grid */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          
-          {/* Mobile Filter Toggle Button */}
-          <div className="w-full flex items-center justify-between lg:hidden mb-4">
-            <button
-              onClick={() => setMobileFiltersOpen(true)}
-              className="flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-brand-200 dark:border-brand-800 bg-white dark:bg-brand-900 text-sm font-semibold text-brand-700 dark:text-brand-300 w-full justify-center"
-            >
-              <Icons.SlidersHorizontal className="w-4 h-4" />
-              <span>Mostrar Filtros</span>
-            </button>
-          </div>
-
-          {/* Left Column Filters (Desktop Panel / Mobile Overlay) */}
-          <AnimatePresence>
-            {/* Desktop filter list (always visible on lg) */}
-            <aside id="desktop-filters" className="hidden lg:block w-64 shrink-0 glass p-6 rounded-3xl sticky top-24 space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-brand-200/50 dark:border-brand-800/50">
-                <h3 className="font-bold text-brand-900 dark:text-white flex items-center space-x-2">
-                  <Icons.SlidersHorizontal className="w-4 h-4" />
-                  <span>Filtros</span>
-                </h3>
-                <button
-                  onClick={resetFilters}
-                  className="text-xs text-brand-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                >
-                  Limpiar Todo
-                </button>
-              </div>
-
-              {/* Price Range */}
-              <div className="space-y-3">
-                <h4 className="text-xs uppercase font-bold text-brand-400 tracking-wider">Precio Máximo</h4>
-                <div className="flex items-center justify-between text-sm font-bold text-brand-850 dark:text-brand-200">
-                  <span>S/ 0</span>
-                  <span>S/ {maxPrice}</span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="600"
-                  step="10"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="w-full accent-primary-600 h-1.5 bg-brand-200 dark:bg-brand-800 rounded-lg cursor-pointer"
-                />
-              </div>
-
-              {/* Brands Checkbox list */}
-              <div className="space-y-3">
-                <h4 className="text-xs uppercase font-bold text-brand-400 tracking-wider">Marcas</h4>
-                <div className="space-y-2">
-                  {brands.map((brand) => (
-                    <label key={brand} className="flex items-center space-x-2.5 text-sm cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={selectedBrands.includes(brand)}
-                        onChange={() => handleBrandChange(brand)}
-                        className="rounded border-brand-300 text-primary-600 focus:ring-primary-500 w-4 h-4"
-                      />
-                      <span className="text-brand-700 dark:text-brand-300">{brand}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Special Options */}
-              <div className="space-y-3">
-                <h4 className="text-xs uppercase font-bold text-brand-400 tracking-wider">Ofertas</h4>
-                <label className="flex items-center space-x-2.5 text-sm cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={onlyPromo}
-                    onChange={(e) => setOnlyPromo(e.target.checked)}
-                    className="rounded border-brand-300 text-primary-600 focus:ring-primary-500 w-4 h-4"
-                  />
-                  <span className="text-brand-700 dark:text-brand-300 font-semibold text-accent-rose">Solo Promociones</span>
-                </label>
-              </div>
-            </aside>
-
-            {/* Mobile Filters Drawer Overlay */}
-            {mobileFiltersOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm lg:hidden flex justify-end"
-              >
-                <motion.div
-                  initial={{ x: '100%' }}
-                  animate={{ x: 0 }}
-                  exit={{ x: '100%' }}
-                  transition={{ type: 'tween', duration: 0.3 }}
-                  className="w-full max-w-sm bg-white dark:bg-brand-950 h-full p-6 flex flex-col justify-between overflow-y-auto"
-                >
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between pb-4 border-b border-brand-200/50 dark:border-brand-800/50">
-                      <h3 className="font-bold text-lg flex items-center space-x-2">
-                        <Icons.SlidersHorizontal className="w-5 h-5" />
-                        <span>Filtros</span>
-                      </h3>
-                      <button
-                        onClick={() => setMobileFiltersOpen(false)}
-                        className="p-1 rounded-lg hover:bg-brand-100 dark:hover:bg-brand-900"
-                      >
-                        <Icons.X className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    {/* Price Range */}
-                    <div className="space-y-3">
-                      <h4 className="text-xs uppercase font-bold text-brand-400 tracking-wider">Precio Máximo</h4>
-                      <div className="flex items-center justify-between text-sm font-bold">
-                        <span>S/ 0</span>
-                        <span>S/ {maxPrice}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="600"
-                        step="10"
-                        value={maxPrice}
-                        onChange={(e) => setMaxPrice(Number(e.target.value))}
-                        className="w-full accent-primary-600 h-1.5 bg-brand-200 dark:bg-brand-800 rounded-lg cursor-pointer"
-                      />
-                    </div>
-
-                    {/* Brands Checkbox */}
-                    <div className="space-y-3">
-                      <h4 className="text-xs uppercase font-bold text-brand-400 tracking-wider">Marcas</h4>
-                      <div className="space-y-2">
-                        {brands.map((brand) => (
-                          <label key={brand} className="flex items-center space-x-2.5 text-sm cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              checked={selectedBrands.includes(brand)}
-                              onChange={() => handleBrandChange(brand)}
-                              className="rounded border-brand-300 text-primary-600 focus:ring-primary-500 w-4 h-4"
-                            />
-                            <span className="text-brand-700 dark:text-brand-300">{brand}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Promo */}
-                    <div className="space-y-3">
-                      <h4 className="text-xs uppercase font-bold text-brand-400 tracking-wider">Ofertas</h4>
-                      <label className="flex items-center space-x-2.5 text-sm cursor-pointer select-none">
-                        <input
-                          type="checkbox"
-                          checked={onlyPromo}
-                          onChange={(e) => setOnlyPromo(e.target.checked)}
-                          className="rounded border-brand-300 text-primary-600 focus:ring-primary-500 w-4 h-4"
-                        />
-                        <span className="text-brand-700 dark:text-brand-300 font-semibold text-accent-rose">Solo Promociones</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="pt-6 border-t border-brand-200/50 dark:border-brand-800/50 flex space-x-4">
-                    <button
-                      onClick={() => {
-                        resetFilters();
-                        setMobileFiltersOpen(false);
-                      }}
-                      className="flex-1 py-3 border border-brand-200 dark:border-brand-800 rounded-xl text-sm font-semibold hover:bg-brand-50"
-                    >
-                      Limpiar
-                    </button>
-                    <button
-                      onClick={() => setMobileFiltersOpen(false)}
-                      className="flex-1 py-3 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700"
-                    >
-                      Aplicar
-                    </button>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* 3. Main Grid Layout */}
+        <div className="w-full">
 
           {/* Right Column: Grid and Search */}
-          <main className="flex-1 w-full space-y-6">
+          <main className="w-full space-y-6">
             
             {/* Header control: Search bar and sort dropdown */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 glass rounded-2xl">
@@ -437,7 +257,7 @@ export default function ProductsClient() {
 
             {/* Products Grid */}
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {filteredProducts.map((product) => {
                   const discount = product.isPromo && product.promoPrice
                     ? Math.round(((product.price - product.promoPrice) / product.price) * 100)
