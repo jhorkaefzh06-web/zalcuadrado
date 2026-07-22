@@ -20,6 +20,33 @@ function CategoryIcon({ name, className = "w-6 h-6" }: { name: string; className
 export default function Home() {
   const promoProducts = PRODUCTS.filter(p => p.isPromo);
 
+  const displayCategories = [
+    {
+      id: "hielos",
+      name: "Hielos & Hielo Gourmet",
+      description: "Hielo cristalino en esferas, cubos macizos, escamas y hielo seco para coctelería.",
+      icon: "Sparkles",
+      image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=800&auto=format&fit=crop",
+      href: "/productos?category=hielos"
+    },
+    {
+      id: "bebidas",
+      name: "Bebidas & Licores",
+      description: "Whiskies, Vinos, Rones, Tequilas, Ginebras y cervezas importadas.",
+      icon: "Wine",
+      image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop",
+      href: "/productos?category=bebidas"
+    },
+    {
+      id: "promociones",
+      name: "Promociones & Ofertas",
+      description: "Aprovecha descuentos exclusivos, combos y promociones especiales del día.",
+      icon: "Tag",
+      image: "https://images.unsplash.com/photo-1572715655204-47e297d386ce?q=80&w=800&auto=format&fit=crop",
+      href: "/productos?filter=promo"
+    }
+  ];
+
   return (
     <div className="w-full pb-16">
       
@@ -104,12 +131,12 @@ export default function Home() {
             Explora por Categoría
           </h2>
           <p className="text-brand-500 dark:text-brand-400 mt-3">
-            Hielos gourmet purificados, whiskies escoceses, vinos reservas y cervezas artesanales.
+            Hielos gourmet cristalinos, nuestra cava exclusiva de licores y las mejores ofertas del día.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {CATEGORIES.map((cat, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {displayCategories.map((cat, index) => (
             <motion.div
               key={cat.id}
               initial={{ opacity: 0, y: 20 }}
@@ -118,7 +145,7 @@ export default function Home() {
               transition={{ delay: index * 0.1 }}
             >
               <Link
-                href={`/productos?category=${cat.id}`}
+                href={cat.href}
                 className="group block relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-64 border border-brand-200/50 dark:border-brand-800/50"
               >
                 {/* Background image */}

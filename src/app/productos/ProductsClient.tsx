@@ -1,18 +1,11 @@
 /* eslint-disable */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, FreeMode } from 'swiper/modules';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
 
 import { CATEGORIES, PRODUCTS, Product } from '@/lib/mockData';
 
@@ -34,6 +27,65 @@ export default function ProductsClient() {
   const [onlyPromo, setOnlyPromo] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<string>('featured');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
+
+  // Ref and custom effect for smooth category carousel hover scrolling
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    let animationFrameId: number;
+    let targetSpeed = 0;
+    let currentSpeed = 0;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const width = rect.width;
+      const ratio = x / width;
+
+      // Active zone: outer 25% on both ends
+      const threshold = 0.25;
+      const maxSpeed = 15; // Max scroll speed in pixels per frame
+
+      if (ratio < threshold && ratio >= 0) {
+        // Scroll left (near the left edge)
+        const intensity = (threshold - ratio) / threshold; // 0 to 1
+        targetSpeed = -maxSpeed * intensity;
+      } else if (ratio > 1 - threshold && ratio <= 1) {
+        // Scroll right (near the right edge)
+        const intensity = (ratio - (1 - threshold)) / threshold; // 0 to 1
+        targetSpeed = maxSpeed * intensity;
+      } else {
+        targetSpeed = 0;
+      }
+    };
+
+    const handleMouseLeave = () => {
+      targetSpeed = 0;
+    };
+
+    const animate = () => {
+      // Linear interpolation to smooth out the speed changes
+      currentSpeed += (targetSpeed - currentSpeed) * 0.1;
+      
+      if (Math.abs(currentSpeed) > 0.05) {
+        container.scrollLeft += currentSpeed;
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseleave', handleMouseLeave);
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   // Extract unique brands for filter checklist
   const brands = Array.from(new Set(PRODUCTS.map((p) => p.brand)));
@@ -152,23 +204,19 @@ export default function ProductsClient() {
       {/* Main Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* 2. Horizontal Categories Carousel (Swiper.js) */}
+        {/* 2. Horizontal Categories Carousel (Custom Edge-Hover Scroll) */}
         <section id="categories-carousel" className="mb-10 w-full relative">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Categorías</h3>
             <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold md:hidden">Desliza para ver más →</span>
           </div>
 
-          <Swiper
-            modules={[Navigation, FreeMode]}
-            spaceBetween={12}
-            slidesPerView={'auto'}
-            freeMode={true}
-            navigation={true}
-            className="categories-swiper py-2"
+          <div
+            ref={scrollRef}
+            className="flex items-center space-x-3 overflow-x-auto py-2 select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {/* "Todos" Slide */}
-            <SwiperSlide className="!w-auto">
+            {/* "Todos" Option */}
+            <div className="flex-shrink-0">
               <button
                 onClick={() => {
                   setSelectedCategory('todos');
@@ -183,10 +231,10 @@ export default function ProductsClient() {
                 <Icons.Grid className="w-4 h-4" />
                 <span>Todos los Licores</span>
               </button>
-            </SwiperSlide>
+            </div>
 
             {CATEGORIES.map((cat) => (
-              <SwiperSlide key={cat.id} className="!w-auto">
+              <div key={cat.id} className="flex-shrink-0">
                 <button
                   onClick={() => {
                     setSelectedCategory(cat.id);
@@ -201,9 +249,9 @@ export default function ProductsClient() {
                   <CategoryIcon name={cat.icon} className="w-4 h-4" />
                   <span>{cat.name}</span>
                 </button>
-              </SwiperSlide>
+              </div>
             ))}
-          </Swiper>
+          </div>
         </section>
 
         {/* 3. Main Grid Layout */}
