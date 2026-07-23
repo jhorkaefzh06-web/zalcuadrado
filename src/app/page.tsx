@@ -11,41 +11,8 @@ import Bottle3D from '@/components/Bottle3D';
 
 import SpotlightButton from '@/components/SpotlightButton';
 
-// Dynamic Icon rendering helper
-function CategoryIcon({ name, className = "w-6 h-6" }: { name: string; className?: string }) {
-  const IconComponent = (Icons as any)[name] || Icons.Wine;
-  return <IconComponent className={className} />;
-}
-
 export default function Home() {
   const promoProducts = PRODUCTS.filter(p => p.isPromo);
-
-  const displayCategories = [
-    {
-      id: "hielos",
-      name: "Hielos & Hielo Gourmet",
-      description: "Hielo cristalino en esferas, cubos macizos, escamas y hielo seco para coctelería.",
-      icon: "Sparkles",
-      image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=800&auto=format&fit=crop",
-      href: "/productos?category=hielos"
-    },
-    {
-      id: "bebidas",
-      name: "Bebidas & Licores",
-      description: "Whiskies, Vinos, Rones, Tequilas, Ginebras y cervezas importadas.",
-      icon: "Wine",
-      image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop",
-      href: "/productos?category=bebidas"
-    },
-    {
-      id: "promociones",
-      name: "Promociones & Ofertas",
-      description: "Aprovecha descuentos exclusivos, combos y promociones especiales del día.",
-      icon: "Tag",
-      image: "https://images.unsplash.com/photo-1572715655204-47e297d386ce?q=80&w=800&auto=format&fit=crop",
-      href: "/productos?filter=promo"
-    }
-  ];
 
   return (
     <div className="w-full pb-16">
@@ -102,56 +69,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. CATEGORIES SECTION */}
-      <section id="categories-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            Nuestra Selección de Hielos & Bebidas
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mt-2">
-            Explora por Categoría
-          </h2>
-          <p className="text-brand-500 dark:text-brand-400 mt-3">
-            Hielos gourmet cristalinos, nuestra cava exclusiva de licores y las mejores ofertas del día.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {displayCategories.map((cat, index) => (
-            <motion.div
-              key={cat.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link
-                href={cat.href}
-                className="group block relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-64 border border-brand-200/50 dark:border-brand-800/50"
-              >
-                {/* Background image */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-brand-900/40 to-transparent z-10 transition-opacity group-hover:opacity-90" />
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-
-                {/* Category metadata */}
-                <div className="absolute inset-0 z-20 p-5 flex flex-col justify-end text-white">
-                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-md w-fit mb-3 group-hover:bg-amber-600 transition-colors">
-                    <CategoryIcon name={cat.icon} className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold tracking-tight">{cat.name}</h3>
-                  <p className="text-xs text-brand-300 opacity-0 group-hover:opacity-100 transition-all duration-300 mt-1 line-clamp-2">
-                    {cat.description}
-                  </p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </section>
 
       {/* 4. PROMOTIONS SECTION */}
       <section id="promotions-section" className="bg-brand-100 dark:bg-brand-900/30 py-16 md:py-24 border-y border-brand-200/30 dark:border-brand-800/30">

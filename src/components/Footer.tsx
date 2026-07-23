@@ -26,9 +26,6 @@ export default function Footer() {
                 <Link href="/" className="hover:text-amber-400 transition-colors">Inicio</Link>
               </li>
               <li>
-                <Link href="/quienes-somos" className="hover:text-amber-400 transition-colors">Quiénes Somos</Link>
-              </li>
-              <li>
                 <Link href="/productos?category=hielos" className="hover:text-amber-400 transition-colors">Hielos</Link>
               </li>
               <li>
@@ -36,9 +33,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/productos?filter=promo" className="hover:text-amber-400 transition-colors">Promociones</Link>
-              </li>
-              <li>
-                <Link href="/contacto" className="hover:text-amber-400 transition-colors">Contacto</Link>
               </li>
             </ul>
           </div>
