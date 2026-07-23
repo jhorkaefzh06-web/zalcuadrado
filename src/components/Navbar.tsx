@@ -54,10 +54,10 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
             key={item.path}
             href={item.path}
             id={`nav-link-${item.name.toLowerCase().replace(' ', '-')}`}
-            className={`btn-spotlight relative px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+            className={`btn-spotlight relative px-4 py-2 rounded-xl text-sm font-semibold transition-colors drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)] ${
               isActive
-                ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10'
-                : 'text-brand-600 hover:text-brand-900 dark:text-brand-300 dark:hover:text-white hover:bg-white/5'
+                ? 'text-amber-600 dark:text-amber-400 bg-amber-500/15'
+                : 'text-brand-800 hover:text-brand-950 dark:text-brand-100 dark:hover:text-white hover:bg-white/5'
             }`}
           >
             {item.name}
@@ -115,7 +115,7 @@ function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: 
             className={`btn-spotlight block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
               isActive
                 ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 font-semibold'
-                : 'text-brand-600 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-900/50'
+                : 'text-brand-800 hover:bg-brand-50 dark:text-brand-200 dark:hover:bg-brand-900/50'
             }`}
           >
             {item.name}
@@ -201,7 +201,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled
           ? 'shadow-md py-3 bg-white dark:bg-brand-950 border-b border-brand-200 dark:border-brand-800'
-          : 'bg-brand-950/90 backdrop-blur-md py-3.5 border-b border-brand-800/40'
+          : 'bg-brand-950/15 backdrop-blur-md py-3.5 border-b border-transparent shadow-sm'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

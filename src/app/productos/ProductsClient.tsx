@@ -23,6 +23,43 @@ export default function ProductsClient() {
   const [sortBy, setSortBy] = useState<string>('featured');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
 
+  const productsSectionRef = useRef<HTMLDivElement>(null);
+
+  // Sync scroll on category change
+  useEffect(() => {
+    if (selectedCategory === 'hielos' && productsSectionRef.current) {
+      const timer = setTimeout(() => {
+        productsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedCategory]);
+
+  const getBannerInfo = () => {
+    switch (selectedCategory) {
+      case 'hielos':
+        return {
+          title: "Hielos & Hielo Gourmet Cristalino",
+          description: "Esferas de fusión ultra lenta y cubos macizos purificados para coctelería de autor y celebraciones.",
+          image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=1600&auto=format&fit=crop"
+        };
+      case 'bebidas':
+        return {
+          title: "Bebidas & Licores Premium",
+          description: "Whiskies de colección, vinos reservas, rones añejados y cervezas de especialidad.",
+          image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
+        };
+      default:
+        return {
+          title: "Catálogo de Licores & Hielos Z²",
+          description: "Explora nuestra selección exclusiva de whiskies, vinos, rones, licores premium y hielo gourmet.",
+          image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
+        };
+    }
+  };
+
+  const banner = getBannerInfo();
+
 
   // Extract unique brands for filter checklist
   const brands = Array.from(new Set(PRODUCTS.map((p) => p.brand)));
@@ -123,17 +160,15 @@ export default function ProductsClient() {
   return (
     <div className="w-full pb-16">
       {/* 1. Sutil Header Banner (Not very tall) */}
-      <section className="relative h-[20vh] bg-brand-900 flex items-center overflow-hidden border-b border-brand-850">
-        <div className="absolute inset-0 bg-brand-950/70 z-10" />
-        <img
-          src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
-          alt="Cava de Licores"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+      <section className="relative h-[20vh] bg-transparent flex items-center overflow-hidden">
         <div className="absolute inset-0 z-20 flex items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-white">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Catálogo de Licores & Cava</h1>
-            <p className="text-xs sm:text-sm text-brand-300 mt-1">Explora nuestra selección exclusiva de whiskies, vinos, rones y licores premium.</p>
+          <div className="bg-brand-950/40 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-brand-800/30 max-w-2xl shadow-lg">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-amber-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] transition-all duration-300">
+              {banner.title}
+            </h1>
+            <p className="text-xs sm:text-sm text-brand-100 mt-1 transition-all duration-300">
+              {banner.description}
+            </p>
           </div>
         </div>
       </section>
@@ -143,7 +178,14 @@ export default function ProductsClient() {
         
 
         {/* 3. Main Grid Layout */}
-        <div className="w-full">
+        <div
+          ref={productsSectionRef}
+          className={`w-full rounded-3xl transition-all duration-700 border ${
+            selectedCategory === 'hielos'
+              ? 'bg-gradient-to-br from-cyan-950/50 via-blue-950/30 to-brand-950/60 border-cyan-500/35 shadow-[0_0_45px_rgba(6,182,212,0.2)] backdrop-blur-lg p-6 sm:p-8'
+              : 'bg-transparent border-transparent p-0'
+          }`}
+        >
 
           {/* Right Column: Grid and Search */}
           <main className="w-full space-y-6">
