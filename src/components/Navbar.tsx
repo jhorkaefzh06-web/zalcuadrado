@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
   { name: 'Inicio', path: '/' },
-  { name: 'Quiénes Somos', path: '/quienes-somos' },
   { name: 'Hielos', path: '/productos?category=hielos' },
   { name: 'Bebidas', path: '/productos?category=bebidas' },
   { name: 'Promociones', path: '/productos?filter=promo' },

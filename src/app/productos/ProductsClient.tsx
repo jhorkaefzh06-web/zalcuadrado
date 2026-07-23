@@ -9,11 +9,6 @@ import Link from 'next/link';
 
 import { CATEGORIES, PRODUCTS, Product } from '@/lib/mockData';
 
-// Dynamic Icon rendering helper
-function CategoryIcon({ name, className = "w-5 h-5" }: { name: string; className?: string }) {
-  const IconComponent = (Icons as any)[name] || Icons.HelpCircle;
-  return <IconComponent className={className} />;
-}
 
 export default function ProductsClient() {
   const searchParams = useSearchParams();
@@ -28,64 +23,6 @@ export default function ProductsClient() {
   const [sortBy, setSortBy] = useState<string>('featured');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
 
-  // Ref and custom effect for smooth category carousel hover scrolling
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    let animationFrameId: number;
-    let targetSpeed = 0;
-    let currentSpeed = 0;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const width = rect.width;
-      const ratio = x / width;
-
-      // Active zone: outer 25% on both ends
-      const threshold = 0.25;
-      const maxSpeed = 15; // Max scroll speed in pixels per frame
-
-      if (ratio < threshold && ratio >= 0) {
-        // Scroll left (near the left edge)
-        const intensity = (threshold - ratio) / threshold; // 0 to 1
-        targetSpeed = -maxSpeed * intensity;
-      } else if (ratio > 1 - threshold && ratio <= 1) {
-        // Scroll right (near the right edge)
-        const intensity = (ratio - (1 - threshold)) / threshold; // 0 to 1
-        targetSpeed = maxSpeed * intensity;
-      } else {
-        targetSpeed = 0;
-      }
-    };
-
-    const handleMouseLeave = () => {
-      targetSpeed = 0;
-    };
-
-    const animate = () => {
-      // Linear interpolation to smooth out the speed changes
-      currentSpeed += (targetSpeed - currentSpeed) * 0.1;
-      
-      if (Math.abs(currentSpeed) > 0.05) {
-        container.scrollLeft += currentSpeed;
-      }
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
-    animationFrameId = requestAnimationFrame(animate);
-
-    return () => {
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
 
   // Extract unique brands for filter checklist
   const brands = Array.from(new Set(PRODUCTS.map((p) => p.brand)));
@@ -204,55 +141,6 @@ export default function ProductsClient() {
       {/* Main Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* 2. Horizontal Categories Carousel (Custom Edge-Hover Scroll) */}
-        <section id="categories-carousel" className="mb-10 w-full relative">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Categorías</h3>
-            <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold md:hidden">Desliza para ver más →</span>
-          </div>
-
-          <div
-            ref={scrollRef}
-            className="flex items-center space-x-3 overflow-x-auto py-2 select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {/* "Todos" Option */}
-            <div className="flex-shrink-0">
-              <button
-                onClick={() => {
-                  setSelectedCategory('todos');
-                  router.push('/productos');
-                }}
-                className={`flex items-center space-x-2 px-5 py-3 rounded-2xl text-sm font-semibold transition-all border shadow-sm ${
-                  selectedCategory === 'todos'
-                    ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-transparent'
-                    : 'bg-white dark:bg-brand-900 border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-brand-850'
-                }`}
-              >
-                <Icons.Grid className="w-4 h-4" />
-                <span>Todos los Licores</span>
-              </button>
-            </div>
-
-            {CATEGORIES.map((cat) => (
-              <div key={cat.id} className="flex-shrink-0">
-                <button
-                  onClick={() => {
-                    setSelectedCategory(cat.id);
-                    router.push(`/productos?category=${cat.id}`);
-                  }}
-                  className={`flex items-center space-x-2 px-5 py-3 rounded-2xl text-sm font-semibold transition-all border shadow-sm ${
-                    selectedCategory === cat.id
-                      ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-transparent'
-                      : 'bg-white dark:bg-brand-900 border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-brand-850'
-                  }`}
-                >
-                  <CategoryIcon name={cat.icon} className="w-4 h-4" />
-                  <span>{cat.name}</span>
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* 3. Main Grid Layout */}
         <div className="w-full">

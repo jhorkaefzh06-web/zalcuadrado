@@ -65,42 +65,23 @@ export default function Home() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <div className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400">
-                <Icons.Sparkles className="w-4 h-4 text-amber-400" />
-                <span>Experiencia 3D Parallax & Agua en Movimiento</span>
-              </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                Licorería Premium con <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100 bg-clip-text text-transparent">Efecto 3D Estilo Unicorn Studio</span>
+                ¿Quiénes <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100 bg-clip-text text-transparent">Somos?</span>
               </h2>
               <p className="text-brand-300 leading-relaxed text-base">
-                Disfruta del fondo interactivo con gotas de agua y destellos de hielo cayendo sobre la botella en tiempo real. Mueve tu cursor para experimentar la profundidad tridimensional.
+                En Z² redefinimos el concepto de disfrutar de una buena bebida. No solo te ofrecemos licores seleccionados de alta gama, sino que creamos el complemento perfecto con nuestro hielo gourmet cristalino de fusión ultra lenta, diseñado artesanalmente para mantener el sabor intacto de tu copa. Nos mueve la pasión por el detalle, la calidad excepcional y un servicio express las 24 horas.
               </p>
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="p-4 rounded-xl bg-brand-800/40 border border-amber-500/20 space-y-1">
-                  <span className="text-amber-400 font-bold text-lg">Hielo Gourmet Z²</span>
-                  <p className="text-xs text-brand-300">Esferas cristalinas de fusión ultra lenta</p>
+                  <span className="text-amber-400 font-bold text-lg">Calidad Artesanal</span>
+                  <p className="text-xs text-brand-300">Hielos de pureza cristalina y una selección rigurosa de destilados.</p>
                 </div>
                 <div className="p-4 rounded-xl bg-brand-800/40 border border-amber-500/20 space-y-1">
-                  <span className="text-amber-400 font-bold text-lg">Delivery 24/7</span>
-                  <p className="text-xs text-brand-300">Envíos helados en menos de 45 minutos</p>
+                  <span className="text-amber-400 font-bold text-lg">Experiencia Z²</span>
+                  <p className="text-xs text-brand-300">Servicio express las 24 horas para acompañar tus celebraciones.</p>
                 </div>
               </div>
-              <div className="pt-4 flex flex-wrap gap-4">
-                <SpotlightButton
-                  href="/productos?category=hielos"
-                  variant="primary"
-                  size="md"
-                >
-                  Pedir Hielos Gourmet
-                </SpotlightButton>
-                <SpotlightButton
-                  href="/productos?category=bebidas"
-                  variant="secondary"
-                  size="md"
-                >
-                  Catálogo de Bebidas
-                </SpotlightButton>
-              </div>
+
             </motion.div>
 
             {/* Contenedor 3D Interactivo con la botella y el cursor */}
