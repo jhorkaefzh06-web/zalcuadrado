@@ -36,17 +36,25 @@ export default function ProductsClient() {
   }, [selectedCategory]);
 
   const getBannerInfo = () => {
+    if (onlyPromo) {
+      return {
+        title: "Promociones",
+        description: "Aprovecha nuestros combos exclusivos de licores premium con hielo incluido. ¡Ofertas especiales con delivery las 24 horas!",
+        image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
+      };
+    }
+
     switch (selectedCategory) {
       case 'hielos':
         return {
-          title: "Hielos & Hielo Gourmet Cristalino",
-          description: "Esferas de fusión ultra lenta y cubos macizos purificados para coctelería de autor y celebraciones.",
+          title: "Hielos",
+          description: "El cubo de hielo perfecto que enfría sin diluir tus bebidas. Calidad purificada para tu hogar, y venta al por mayor para abastecer bares, restaurantes y eventos.",
           image: "https://images.unsplash.com/photo-1517559132301-7e137c887960?q=80&w=1600&auto=format&fit=crop"
         };
       case 'bebidas':
         return {
-          title: "Bebidas & Licores Premium",
-          description: "Whiskies de colección, vinos reservas, rones añejados y cervezas de especialidad.",
+          title: "Bebidas",
+          description: "Catálogo premium de destilados y cervezas de especialidad. Cotiza tus compras por volumen con beneficios exclusivos para eventos.",
           image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop"
         };
       default:

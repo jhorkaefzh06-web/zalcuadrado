@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { Mail, Phone, MapPin, ShieldAlert } from 'lucide-react';
+import { Phone, MapPin, ShieldAlert } from 'lucide-react';
 import { BrandLogo } from '@/components/Navbar';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer id="main-footer" className="bg-brand-950 text-brand-300 border-t border-brand-800">
+    <footer id="main-footer" className="bg-gradient-to-br from-cyan-950/50 via-blue-950/30 to-brand-950/60 border-t border-cyan-500/35 backdrop-blur-lg text-brand-300 shadow-[0_-15px_45px_rgba(6,182,212,0.15)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           
@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="space-y-4">
             <BrandLogo />
             <p className="text-sm text-brand-400 leading-relaxed pt-2">
-              Hielo gourmet en esferas, cubos macizos, whiskies de colección, vinos reservas y licores de alta gama con delivery express las 24 horas.
+              Somos tu proveedor de confianza, disponibles las 24 horas. Abastecemos tu negocio o evento con hielos de primera calidad y un catálogo completo de licores premium. Ventas al por mayor con distribución eficiente y delivery express para que tu barra nunca se detenga.
             </p>
           </div>
 
@@ -42,16 +42,16 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Servicios & Delivery</h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Delivery Express 24/7 en Frío</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Delivery las 24 horas</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Hielos Gourmet para Eventos</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Hielos por medidas</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Sommelier & Catas Privadas</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Mayorista</Link>
               </li>
               <li>
-                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Catering para Bodas & Fiestas</Link>
+                <Link href="/servicios" className="hover:text-amber-400 transition-colors">Precios accesibles</Link>
               </li>
             </ul>
           </div>
@@ -62,16 +62,18 @@ export default function Footer() {
             <ul className="space-y-3.5 text-sm text-brand-400">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <span>Av. Las Cavas 450, Miraflores<br />Lima - Perú</span>
+                <span>AV. 15 de Julio, Huaycán<br />ATE - LIMA - PERÚ</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-amber-500 shrink-0" />
-                <span>+51 987 654 321 (Atención 24/7)</span>
+                <span>+51 961 806 622</span>
               </li>
               <li className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-amber-500 shrink-0" />
-                <a href="mailto:pedidos@zetaspirits.com" className="hover:text-amber-400 transition-colors">
-                  pedidos@zetaspirits.com
+                <svg className="w-5 h-5 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+                <a href="https://www.facebook.com/zalcuadrado" target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
+                  zalcuadrado
                 </a>
               </li>
             </ul>
