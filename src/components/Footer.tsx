@@ -72,8 +72,8 @@ export default function Footer() {
                 <svg className="w-5 h-5 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                 </svg>
-                <a href="https://www.facebook.com/zalcuadrado" target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
-                  zalcuadrado
+                <a href="https://www.facebook.com/HielosCubitos" target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
+                  Hielos Cubitos
                 </a>
               </li>
             </ul>
