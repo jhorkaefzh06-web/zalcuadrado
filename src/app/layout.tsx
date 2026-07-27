@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import WhatsAppChat from "@/components/WhatsAppChat";
 import Background3DCanvas from "@/components/Background3DCanvas";
 
 const geistSans = Geist({
@@ -29,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-brand-950 text-brand-50 transition-colors duration-300 relative">
         {/* Full-page 3D Parallax & Water Falling Background */}
@@ -42,7 +41,6 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <WhatsAppChat />
         </div>
       </body>
     </html>

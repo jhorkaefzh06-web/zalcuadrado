@@ -20,7 +20,6 @@ export default function UnicornStudioHero() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-500/20 backdrop-blur-md border border-amber-500/40 text-amber-300 text-xs uppercase tracking-widest font-extrabold shadow-lg"
           >
-            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
             <span>✨ EL ARTE DE BEBER BIEN — DELIVERY las 24 horas</span>
           </motion.div>
 

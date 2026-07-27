@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
@@ -153,7 +153,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -167,33 +166,6 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Handle dark mode initialization
-  useEffect(() => {
-    const theme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (theme === 'dark' || (!theme && systemPrefersDark)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    if (isDarkMode) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      setIsDarkMode(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      setIsDarkMode(true);
-    }
-  };
 
   return (
     <header
@@ -216,29 +188,12 @@ export default function Navbar() {
             </Suspense>
           </nav>
 
-          {/* Actions */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Dark Mode Toggle */}
-            <button
-              id="theme-toggle-desktop"
-              onClick={toggleDarkMode}
-              className="btn-spotlight p-2.5 rounded-xl text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {isDarkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
-            </button>
+          {/* Actions placeholder to keep flex spacing */}
+          <div className="hidden md:flex items-center space-x-4 w-10">
           </div>
 
-          {/* Mobile Menu & Theme Toggle */}
+          {/* Mobile Menu */}
           <div className="flex md:hidden items-center space-x-2">
-            <button
-              id="theme-toggle-mobile"
-              onClick={toggleDarkMode}
-              className="btn-spotlight p-2.5 rounded-xl text-brand-600 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {isDarkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
-            </button>
             <button
               id="mobile-menu-btn"
               onClick={() => setIsOpen(!isOpen)}
