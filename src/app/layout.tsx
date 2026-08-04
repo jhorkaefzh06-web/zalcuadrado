@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Background3DCanvas from "@/components/Background3DCanvas";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,17 +28,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-brand-950 text-brand-50 transition-colors duration-300 relative">
-        {/* Full-page 3D Parallax & Water Falling Background */}
-        <Background3DCanvas />
-
-        {/* Website Content floating on top of 3D background */}
-        <div className="relative z-10 flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow pt-20 md:pt-24">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -8,11 +8,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
 import { CATEGORIES, PRODUCTS, Product } from '@/lib/mockData';
+import { useCart } from '@/context/CartContext';
 
 
 export default function ProductsClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { addToCart } = useCart();
 
   // Filter States
   const [selectedCategory, setSelectedCategory] = useState<string>('todos');
@@ -22,6 +24,7 @@ export default function ProductsClient() {
   const [onlyPromo, setOnlyPromo] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<string>('featured');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('todos');
 
   const productsSectionRef = useRef<HTMLDivElement>(null);
 
@@ -77,6 +80,8 @@ export default function ProductsClient() {
     const categoryParam = searchParams.get('category');
     const filterParam = searchParams.get('filter');
     const idParam = searchParams.get('id');
+    const searchParam = searchParams.get('search');
+    const subcategoryParam = searchParams.get('subcategory');
 
     if (categoryParam) {
       setSelectedCategory(categoryParam);
@@ -96,6 +101,16 @@ export default function ProductsClient() {
       if (prod) {
         setSearchQuery(prod.name);
       }
+    } else if (searchParam) {
+      setSearchQuery(searchParam);
+    } else {
+      setSearchQuery('');
+    }
+
+    if (subcategoryParam) {
+      setSelectedSubcategory(subcategoryParam);
+    } else {
+      setSelectedSubcategory('todos');
     }
   }, [searchParams]);
 
@@ -111,6 +126,7 @@ export default function ProductsClient() {
   // Reset all filters
   const resetFilters = () => {
     setSelectedCategory('todos');
+    setSelectedSubcategory('todos');
     setSearchQuery('');
     setMaxPrice(600);
     setSelectedBrands([]);
@@ -125,6 +141,23 @@ export default function ProductsClient() {
     if (selectedCategory !== 'todos' && product.category !== selectedCategory) {
       return false;
     }
+
+    // 1.5. Subcategory Filter
+    if (selectedSubcategory !== 'todos') {
+      const nameLower = product.name.toLowerCase();
+      if (selectedSubcategory === 'licores') {
+        // Exclude vinos, champagnes, cervezas
+        if (nameLower.includes('vino') || nameLower.includes('champagne') || nameLower.includes('moët') || nameLower.includes('cerveza')) {
+          return false;
+        }
+      } else if (selectedSubcategory === 'vinos') {
+        // Only vinos and champagnes
+        if (!nameLower.includes('vino') && !nameLower.includes('champagne') && !nameLower.includes('moët')) {
+          return false;
+        }
+      }
+    }
+
     // 2. Search query Filter
     if (
       searchQuery &&
@@ -266,7 +299,7 @@ export default function ProductsClient() {
                               -{discount}%
                             </span>
                           )}
-                          {product.countInStock <= 5 && (
+                          {product.countInStock !== undefined && product.countInStock <= 5 && (
                             <span className="absolute top-3 right-3 z-10 px-2 py-0.5 text-[10px] font-bold text-white bg-accent-amber rounded-lg shadow-sm">
                               Solo {product.countInStock} disp.
                             </span>
@@ -302,7 +335,7 @@ export default function ProductsClient() {
                         </div>
 
                         {/* Price footer */}
-                        <div className="pt-3 border-t border-brand-200/50 dark:border-brand-800/50 flex items-center justify-between">
+                        <div className="pt-3 border-t border-brand-200/50 dark:border-brand-800/50 flex items-center justify-between gap-2">
                           <div>
                             {product.isPromo && product.promoPrice ? (
                               <>
@@ -319,13 +352,23 @@ export default function ProductsClient() {
                               </span>
                             )}
                           </div>
-                          <Link
-                            href={`/productos/${product.id}`}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors"
-                          >
-                            Ver ficha
-                            <Icons.ArrowRight className="w-3.5 h-3.5" />
-                          </Link>
+                          <div className="flex items-center space-x-1.5 shrink-0">
+                            {/* Quick Add to Cart */}
+                            <button
+                              onClick={() => addToCart(product)}
+                              className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500/25 text-amber-500 hover:text-amber-400 transition-colors cursor-pointer"
+                              aria-label="Agregar al carrito"
+                            >
+                              <Icons.ShoppingBag className="w-4 h-4" />
+                            </button>
+                            <Link
+                              href={`/productos/${product.id}`}
+                              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold transition-colors shrink-0"
+                            >
+                              Ver ficha
+                              <Icons.ArrowRight className="w-3.5 h-3.5" />
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </motion.div>

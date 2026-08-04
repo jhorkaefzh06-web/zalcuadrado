@@ -9,14 +9,12 @@ import { CATEGORIES, PRODUCTS, TESTIMONIALS } from '@/lib/mockData';
 import UnicornStudioHero from '@/components/UnicornStudioHero';
 import Bottle3D from '@/components/Bottle3D';
 
-import SpotlightButton from '@/components/SpotlightButton';
-
 export default function Home() {
   const promoProducts = PRODUCTS.filter(p => p.isPromo);
 
   return (
     <div className="w-full pb-16">
-      
+
       {/* 1. HERO UNICORN STUDIO 3D PARALLAX WITH HD BOTTLE & WATER FALL EFFECT */}
       <UnicornStudioHero />
 
@@ -24,7 +22,7 @@ export default function Home() {
       <section id="seccion-3d-parallax" className="w-full bg-gradient-to-b from-brand-950 via-brand-900 to-brand-950 text-white py-16 md:py-24 border-b border-brand-800/50 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
+
             {/* Texto descriptivo de la experiencia 3D */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}

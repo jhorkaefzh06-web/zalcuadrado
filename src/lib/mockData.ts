@@ -10,7 +10,7 @@ export interface Product {
   features: string[];
   isPromo: boolean;
   promoPrice?: number;
-  countInStock: number;
+  countInStock?: number;
 }
 
 export interface Service {
