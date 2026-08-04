@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { PRODUCTS, CATEGORIES, Product } from '@/lib/mockData';
+import { notifyProductsChanged } from '@/lib/productsStore';
 import { Search, Plus, Edit, Trash2, X, AlertTriangle, Check, Loader2, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -226,6 +227,7 @@ export default function AdminProductsPage() {
 
       setSuccess(editingProduct ? 'Producto actualizado correctamente.' : 'Producto creado con éxito.');
       setModalOpen(false);
+      notifyProductsChanged();
       fetchProducts();
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {
@@ -253,6 +255,7 @@ export default function AdminProductsPage() {
         localStorage.setItem('z2_mock_products', JSON.stringify(updated));
       }
       setSuccess('Producto eliminado con éxito.');
+      notifyProductsChanged();
       fetchProducts();
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {

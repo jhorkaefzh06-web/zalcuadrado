@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { CATEGORIES, Product } from '@/lib/mockData';
+import { notifyProductsChanged } from '@/lib/productsStore';
 import { ArrowLeft, Plus, Trash2, X, AlertTriangle, Check, Loader2, GripVertical, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -276,6 +277,7 @@ export default function AdminEditProductPage() {
       }
 
       setSuccess('Producto guardado correctamente con sus imágenes ordenadas.');
+      notifyProductsChanged();
       setTimeout(() => {
         setSuccess(null);
         router.push('/admin/productos');

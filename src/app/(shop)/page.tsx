@@ -5,11 +5,13 @@ import Link from 'next/link';
 import * as Icons from 'lucide-react';
 import { motion } from 'framer-motion';
 
-import { CATEGORIES, PRODUCTS, TESTIMONIALS } from '@/lib/mockData';
+import { CATEGORIES, TESTIMONIALS } from '@/lib/mockData';
+import { useProducts } from '@/hooks/useProducts';
 import UnicornStudioHero from '@/components/UnicornStudioHero';
 import Bottle3D from '@/components/Bottle3D';
 
 export default function Home() {
+  const { products: PRODUCTS } = useProducts();
   const promoProducts = PRODUCTS.filter(p => p.isPromo);
 
   return (

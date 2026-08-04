@@ -7,11 +7,13 @@ import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
-import { CATEGORIES, PRODUCTS, Product } from '@/lib/mockData';
+import { CATEGORIES, Product } from '@/lib/mockData';
+import { useProducts } from '@/hooks/useProducts';
 import { useCart } from '@/context/CartContext';
 
 
 export default function ProductsClient() {
+  const { products: PRODUCTS, loading } = useProducts();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { addToCart } = useCart();
@@ -138,21 +140,44 @@ export default function ProductsClient() {
   // Filter & Sort computation
   const filteredProducts = PRODUCTS.filter((product) => {
     // 1. Category Filter
-    if (selectedCategory !== 'todos' && product.category !== selectedCategory) {
-      return false;
+    const normProductCat = product.category ? product.category.toLowerCase().trim() : '';
+    if (selectedCategory !== 'todos') {
+      const normSelected = selectedCategory.toLowerCase().trim();
+      if (normSelected === 'hielos') {
+        if (normProductCat !== 'hielos' && normProductCat !== 'hielo') {
+          return false;
+        }
+      } else if (normSelected === 'bebidas') {
+        const allowed = ['bebidas', 'licores', 'vinos', 'espumantes', 'cervezas'];
+        if (!allowed.includes(normProductCat)) {
+          return false;
+        }
+      } else if (normProductCat !== normSelected) {
+        return false;
+      }
     }
 
     // 1.5. Subcategory Filter
     if (selectedSubcategory !== 'todos') {
-      const nameLower = product.name.toLowerCase();
-      if (selectedSubcategory === 'licores') {
-        // Exclude vinos, champagnes, cervezas
-        if (nameLower.includes('vino') || nameLower.includes('champagne') || nameLower.includes('moët') || nameLower.includes('cerveza')) {
-          return false;
-        }
-      } else if (selectedSubcategory === 'vinos') {
-        // Only vinos and champagnes
-        if (!nameLower.includes('vino') && !nameLower.includes('champagne') && !nameLower.includes('moët')) {
+      const normSub = selectedSubcategory.toLowerCase().trim();
+      if (normProductCat === normSub) {
+        // Direct category match in DB
+      } else {
+        // Fallback check on name
+        const nameLower = product.name.toLowerCase();
+        if (normSub === 'licores') {
+          if (nameLower.includes('vino') || nameLower.includes('champagne') || nameLower.includes('moët') || nameLower.includes('cerveza')) {
+            return false;
+          }
+        } else if (normSub === 'vinos') {
+          if (!nameLower.includes('vino') && !nameLower.includes('champagne') && !nameLower.includes('moët')) {
+            return false;
+          }
+        } else if (normSub === 'cervezas') {
+          if (!nameLower.includes('cerveza')) {
+            return false;
+          }
+        } else {
           return false;
         }
       }

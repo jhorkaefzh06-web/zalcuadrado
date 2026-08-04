@@ -78,7 +78,7 @@ export function BrandLogo({ className = "" }: { className?: string }) {
       <img
         src="/logo.webp"
         alt="Hielos & Bebidas Z² - Delivery las 24 Horas"
-        className="h-16 sm:h-20 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(245,158,11,0.35)]"
+        className="h-13 sm:h-16 md:h-18 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)]"
       />
     </Link>
   );
@@ -131,56 +131,59 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
                 )}
               </Link>
               
-              {/* Mega Dropdown Menu */}
-              <div className="absolute top-full right-0 mt-1 w-[680px] lg:w-[800px] bg-brand-950/95 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
-                <div className="grid grid-cols-4 gap-6">
-                  {BEBIDAS_MEGAMENU.categories.map((cat) => (
-                    <div key={cat.title} className="space-y-3">
-                      <h4 className="text-amber-400 font-extrabold text-xs uppercase tracking-wider border-b border-white/5 pb-1">
-                        {cat.title}
-                      </h4>
-                      <ul className="space-y-1.5">
-                        {cat.items.map((sub) => {
-                          const isSubActive = checkIsActive(sub.path, pathname, searchParams);
-                          return (
-                            <li key={sub.name}>
-                              <Link
-                                href={sub.path}
-                                className={`block text-[11px] font-bold transition-all duration-200 hover:text-amber-400 hover:translate-x-1 ${isSubActive
-                                  ? 'text-amber-400 font-extrabold'
-                                  : 'text-brand-300 hover:text-white'
-                                  }`}
-                              >
-                                {sub.name}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Mega Dropdown Footer */}
-                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-                  <div className="flex items-center space-x-6">
-                    {BEBIDAS_MEGAMENU.footer.slice(0, 2).map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.path}
-                        className="font-extrabold text-brand-300 hover:text-amber-400 transition-colors"
-                      >
-                        {item.name}
-                      </Link>
+              {/* Mega Dropdown Menu Wrapper (Bridges hover gap using padding-top) */}
+              <div className="absolute top-full right-0 pt-2 w-[680px] lg:w-[800px] opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
+                {/* Visual dropdown content box */}
+                <div className="bg-brand-950/95 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-2xl">
+                  <div className="grid grid-cols-4 gap-6">
+                    {BEBIDAS_MEGAMENU.categories.map((cat) => (
+                      <div key={cat.title} className="space-y-3">
+                        <h4 className="text-amber-400 font-extrabold text-xs uppercase tracking-wider border-b border-white/5 pb-1">
+                          {cat.title}
+                        </h4>
+                        <ul className="space-y-1.5">
+                          {cat.items.map((sub) => {
+                            const isSubActive = checkIsActive(sub.path, pathname, searchParams);
+                            return (
+                              <li key={sub.name}>
+                                <Link
+                                  href={sub.path}
+                                  className={`block text-[11px] font-bold transition-all duration-200 hover:text-amber-400 hover:translate-x-1 ${isSubActive
+                                    ? 'text-amber-400 font-extrabold'
+                                    : 'text-brand-300 hover:text-white'
+                                    }`}
+                                >
+                                  {sub.name}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
                     ))}
                   </div>
-                  <div>
-                    <Link
-                      href={BEBIDAS_MEGAMENU.footer[2].path}
-                      className="font-extrabold text-brand-300 hover:text-amber-400 transition-colors bg-white/5 px-3 py-1 rounded-lg border border-white/5"
-                    >
-                      {BEBIDAS_MEGAMENU.footer[2].name}
-                    </Link>
+                  
+                  {/* Mega Dropdown Footer */}
+                  <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
+                    <div className="flex items-center space-x-6">
+                      {BEBIDAS_MEGAMENU.footer.slice(0, 2).map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.path}
+                          className="font-extrabold text-brand-300 hover:text-amber-400 transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                    <div>
+                      <Link
+                        href={BEBIDAS_MEGAMENU.footer[2].path}
+                        className="font-extrabold text-brand-300 hover:text-amber-400 transition-colors bg-white/5 px-3 py-1 rounded-lg border border-white/5"
+                      >
+                        {BEBIDAS_MEGAMENU.footer[2].name}
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -434,15 +437,15 @@ export default function Navbar() {
             <BrandLogo />
             
             {/* Desktop/Tablet Search Input */}
-            <form onSubmit={handleSearchSubmit} className="hidden sm:flex items-center relative max-w-xs w-48 md:w-56 lg:w-64">
+            <form onSubmit={handleSearchSubmit} className="hidden sm:flex items-center w-56 md:w-72 lg:w-80 bg-brand-950/60 hover:bg-brand-900/80 focus-within:bg-brand-950/95 backdrop-blur-md border border-amber-500/30 hover:border-amber-500/50 focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400/50 rounded-full pl-4 pr-2 py-1.5 shadow-[0_2px_12px_rgba(0,0,0,0.4)] focus-within:shadow-[0_0_20px_rgba(245,158,11,0.25)] transition-all duration-300">
               <input
                 type="text"
                 value={searchVal}
                 onChange={(e) => setSearchVal(e.target.value)}
                 placeholder="Buscar licores, hielos..."
-                className="w-full bg-brand-900/40 hover:bg-brand-900/60 focus:bg-brand-900/80 backdrop-blur-md border border-white/10 text-white rounded-full py-2 pl-4 pr-10 text-xs focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 placeholder-brand-400 transition-all duration-300"
+                className="w-full bg-transparent text-white text-xs sm:text-sm font-medium focus:outline-none placeholder-brand-300/60 tracking-wide"
               />
-              <button type="submit" className="absolute right-3 text-brand-400 hover:text-amber-400 transition-colors cursor-pointer">
+              <button type="submit" className="text-amber-400 hover:text-amber-300 hover:scale-110 transition-all cursor-pointer p-1 shrink-0 ml-1 rounded-full hover:bg-amber-400/10 flex items-center justify-center" aria-label="Buscar">
                 <Search className="w-4 h-4" />
               </button>
             </form>
@@ -530,7 +533,7 @@ export default function Navbar() {
                   handleSearchSubmit(e);
                   setIsOpen(false);
                 }}
-                className="flex items-center relative w-full"
+                className="flex items-center w-full bg-brand-950/70 border border-amber-500/30 focus-within:border-amber-400 rounded-full pl-4 pr-2 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.3)]"
               >
                 <input
                   id="mobile-search-input"
@@ -538,9 +541,9 @@ export default function Navbar() {
                   value={searchVal}
                   onChange={(e) => setSearchVal(e.target.value)}
                   placeholder="Buscar licores, hielos..."
-                  className="w-full bg-brand-100 dark:bg-brand-900 border border-brand-200 dark:border-brand-800 text-brand-900 dark:text-white rounded-full py-2.5 pl-4 pr-10 text-sm focus:outline-none focus:border-amber-400 placeholder-brand-400"
+                  className="w-full bg-transparent text-white text-sm font-medium focus:outline-none placeholder-brand-300/60"
                 />
-                <button type="submit" className="absolute right-3 text-brand-400 hover:text-amber-400 transition-colors cursor-pointer">
+                <button type="submit" className="text-amber-400 hover:text-amber-300 transition-colors cursor-pointer p-1 shrink-0 ml-1.5 rounded-full hover:bg-amber-400/10 flex items-center justify-center" aria-label="Buscar">
                   <Search className="w-4 h-4" />
                 </button>
               </form>

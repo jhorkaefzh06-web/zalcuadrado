@@ -1,19 +1,18 @@
 import { notFound } from 'next/navigation';
-import { PRODUCTS } from '@/lib/mockData';
+import { fetchAllProducts } from '@/lib/productsStore';
 import type { Metadata } from 'next';
 import ProductDetailClient from './ProductDetailClient';
+
+export const dynamic = 'force-dynamic';
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export async function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ id: p.id }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const product = PRODUCTS.find((p) => p.id === id);
+  const products = await fetchAllProducts();
+  const product = products.find((p) => p.id === id);
   if (!product) return { title: 'Producto no encontrado | ZetaCorp' };
 
   return {
@@ -29,11 +28,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params;
-  const product = PRODUCTS.find((p) => p.id === id);
+  const products = await fetchAllProducts();
+  const product = products.find((p) => p.id === id);
   if (!product) notFound();
 
   // Related products: same category, excluding current
-  const related = PRODUCTS.filter(
+  const related = products.filter(
     (p) => p.category === product.category && p.id !== product.id
   ).slice(0, 3);
 
