@@ -35,6 +35,7 @@ export default function AdminProductsPage() {
   const [formFeatures, setFormFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [formCountInStock, setFormCountInStock] = useState(10);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -102,7 +103,7 @@ export default function AdminProductsPage() {
           features: p.features || [],
           isPromo: p.is_promo,
           promoPrice: p.promo_price ? Number(p.promo_price) : undefined,
-
+          countInStock: p.count_in_stock !== undefined ? Number(p.count_in_stock) : 10,
         }));
         setProducts(mapped);
       } else {
@@ -136,6 +137,7 @@ export default function AdminProductsPage() {
     setFormPromoPrice(0);
     setFormFeatures([]);
     setFeatureInput('');
+    setFormCountInStock(10);
     setModalOpen(true);
   };
 
@@ -153,6 +155,7 @@ export default function AdminProductsPage() {
     setFormPromoPrice(product.promoPrice || 0);
     setFormFeatures(product.features || []);
     setFeatureInput('');
+    setFormCountInStock(product.countInStock !== undefined ? product.countInStock : 10);
     setModalOpen(true);
   };
 
@@ -183,7 +186,8 @@ export default function AdminProductsPage() {
       rating: editingProduct ? editingProduct.rating : 5.0,
       features: formFeatures,
       isPromo: formIsPromo,
-      promoPrice: formIsPromo ? Number(formPromoPrice) : undefined
+      promoPrice: formIsPromo ? Number(formPromoPrice) : undefined,
+      countInStock: Number(formCountInStock)
     };
 
     if (!payload.name || !payload.brand || payload.price <= 0) {
@@ -205,7 +209,8 @@ export default function AdminProductsPage() {
           rating: payload.rating,
           features: payload.features,
           is_promo: payload.isPromo,
-          promo_price: payload.promoPrice
+          promo_price: payload.promoPrice,
+          count_in_stock: payload.countInStock
         };
 
         const { error: saveErr } = await supabase
@@ -213,16 +218,90 @@ export default function AdminProductsPage() {
           .upsert([dbPayload]);
 
         if (saveErr) throw saveErr;
+
+        // Sync inventory table and log movement
+        try {
+          let oldStock = 0;
+          let warehouseId = '';
+
+          // 1. Fetch current stock in inventory
+          const { data: invRows } = await supabase
+            .from('inventory')
+            .select('stock, warehouse_id')
+            .eq('product_id', payload.id);
+
+          if (invRows && invRows.length > 0) {
+            oldStock = Number(invRows[0].stock || 0);
+            warehouseId = invRows[0].warehouse_id;
+          }
+
+          // 2. Fetch warehouse id if not found
+          if (!warehouseId) {
+            const { data: whRows } = await supabase
+              .from('warehouses')
+              .select('id')
+              .limit(1);
+            if (whRows && whRows.length > 0) {
+              warehouseId = whRows[0].id;
+            }
+          }
+
+          if (warehouseId) {
+            const newStock = payload.countInStock;
+            const diff = newStock - oldStock;
+
+            if (diff !== 0) {
+              // Direct insert to stock_movements. Database trigger updates the inventory table!
+              const { error: movErr } = await supabase
+                .from('stock_movements')
+                .insert([{
+                  product_id: payload.id,
+                  warehouse_id: warehouseId,
+                  type: diff > 0 ? 'entrada' : 'salida',
+                  quantity: Math.abs(diff),
+                  reason: 'Ajuste desde Administrador'
+                }]);
+              
+              if (movErr) console.error('Error inserting stock movement:', movErr);
+            }
+          }
+        } catch (syncErr) {
+          console.error('Error syncing stock/inventory:', syncErr);
+        }
       } else {
         // Mock save
         let updated: Product[];
         if (editingProduct) {
-          updated = products.map(p => p.id === payload.id ? payload : p);
+          updated = products.map(p => p.id === payload.id ? { ...payload, countInStock: payload.countInStock } : p);
         } else {
-          updated = [payload, ...products];
+          updated = [{ ...payload, countInStock: payload.countInStock }, ...products];
         }
         setProducts(updated);
         localStorage.setItem('z2_mock_products', JSON.stringify(updated));
+
+        // Sync mock inventory
+        try {
+          const storedInv = localStorage.getItem('z2_mock_inventory');
+          let inventoryList = storedInv ? JSON.parse(storedInv) : [];
+          const invIndex = inventoryList.findIndex((i: any) => i.product_id === payload.id);
+          if (invIndex > -1) {
+            inventoryList[invIndex].stock = payload.countInStock;
+          } else {
+            const storedWhs = localStorage.getItem('z2_mock_warehouses');
+            const whs = storedWhs ? JSON.parse(storedWhs) : [];
+            if (whs.length > 0) {
+              inventoryList.push({
+                id: 'inv_' + Math.random().toString(36).substr(2, 9),
+                product_id: payload.id,
+                warehouse_id: whs[0].id,
+                stock: payload.countInStock
+              });
+            }
+          }
+          localStorage.setItem('z2_mock_inventory', JSON.stringify(inventoryList));
+        } catch (e) {
+          console.error('Error syncing mock inventory:', e);
+        }
       }
 
       setSuccess(editingProduct ? 'Producto actualizado correctamente.' : 'Producto creado con éxito.');
@@ -485,7 +564,7 @@ export default function AdminProductsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 {/* Price */}
                 <div className="space-y-1 col-span-1">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Precio *</label>
@@ -494,6 +573,18 @@ export default function AdminProductsPage() {
                     step="0.01"
                     value={formPrice}
                     onChange={(e) => setFormPrice(Number(e.target.value))}
+                    className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-amber-500"
+                    required
+                  />
+                </div>
+
+                {/* Stock */}
+                <div className="space-y-1 col-span-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Stock *</label>
+                  <input
+                    type="number"
+                    value={formCountInStock}
+                    onChange={(e) => setFormCountInStock(Number(e.target.value))}
                     className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-amber-500"
                     required
                   />

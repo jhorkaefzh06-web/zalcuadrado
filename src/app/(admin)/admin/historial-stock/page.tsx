@@ -33,6 +33,7 @@ export default function AdminStockHistoryPage() {
 
   // Search Filter
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'admin' | 'compras'>('admin');
 
   // Form State
   const [formProductId, setFormProductId] = useState('');
@@ -43,6 +44,51 @@ export default function AdminStockHistoryPage() {
 
   useEffect(() => {
     fetchData();
+
+    if (typeof window === 'undefined') return;
+
+    const handleCustomEvent = () => {
+      fetchData();
+    };
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      bc = new BroadcastChannel('z2_products_sync');
+      bc.onmessage = (event) => {
+        if (event.data === 'products_updated') {
+          fetchData();
+        }
+      };
+    } catch (e) {
+      console.warn('BroadcastChannel failed to initialize:', e);
+    }
+
+    window.addEventListener('z2_products_changed', handleCustomEvent);
+
+    let movChannel: any = null;
+
+    if (isSupabaseConfigured && supabase) {
+      movChannel = supabase
+        .channel('public:stock_movements')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'stock_movements' },
+          () => {
+            fetchData();
+          }
+        )
+        .subscribe();
+    }
+
+    return () => {
+      window.removeEventListener('z2_products_changed', handleCustomEvent);
+      if (bc) {
+        bc.close();
+      }
+      if (movChannel) {
+        supabase?.removeChannel(movChannel);
+      }
+    };
   }, []);
 
   const fetchData = async () => {
@@ -172,7 +218,18 @@ export default function AdminStockHistoryPage() {
     }
   };
 
-  const filteredMovements = movements.filter(mv => {
+  const adminCount = movements.filter(mv => mv.reason === 'Ajuste desde Administrador').length;
+  const comprasCount = movements.filter(mv => mv.reason !== 'Ajuste desde Administrador').length;
+
+  const tabFilteredMovements = movements.filter(mv => {
+    if (activeTab === 'admin') {
+      return mv.reason === 'Ajuste desde Administrador';
+    } else {
+      return mv.reason !== 'Ajuste desde Administrador';
+    }
+  });
+
+  const filteredMovements = tabFilteredMovements.filter(mv => {
     const term = searchQuery.toLowerCase();
     const prod = productsList.find(p => p.id === mv.product_id) || { name: '' };
     return mv.reason.toLowerCase().includes(term) ||
@@ -324,6 +381,43 @@ export default function AdminStockHistoryPage() {
 
         {/* Right Ledger Column */}
         <div className="lg:col-span-2 space-y-4">
+
+          {/* Tab Selector */}
+          <div className="flex bg-slate-900 border border-slate-800 p-1.5 rounded-2xl gap-1">
+            <button
+              type="button"
+              onClick={() => setActiveTab('admin')}
+              className={`flex-1 py-2 px-3 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                activeTab === 'admin'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-black'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850/50'
+              }`}
+            >
+              <span>Historial Admin</span>
+              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                activeTab === 'admin' ? 'bg-slate-950 text-amber-500' : 'bg-slate-950/60 text-slate-450 border border-slate-850'
+              }`}>
+                {adminCount}
+              </span>
+            </button>
+            
+            <button
+              type="button"
+              onClick={() => setActiveTab('compras')}
+              className={`flex-1 py-2 px-3 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                activeTab === 'compras'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-black'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850/50'
+              }`}
+            >
+              <span>Historial Compras / Ventas</span>
+              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                activeTab === 'compras' ? 'bg-slate-950 text-amber-500' : 'bg-slate-950/60 text-slate-450 border border-slate-850'
+              }`}>
+                {comprasCount}
+              </span>
+            </button>
+          </div>
           
           {/* Ledger filters */}
           <div className="bg-slate-900 border border-slate-800 p-4 rounded-3xl flex items-center">
@@ -424,8 +518,16 @@ export default function AdminStockHistoryPage() {
             ) : (
               <div className="py-16 text-center space-y-2">
                 <ClipboardList className="w-8 h-8 text-slate-600 mx-auto" />
-                <p className="text-xs font-bold text-white">Bitácora de movimientos vacía.</p>
-                <p className="text-[10px] text-slate-400">Registra una entrada o salida en el formulario izquierdo.</p>
+                <p className="text-xs font-bold text-white">
+                  {activeTab === 'admin' 
+                    ? 'No hay ajustes del Administrador registrados.' 
+                    : 'No hay movimientos de compras o ventas registrados.'}
+                </p>
+                <p className="text-[10px] text-slate-400">
+                  {activeTab === 'admin' 
+                    ? 'Modifica el stock al editar un producto en el catálogo para generar registros.' 
+                    : 'Registra una entrada o salida en el formulario izquierdo para generar registros.'}
+                </p>
               </div>
             )}
           </div>

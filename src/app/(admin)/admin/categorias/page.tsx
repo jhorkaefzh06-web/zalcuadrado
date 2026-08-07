@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { CATEGORIES, Category } from '@/lib/mockData';
+import { notifyCategoriesChanged } from '@/lib/categoriesStore';
 import { Plus, Edit, Trash2, X, AlertTriangle, Check, Loader2, Folder, Grid } from 'lucide-react';
 
 interface Subcategory {
@@ -152,6 +153,7 @@ export default function AdminCategoriesPage() {
       setSuccess(editingCategory ? 'Categoría actualizada.' : 'Categoría creada con éxito.');
       setCatModalOpen(false);
       fetchData();
+      notifyCategoriesChanged();
       setActiveCategory(null);
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {
@@ -181,6 +183,7 @@ export default function AdminCategoriesPage() {
       }
       setSuccess('Categoría eliminada.');
       fetchData();
+      notifyCategoriesChanged();
       setActiveCategory(null);
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {
@@ -242,6 +245,7 @@ export default function AdminCategoriesPage() {
       setSuccess(editingSub ? 'Subcategoría actualizada.' : 'Subcategoría agregada con éxito.');
       setSubModalOpen(false);
       fetchData();
+      notifyCategoriesChanged();
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {
       setError('Error al guardar subcategoría: ' + err.message);
@@ -267,6 +271,7 @@ export default function AdminCategoriesPage() {
       }
       setSuccess('Subcategoría eliminada.');
       fetchData();
+      notifyCategoriesChanged();
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {
       setError('Error al eliminar subcategoría: ' + err.message);

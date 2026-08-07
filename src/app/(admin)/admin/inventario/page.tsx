@@ -46,6 +46,66 @@ export default function AdminInventoryPage() {
 
   useEffect(() => {
     fetchData();
+
+    if (typeof window === 'undefined') return;
+
+    const handleCustomEvent = () => {
+      fetchData();
+    };
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      bc = new BroadcastChannel('z2_products_sync');
+      bc.onmessage = (event) => {
+        if (event.data === 'products_updated') {
+          fetchData();
+        }
+      };
+    } catch (e) {
+      console.warn('BroadcastChannel failed to initialize:', e);
+    }
+
+    window.addEventListener('z2_products_changed', handleCustomEvent);
+
+    let invChannel: any = null;
+    let movChannel: any = null;
+
+    if (isSupabaseConfigured && supabase) {
+      invChannel = supabase
+        .channel('public:inventory')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'inventory' },
+          () => {
+            fetchData();
+          }
+        )
+        .subscribe();
+
+      movChannel = supabase
+        .channel('public:stock_movements')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'stock_movements' },
+          () => {
+            fetchData();
+          }
+        )
+        .subscribe();
+    }
+
+    return () => {
+      window.removeEventListener('z2_products_changed', handleCustomEvent);
+      if (bc) {
+        bc.close();
+      }
+      if (invChannel) {
+        supabase?.removeChannel(invChannel);
+      }
+      if (movChannel) {
+        supabase?.removeChannel(movChannel);
+      }
+    };
   }, []);
 
   const fetchData = async () => {

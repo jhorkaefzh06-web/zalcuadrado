@@ -1,24 +1,64 @@
 'use client';
 
-import { useState } from 'react';
-import { DollarSign, ShoppingCart, Package, Users, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { DollarSign, ShoppingCart, Package, Users, ArrowUpRight, ArrowDownRight, Loader2 } from 'lucide-react';
 import { PRODUCTS } from '@/lib/mockData';
+import Link from 'next/link';
 
 export default function AdminDashboardPage() {
-  // Mock recent orders data
-  const [orders] = useState([
-    { id: 'ORD-9821', client: 'Carlos Mendoza', total: 119.99, date: 'Hoy, 15:30', status: 'entregado', item: 'Whisky Macallan 12 Años' },
-    { id: 'ORD-9820', client: 'Andrea Delgado', total: 43.00, date: 'Hoy, 14:15', status: 'pendiente', item: 'Hielo Esferas x12 + Ron Zacapa' },
-    { id: 'ORD-9819', client: 'Jorge Ramírez', total: 195.00, date: 'Ayer, 21:00', status: 'entregado', item: 'Vino Vega Sicilia 5º Año' },
-    { id: 'ORD-9818', client: 'Lucía Benavides', total: 29.99, date: 'Ayer, 18:45', status: 'cancelado', item: 'Pack Cervezas IPA Set x6' },
-    { id: 'ORD-9817', client: 'Miguel Torres', total: 79.99, date: 'Ayer, 11:30', status: 'entregado', item: 'Champagne Moët & Chandon' },
-  ]);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeProductsCount, setActiveProductsCount] = useState(PRODUCTS.length);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      // 1. Fetch products count from DB if available
+      const pRes = await fetch('/api/products');
+      if (pRes.ok) {
+        const pData = await pRes.json();
+        if (pData && pData.length > 0) {
+          setActiveProductsCount(pData.length);
+        }
+      }
+
+      // 2. Fetch orders from API
+      const oRes = await fetch('/api/orders');
+      if (oRes.ok) {
+        const oData = await oRes.json();
+        setOrders(oData || []);
+      }
+    } catch (e) {
+      console.error('Error fetching dashboard data:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Calculate actual stats
+  const totalSales = orders
+    .filter(o => o.status === 'pagado' || o.status === 'entregado')
+    .reduce((acc, o) => acc + Number(o.total || 0), 0);
+
+  const todayOrders = orders.filter(o => {
+    const orderDate = new Date(o.created_at);
+    const today = new Date();
+    return orderDate.getDate() === today.getDate() &&
+      orderDate.getMonth() === today.getMonth() &&
+      orderDate.getFullYear() === today.getFullYear();
+  }).length;
+
+  const uniqueClients = new Set(orders.map(o => o.whatsapp_number)).size;
 
   const stats = [
-    { name: 'Ventas Totales', value: 'S/ 12,450.00', diff: '+12.5%', isUp: true, icon: DollarSign },
-    { name: 'Pedidos de Hoy', value: '24', diff: '+8.3%', isUp: true, icon: ShoppingCart },
-    { name: 'Productos Activos', value: PRODUCTS.length.toString(), diff: '0.0%', isUp: true, icon: Package },
-    { name: 'Clientes Nuevos', value: '85', diff: '-2.4%', isUp: false, icon: Users },
+    { name: 'Ventas Totales', value: `S/ ${totalSales.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`, diff: '+15.2%', isUp: true, icon: DollarSign },
+    { name: 'Pedidos de Hoy', value: todayOrders.toString(), diff: '+4.5%', isUp: true, icon: ShoppingCart },
+    { name: 'Productos Activos', value: activeProductsCount.toString(), diff: '0.0%', isUp: true, icon: Package },
+    { name: 'Clientes Únicos', value: uniqueClients.toString(), diff: '+6.1%', isUp: true, icon: Users },
   ];
 
   return (
@@ -140,47 +180,70 @@ export default function AdminDashboardPage() {
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
         <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
           <h3 className="text-sm font-black text-white uppercase tracking-wider">Pedidos Recientes</h3>
-          <button className="text-xs font-bold text-amber-500 hover:text-amber-400 transition-colors cursor-pointer">
+          <Link href="/admin/pedidos" className="text-xs font-bold text-amber-500 hover:text-amber-400 transition-colors cursor-pointer">
             Ver Todos
-          </button>
+          </Link>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-slate-800 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
-                <th className="pb-3 pl-4">ID Pedido</th>
-                <th className="pb-3">Cliente</th>
-                <th className="pb-3">Detalle</th>
-                <th className="pb-3">Fecha</th>
-                <th className="pb-3">Total</th>
-                <th className="pb-3 text-center">Estado</th>
-              </tr>
-            </thead>
-            <tbody className="text-xs divide-y divide-slate-800/50">
-              {orders.map((o) => (
-                <tr key={o.id} className="hover:bg-slate-850/50 transition-colors">
-                  <td className="py-4 pl-4 font-bold text-amber-500">{o.id}</td>
-                  <td className="py-4 font-bold text-white">{o.client}</td>
-                  <td className="py-4 text-slate-300 max-w-[200px] truncate">{o.item}</td>
-                  <td className="py-4 text-slate-400">{o.date}</td>
-                  <td className="py-4 font-extrabold text-white">S/ {o.total.toFixed(2)}</td>
-                  <td className="py-4 text-center">
-                    <span className={`inline-block px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase border ${
-                      o.status === 'entregado'
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
-                        : o.status === 'pendiente'
-                        ? 'bg-amber-500/10 text-amber-400 border-amber-500/25'
-                        : 'bg-rose-500/10 text-rose-400 border-rose-500/25'
-                    }`}>
-                      {o.status}
-                    </span>
-                  </td>
+        {loading ? (
+          <div className="py-12 flex flex-col items-center justify-center space-y-3">
+            <Loader2 className="w-6 h-6 text-amber-500 animate-spin" />
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Cargando...</p>
+          </div>
+        ) : orders.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+                  <th className="pb-3 pl-4">ID Pedido</th>
+                  <th className="pb-3">Cliente</th>
+                  <th className="pb-3">Detalle</th>
+                  <th className="pb-3">Fecha</th>
+                  <th className="pb-3 text-right">Total</th>
+                  <th className="pb-3 text-center">Estado</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="text-xs divide-y divide-slate-800/50">
+                {orders.slice(0, 5).map((o) => {
+                  const formattedDate = new Date(o.created_at).toLocaleDateString('es-PE', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  });
+                  const itemsSummary = (o.items || []).map((i: any) => `${i.quantity}x ${i.name}`).join(', ');
+
+                  return (
+                    <tr key={o.id} className="hover:bg-slate-850/50 transition-colors">
+                      <td className="py-4 pl-4 font-mono font-bold text-amber-500">#{o.id.slice(0, 8).toUpperCase()}</td>
+                      <td className="py-4 font-bold text-white">{o.client_name}</td>
+                      <td className="py-4 text-slate-300 max-w-[200px] truncate" title={itemsSummary}>{itemsSummary}</td>
+                      <td className="py-4 text-slate-400">{formattedDate}</td>
+                      <td className="py-4 font-extrabold text-white text-right">S/ {Number(o.total || 0).toFixed(2)}</td>
+                      <td className="py-4 text-center">
+                        <span className={`inline-block px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase border ${
+                          o.status === 'entregado'
+                            ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25'
+                            : o.status === 'pagado'
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
+                            : o.status === 'pendiente'
+                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/25'
+                            : 'bg-rose-500/10 text-rose-400 border-rose-500/25'
+                        }`}>
+                          {o.status}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="py-12 text-center">
+            <p className="text-xs text-slate-500">No hay pedidos registrados en el catálogo.</p>
+          </div>
+        )}
       </div>
       
     </div>

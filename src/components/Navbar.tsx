@@ -6,6 +6,7 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { Menu, X, Search, ChevronDown, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
+import { useCategories } from '@/hooks/useCategories';
 
 interface NavItem {
   name: string;
@@ -103,6 +104,62 @@ function checkIsActive(itemPath: string, pathname: string, searchParams: URLSear
 
 function DesktopNavLinks({ pathname }: { pathname: string }) {
   const searchParams = useSearchParams();
+  const { categories, subcategories } = useCategories();
+
+  const drinkCategories = categories.filter(c => {
+    const idLower = c.id.toLowerCase();
+    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes';
+  });
+
+  const activeCategories = drinkCategories.length > 0 ? drinkCategories : [
+    { id: 'licores', name: 'Licores' },
+    { id: 'vinos', name: 'Vinos' },
+    { id: 'cervezas', name: 'Cervezas' }
+  ];
+
+  const dynamicCategories = activeCategories.map(cat => {
+    const catIdLower = cat.id.toLowerCase();
+    const catSubs = subcategories.filter(sub => sub.category_id.toLowerCase() === catIdLower);
+    
+    const items = catSubs.map(sub => {
+      const subIdLower = sub.id.toLowerCase();
+      let path = '';
+      
+      if (subIdLower === 'licor-del-mes') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=mes`;
+      } else if (subIdLower === 'bodega-del-mes') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=bodega-mes`;
+      } else if (subIdLower === 'alta-gama') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=alta-gama`;
+      } else if (subIdLower === 'listos-para-tomar') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=rtd`;
+      } else if (subIdLower === 'cervezas-nacionales') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=nacionales`;
+      } else if (subIdLower === 'cervezas-importadas') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=importadas`;
+      } else if (subIdLower === 'otros-licores') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=otros`;
+      } else if (subIdLower === 'complementos-de-licores') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=complementos`;
+      } else if (subIdLower === 'cervezas-artesanales') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&search=Artesanal`;
+      } else {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&search=${encodeURIComponent(sub.name)}`;
+      }
+      
+      return {
+        name: sub.name,
+        path
+      };
+    });
+
+    return {
+      title: cat.name,
+      items: items.length > 0 ? items : [
+        { name: `Ver todo ${cat.name}`, path: `/productos?category=bebidas&subcategory=${catIdLower}` }
+      ]
+    };
+  });
 
   return (
     <>
@@ -135,8 +192,8 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
               <div className="absolute top-full right-0 pt-2 w-[680px] lg:w-[800px] opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
                 {/* Visual dropdown content box */}
                 <div className="bg-brand-950/95 backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-2xl">
-                  <div className="grid grid-cols-4 gap-6">
-                    {BEBIDAS_MEGAMENU.categories.map((cat) => (
+                  <div className="grid gap-6" style={{ gridTemplateColumns: `repeat(${Math.max(1, dynamicCategories.length)}, minmax(0, 1fr))` }}>
+                    {dynamicCategories.map((cat) => (
                       <div key={cat.title} className="space-y-3">
                         <h4 className="text-amber-400 font-extrabold text-xs uppercase tracking-wider border-b border-white/5 pb-1">
                           {cat.title}
@@ -244,8 +301,64 @@ function DesktopNavFallback({ pathname }: { pathname: string }) {
 
 function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: (open: boolean) => void }) {
   const searchParams = useSearchParams();
+  const { categories, subcategories } = useCategories();
   const [bebidasOpen, setBebidasOpen] = useState(false);
   const [activeSubSection, setActiveSubSection] = useState<string | null>(null);
+
+  const drinkCategories = categories.filter(c => {
+    const idLower = c.id.toLowerCase();
+    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes';
+  });
+
+  const activeCategories = drinkCategories.length > 0 ? drinkCategories : [
+    { id: 'licores', name: 'Licores' },
+    { id: 'vinos', name: 'Vinos' },
+    { id: 'cervezas', name: 'Cervezas' }
+  ];
+
+  const dynamicCategories = activeCategories.map(cat => {
+    const catIdLower = cat.id.toLowerCase();
+    const catSubs = subcategories.filter(sub => sub.category_id.toLowerCase() === catIdLower);
+    
+    const items = catSubs.map(sub => {
+      const subIdLower = sub.id.toLowerCase();
+      let path = '';
+      
+      if (subIdLower === 'licor-del-mes') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=mes`;
+      } else if (subIdLower === 'bodega-del-mes') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=bodega-mes`;
+      } else if (subIdLower === 'alta-gama') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=alta-gama`;
+      } else if (subIdLower === 'listos-para-tomar') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=rtd`;
+      } else if (subIdLower === 'cervezas-nacionales') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=nacionales`;
+      } else if (subIdLower === 'cervezas-importadas') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=importadas`;
+      } else if (subIdLower === 'otros-licores') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=otros`;
+      } else if (subIdLower === 'complementos-de-licores') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&filter=complementos`;
+      } else if (subIdLower === 'cervezas-artesanales') {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&search=Artesanal`;
+      } else {
+        path = `/productos?category=bebidas&subcategory=${catIdLower}&search=${encodeURIComponent(sub.name)}`;
+      }
+      
+      return {
+        name: sub.name,
+        path
+      };
+    });
+
+    return {
+      title: cat.name,
+      items: items.length > 0 ? items : [
+        { name: `Ver todo ${cat.name}`, path: `/productos?category=bebidas&subcategory=${catIdLower}` }
+      ]
+    };
+  });
 
   const toggleSubSection = (title: string) => {
     if (activeSubSection === title) {
@@ -282,7 +395,7 @@ function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: 
                     exit={{ opacity: 0, height: 0 }}
                     className="pl-3 py-1 space-y-2 border-l border-brand-200 dark:border-brand-800 ml-3"
                   >
-                    {BEBIDAS_MEGAMENU.categories.map((cat) => (
+                    {dynamicCategories.map((cat) => (
                       <div key={cat.title} className="space-y-1">
                         <button
                           onClick={() => toggleSubSection(cat.title)}
