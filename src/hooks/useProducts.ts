@@ -63,8 +63,9 @@ export function useProducts() {
     // Listen to Supabase Realtime changes if configured
     let channel: any = null;
     if (isSupabaseConfigured && supabase) {
+      const channelId = Math.random().toString(36).substring(2, 10);
       channel = supabase
-        .channel('public:products')
+        .channel(`public:products:${channelId}`)
         .on(
           'postgres_changes',
           { event: '*', schema: 'public', table: 'products' },

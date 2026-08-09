@@ -66,8 +66,9 @@ export function useCategories() {
     let subChannel: any = null;
 
     if (isSupabaseConfigured && supabase) {
+      const channelId = Math.random().toString(36).substring(2, 10);
       catChannel = supabase
-        .channel('public:categories')
+        .channel(`public:categories:${channelId}`)
         .on(
           'postgres_changes',
           { event: '*', schema: 'public', table: 'categories' },
@@ -78,7 +79,7 @@ export function useCategories() {
         .subscribe();
 
       subChannel = supabase
-        .channel('public:subcategories')
+        .channel(`public:subcategories:${channelId}`)
         .on(
           'postgres_changes',
           { event: '*', schema: 'public', table: 'subcategories' },

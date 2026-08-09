@@ -67,8 +67,6 @@ const BEBIDAS_MEGAMENU = {
     }
   ],
   footer: [
-    { name: 'Cigarros', path: '/productos?category=cigarros' },
-    { name: 'Hielo', path: '/productos?category=hielos' },
     { name: 'Marcas', path: '/productos?filter=marcas' }
   ]
 };
@@ -108,12 +106,18 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
 
   const drinkCategories = categories.filter(c => {
     const idLower = c.id.toLowerCase();
-    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes';
+    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes' || idLower === 'cigarros';
   });
 
-  const activeCategories = drinkCategories.length > 0 ? drinkCategories : [
+  const desiredOrder = ['licores', 'vinos', 'cigarros', 'espumantes', 'cervezas'];
+  const sortedDrinkCategories = [...drinkCategories].sort((a, b) => 
+    desiredOrder.indexOf(a.id.toLowerCase()) - desiredOrder.indexOf(b.id.toLowerCase())
+  );
+
+  const activeCategories = sortedDrinkCategories.length > 0 ? sortedDrinkCategories : [
     { id: 'licores', name: 'Licores' },
     { id: 'vinos', name: 'Vinos' },
+    { id: 'cigarros', name: 'Cigarros' },
     { id: 'cervezas', name: 'Cervezas' }
   ];
 
@@ -156,7 +160,12 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
     return {
       title: cat.name,
       items: items.length > 0 ? items : [
-        { name: `Ver todo ${cat.name}`, path: `/productos?category=bebidas&subcategory=${catIdLower}` }
+        { 
+          name: `Ver todo ${cat.name}`, 
+          path: catIdLower === 'cigarros' 
+            ? '/productos?category=cigarros' 
+            : `/productos?category=bebidas&subcategory=${catIdLower}` 
+        }
       ]
     };
   });
@@ -221,26 +230,16 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
                   </div>
                   
                   {/* Mega Dropdown Footer */}
-                  <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-                    <div className="flex items-center space-x-6">
-                      {BEBIDAS_MEGAMENU.footer.slice(0, 2).map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.path}
-                          className="font-extrabold text-brand-300 hover:text-amber-400 transition-colors"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                    <div>
+                  <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-end text-xs">
+                    {BEBIDAS_MEGAMENU.footer.map((item) => (
                       <Link
-                        href={BEBIDAS_MEGAMENU.footer[2].path}
+                        key={item.name}
+                        href={item.path}
                         className="font-extrabold text-brand-300 hover:text-amber-400 transition-colors bg-white/5 px-3 py-1 rounded-lg border border-white/5"
                       >
-                        {BEBIDAS_MEGAMENU.footer[2].name}
+                        {item.name}
                       </Link>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -307,12 +306,18 @@ function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: 
 
   const drinkCategories = categories.filter(c => {
     const idLower = c.id.toLowerCase();
-    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes';
+    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes' || idLower === 'cigarros';
   });
 
-  const activeCategories = drinkCategories.length > 0 ? drinkCategories : [
+  const desiredOrder = ['licores', 'vinos', 'cigarros', 'espumantes', 'cervezas'];
+  const sortedDrinkCategories = [...drinkCategories].sort((a, b) => 
+    desiredOrder.indexOf(a.id.toLowerCase()) - desiredOrder.indexOf(b.id.toLowerCase())
+  );
+
+  const activeCategories = sortedDrinkCategories.length > 0 ? sortedDrinkCategories : [
     { id: 'licores', name: 'Licores' },
     { id: 'vinos', name: 'Vinos' },
+    { id: 'cigarros', name: 'Cigarros' },
     { id: 'cervezas', name: 'Cervezas' }
   ];
 
@@ -355,7 +360,12 @@ function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: 
     return {
       title: cat.name,
       items: items.length > 0 ? items : [
-        { name: `Ver todo ${cat.name}`, path: `/productos?category=bebidas&subcategory=${catIdLower}` }
+        { 
+          name: `Ver todo ${cat.name}`, 
+          path: catIdLower === 'cigarros' 
+            ? '/productos?category=cigarros' 
+            : `/productos?category=bebidas&subcategory=${catIdLower}` 
+        }
       ]
     };
   });

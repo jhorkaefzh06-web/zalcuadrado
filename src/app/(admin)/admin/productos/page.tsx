@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { PRODUCTS, CATEGORIES, Product } from '@/lib/mockData';
 import { notifyProductsChanged } from '@/lib/productsStore';
@@ -15,7 +15,7 @@ export default function AdminProductsPage() {
 
   // Search & Filter
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('todos');
+  const [activeTab, setActiveTab] = useState('todos');
 
   // Modal State
   const [modalOpen, setModalOpen] = useState(false);
@@ -348,10 +348,69 @@ export default function AdminProductsPage() {
       p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.id.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesCategory = selectedCategory === 'todos' || p.category === selectedCategory;
+    let matchesTab = true;
+    if (activeTab === 'promociones') {
+      matchesTab = p.isPromo === true;
+    } else if (activeTab !== 'todos') {
+      const catId = p.category?.toLowerCase();
+      if (activeTab === 'licores') {
+        matchesTab = catId === 'licores' || catId === 'bebidas';
+      } else if (activeTab === 'hielo') {
+        matchesTab = catId === 'hielo' || catId === 'hielos';
+      } else {
+        matchesTab = catId === activeTab;
+      }
+    }
 
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesTab;
   });
+
+  const getProductGroups = (productList: Product[]) => {
+    const groups: { id: string; name: string; products: Product[] }[] = [
+      { id: 'promociones', name: '⚡ Promociones', products: [] },
+      { id: 'licores', name: '🥃 Licores y Bebidas', products: [] },
+      { id: 'vinos', name: '🍷 Vinos', products: [] },
+      { id: 'cervezas', name: '🍺 Cervezas', products: [] },
+      { id: 'hielo', name: '💎 Hielos', products: [] },
+      { id: 'cigarros', name: '🚬 Cigarros', products: [] },
+      { id: 'otros', name: '📦 Otros', products: [] }
+    ];
+
+    productList.forEach(p => {
+      if (p.isPromo) {
+        groups[0].products.push(p);
+      } else {
+        const catId = p.category?.toLowerCase();
+        if (catId === 'licores' || catId === 'bebidas') {
+          groups[1].products.push(p);
+        } else if (catId === 'vinos') {
+          groups[2].products.push(p);
+        } else if (catId === 'cervezas') {
+          groups[3].products.push(p);
+        } else if (catId === 'hielo' || catId === 'hielos') {
+          groups[4].products.push(p);
+        } else if (catId === 'cigarros') {
+          groups[5].products.push(p);
+        } else {
+          groups[6].products.push(p);
+        }
+      }
+    });
+
+    return groups.filter(g => g.products.length > 0);
+  };
+
+  const productGroups = getProductGroups(filteredProducts);
+
+  const tabs = [
+    { id: 'todos', name: 'Todos' },
+    { id: 'promociones', name: '⚡ Promociones' },
+    { id: 'licores', name: '🥃 Licores' },
+    { id: 'vinos', name: '🍷 Vinos' },
+    { id: 'cervezas', name: '🍺 Cervezas' },
+    { id: 'hielo', name: '💎 Hielos' },
+    { id: 'cigarros', name: '🚬 Cigarros' }
+  ];
 
   return (
     <div className="space-y-6">
@@ -386,31 +445,55 @@ export default function AdminProductsPage() {
         </div>
       )}
 
-      {/* Filters Bar */}
-      <div className="flex flex-col md:flex-row gap-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl">
-        <div className="relative flex-grow">
+      {/* Filters & Tabs Bar */}
+      <div className="space-y-4">
+        {/* Search */}
+        <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por nombre, marca o ID..."
-            className="w-full bg-slate-950 border border-slate-800 text-white pl-10 pr-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-amber-500 transition-colors"
+            className="w-full bg-slate-900 border border-slate-800 text-white pl-10 pr-4 py-3 rounded-2xl text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-200"
           />
-          <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
         </div>
 
-        <div className="flex items-center space-x-2 shrink-0">
-          <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Categoría:</label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-white px-3 py-2.5 rounded-xl text-xs focus:outline-none focus:border-amber-500"
-          >
-            <option value="todos">Todos</option>
-            {CATEGORIES.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
+        {/* Category Tabs */}
+        <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+          {tabs.map(tab => {
+            const count = tab.id === 'todos' 
+              ? products.length 
+              : tab.id === 'promociones' 
+                ? products.filter(p => p.isPromo).length 
+                : products.filter(p => {
+                    const catId = p.category?.toLowerCase();
+                    if (tab.id === 'licores') return catId === 'licores' || catId === 'bebidas';
+                    if (tab.id === 'hielo') return catId === 'hielo' || catId === 'hielos';
+                    return catId === tab.id;
+                  }).length;
+            
+            const isActive = activeTab === tab.id;
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 border ${
+                  isActive
+                    ? 'bg-amber-500 border-amber-500 text-slate-900 shadow-md shadow-amber-500/10'
+                    : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <span>{tab.name}</span>
+                <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${
+                  isActive ? 'bg-slate-900/15 text-slate-900' : 'bg-slate-950 text-slate-400'
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -434,54 +517,71 @@ export default function AdminProductsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/40 text-xs">
-                {filteredProducts.map((p) => (
-                  <tr key={p.id} className="hover:bg-slate-850/30 transition-colors">
-                    <td className="py-4 pl-6">
-                      <div className="flex items-center space-x-3">
-                        <img src={p.image} alt={p.name} className="w-11 h-11 object-cover rounded-xl border border-slate-800 shrink-0" />
-                        <span className="font-mono text-[10px] text-slate-500">{p.id}</span>
-                      </div>
-                    </td>
-                    <td className="py-4">
-                      <div>
-                        <p className="font-bold text-white leading-normal">{p.name}</p>
-                        <p className="text-[9px] font-black text-amber-500/80 uppercase tracking-wide mt-0.5">{p.brand}</p>
-                      </div>
-                    </td>
-                    <td className="py-4 text-center">
-                      <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-[9px] font-bold uppercase text-slate-300">
-                        {p.category}
-                      </span>
-                    </td>
-                    <td className="py-4 text-right font-bold text-white">
-                      {p.isPromo && p.promoPrice ? (
-                        <div className="text-right">
-                          <span className="text-[10px] line-through text-slate-500 block">S/ {p.price.toFixed(2)}</span>
-                          <span className="text-amber-500">S/ {p.promoPrice.toFixed(2)}</span>
+                {productGroups.map((group) => (
+                  <React.Fragment key={group.id}>
+                    {/* Category Divider Header Row */}
+                    <tr className="bg-slate-950/60 border-y border-slate-800/80">
+                      <td colSpan={5} className="py-2.5 pl-6 text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">
+                        <div className="flex items-center space-x-2">
+                          <span>{group.name}</span>
+                          <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[9px] text-slate-400 font-black">
+                            {group.products.length}
+                          </span>
                         </div>
-                      ) : (
-                        <span>S/ {p.price.toFixed(2)}</span>
-                      )}
-                    </td>
-                    <td className="py-4 text-center pr-6">
-                      <div className="flex items-center justify-center space-x-2">
-                        <Link
-                          href={`/admin/productos/editar/${p.id}`}
-                          className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700/60 rounded-lg text-slate-300 hover:text-white transition-colors cursor-pointer"
-                          title="Editar"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(p.id)}
-                          className="p-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors cursor-pointer"
-                          title="Eliminar"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                    
+                    {/* Products of this category */}
+                    {group.products.map((p) => (
+                      <tr key={p.id} className="hover:bg-slate-850/30 transition-colors">
+                        <td className="py-4 pl-6">
+                          <div className="flex items-center space-x-3">
+                            <img src={p.image} alt={p.name} className="w-11 h-11 object-cover rounded-xl border border-slate-800 shrink-0" />
+                            <span className="font-mono text-[10px] text-slate-500">{p.id}</span>
+                          </div>
+                        </td>
+                        <td className="py-4">
+                          <div>
+                            <p className="font-bold text-white leading-normal">{p.name}</p>
+                            <p className="text-[9px] font-black text-amber-500/80 uppercase tracking-wide mt-0.5">{p.brand}</p>
+                          </div>
+                        </td>
+                        <td className="py-4 text-center">
+                          <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-[9px] font-bold uppercase text-slate-300">
+                            {p.category}
+                          </span>
+                        </td>
+                        <td className="py-4 text-right font-bold text-white">
+                          {p.isPromo && p.promoPrice ? (
+                            <div className="text-right">
+                              <span className="text-[10px] line-through text-slate-500 block">S/ {p.price.toFixed(2)}</span>
+                              <span className="text-amber-500">S/ {p.promoPrice.toFixed(2)}</span>
+                            </div>
+                          ) : (
+                            <span>S/ {p.price.toFixed(2)}</span>
+                          )}
+                        </td>
+                        <td className="py-4 text-center pr-6">
+                          <div className="flex items-center justify-center space-x-2">
+                            <Link
+                              href={`/admin/productos/editar/${p.id}`}
+                              className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700/60 rounded-lg text-slate-300 hover:text-white transition-colors cursor-pointer"
+                              title="Editar"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(p.id)}
+                              className="p-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                              title="Eliminar"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
