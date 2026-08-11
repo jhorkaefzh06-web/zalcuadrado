@@ -34,6 +34,9 @@ export default function Footer() {
               <li>
                 <Link href="/productos?filter=promo" className="hover:text-amber-400 transition-colors">Promociones</Link>
               </li>
+              <li>
+                <Link href="/quienes-somos" className="hover:text-amber-400 transition-colors">Quiénes Somos</Link>
+              </li>
             </ul>
           </div>
 

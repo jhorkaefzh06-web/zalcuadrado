@@ -8,7 +8,6 @@ import { motion } from 'framer-motion';
 import { CATEGORIES, TESTIMONIALS } from '@/lib/mockData';
 import { useProducts } from '@/hooks/useProducts';
 import UnicornStudioHero from '@/components/UnicornStudioHero';
-import Bottle3D from '@/components/Bottle3D';
 
 export default function Home() {
   const { products: PRODUCTS } = useProducts();
@@ -20,54 +19,7 @@ export default function Home() {
       {/* 1. HERO UNICORN STUDIO 3D PARALLAX WITH HD BOTTLE & WATER FALL EFFECT */}
       <UnicornStudioHero />
 
-      {/* 2. SECCIÓN DESTACADA: BOTELLA EN EFECTO 3D PARALLAX INTERACTIVO CON EL CURSOR */}
-      <section id="seccion-3d-parallax" className="w-full bg-gradient-to-b from-brand-950 via-brand-900 to-brand-950 text-white py-16 md:py-24 border-b border-brand-800/50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-            {/* Texto descriptivo de la experiencia 3D */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                ¿Quiénes <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100 bg-clip-text text-transparent">Somos?</span>
-              </h2>
-              <p className="text-brand-300 leading-relaxed text-base">
-                En Z² redefinimos el concepto de disfrutar de una buena bebida. No solo te ofrecemos licores seleccionados de alta gama, sino que creamos el complemento perfecto con nuestro hielo gourmet cristalino de fusión ultra lenta, diseñado artesanalmente para mantener el sabor intacto de tu copa. Nos mueve la pasión por el detalle, la calidad excepcional y un servicio express las 24 horas.
-              </p>
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-brand-800/40 border border-amber-500/20 space-y-1">
-                  <span className="text-amber-400 font-bold text-lg">Calidad Artesanal</span>
-                  <p className="text-xs text-brand-300">Hielos de pureza cristalina y una selección rigurosa de destilados.</p>
-                </div>
-                <div className="p-4 rounded-xl bg-brand-800/40 border border-amber-500/20 space-y-1">
-                  <span className="text-amber-400 font-bold text-lg">Experiencia Z²</span>
-                  <p className="text-xs text-brand-300">Servicio express las 24 horas para acompañar tus celebraciones.</p>
-                </div>
-              </div>
-
-            </motion.div>
-
-            {/* Contenedor 3D Interactivo con la botella y el cursor */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="flex justify-center items-center"
-            >
-              <Bottle3D
-                imageSrc="/hero-bottle-3d.png"
-                altText="Botella Johnnie Walker Black Label 3D"
-                className="w-full max-w-lg"
-              />
-            </motion.div>
-
-          </div>
-        </div>
-      </section>
 
 
       {/* 4. PROMOTIONS SECTION */}
