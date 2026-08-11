@@ -106,13 +106,18 @@ function DesktopNavLinks({ pathname }: { pathname: string }) {
 
   const drinkCategories = categories.filter(c => {
     const idLower = c.id.toLowerCase();
-    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes' || idLower === 'cigarros';
+    return idLower !== 'hielos' && idLower !== 'hielo' && idLower !== 'bebidas';
   });
 
   const desiredOrder = ['licores', 'vinos', 'cigarros', 'espumantes', 'cervezas'];
-  const sortedDrinkCategories = [...drinkCategories].sort((a, b) => 
-    desiredOrder.indexOf(a.id.toLowerCase()) - desiredOrder.indexOf(b.id.toLowerCase())
-  );
+  const sortedDrinkCategories = [...drinkCategories].sort((a, b) => {
+    const aIndex = desiredOrder.indexOf(a.id.toLowerCase());
+    const bIndex = desiredOrder.indexOf(b.id.toLowerCase());
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    return a.name.localeCompare(b.name);
+  });
 
   const activeCategories = sortedDrinkCategories.length > 0 ? sortedDrinkCategories : [
     { id: 'licores', name: 'Licores' },
@@ -306,13 +311,18 @@ function MobileNavLinks({ pathname, setIsOpen }: { pathname: string; setIsOpen: 
 
   const drinkCategories = categories.filter(c => {
     const idLower = c.id.toLowerCase();
-    return idLower === 'licores' || idLower === 'vinos' || idLower === 'cervezas' || idLower === 'espumantes' || idLower === 'cigarros';
+    return idLower !== 'hielos' && idLower !== 'hielo' && idLower !== 'bebidas';
   });
 
   const desiredOrder = ['licores', 'vinos', 'cigarros', 'espumantes', 'cervezas'];
-  const sortedDrinkCategories = [...drinkCategories].sort((a, b) => 
-    desiredOrder.indexOf(a.id.toLowerCase()) - desiredOrder.indexOf(b.id.toLowerCase())
-  );
+  const sortedDrinkCategories = [...drinkCategories].sort((a, b) => {
+    const aIndex = desiredOrder.indexOf(a.id.toLowerCase());
+    const bIndex = desiredOrder.indexOf(b.id.toLowerCase());
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    return a.name.localeCompare(b.name);
+  });
 
   const activeCategories = sortedDrinkCategories.length > 0 ? sortedDrinkCategories : [
     { id: 'licores', name: 'Licores' },

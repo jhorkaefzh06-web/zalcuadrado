@@ -21,15 +21,20 @@ export default function AdminBannersPage() {
   const [formId, setFormId] = useState('');
   const [formImageUrl, setFormImageUrl] = useState('');
   const [formHref, setFormHref] = useState('');
+  const [isSplit, setIsSplit] = useState(false);
+  const [leftImageUrl, setLeftImageUrl] = useState('');
+  const [rightImageUrl, setRightImageUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingTarget, setUploadingTarget] = useState<'single' | 'left' | 'right' | null>(null);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, target: 'single' | 'left' | 'right') => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     setError(null);
     setSuccess(null);
     setUploadingImage(true);
+    setUploadingTarget(target);
 
     const file = files[0];
     const formData = new FormData();
@@ -47,7 +52,10 @@ export default function AdminBannersPage() {
       }
 
       if (data.url) {
-        setFormImageUrl(data.url);
+        if (target === 'single') setFormImageUrl(data.url);
+        else if (target === 'left') setLeftImageUrl(data.url);
+        else if (target === 'right') setRightImageUrl(data.url);
+        
         setSuccess('Banner subido y cargado con éxito.');
         setTimeout(() => setSuccess(null), 3000);
       }
@@ -56,6 +64,7 @@ export default function AdminBannersPage() {
       setError('Fallo al subir archivo: ' + err.message);
     } finally {
       setUploadingImage(false);
+      setUploadingTarget(null);
       e.target.value = '';
     }
   };
@@ -64,6 +73,9 @@ export default function AdminBannersPage() {
     setEditingBanner(null);
     setFormId('b_' + Math.random().toString(36).substr(2, 9));
     setFormImageUrl('');
+    setLeftImageUrl('');
+    setRightImageUrl('');
+    setIsSplit(false);
     setFormHref('/productos?filter=promo');
     setError(null);
     setSuccess(null);
@@ -73,7 +85,18 @@ export default function AdminBannersPage() {
   const openEditModal = (banner: Banner) => {
     setEditingBanner(banner);
     setFormId(banner.id);
-    setFormImageUrl(banner.image_url);
+    const hasComma = banner.image_url.includes(',');
+    setIsSplit(hasComma);
+    if (hasComma) {
+      const [l, r] = banner.image_url.split(',');
+      setLeftImageUrl(l);
+      setRightImageUrl(r);
+      setFormImageUrl('');
+    } else {
+      setLeftImageUrl('');
+      setRightImageUrl('');
+      setFormImageUrl(banner.image_url);
+    }
     setFormHref(banner.href || '');
     setError(null);
     setSuccess(null);
@@ -86,17 +109,26 @@ export default function AdminBannersPage() {
     setSuccess(null);
     setSaving(true);
 
-    const payload = {
-      id: formId,
-      image_url: formImageUrl.trim(),
-      href: formHref.trim()
-    };
+    const imageUrl = isSplit 
+      ? `${leftImageUrl.trim()},${rightImageUrl.trim()}`
+      : formImageUrl.trim();
 
-    if (!payload.image_url) {
+    if (isSplit && (!leftImageUrl.trim() || !rightImageUrl.trim())) {
+      setError('Por favor define las URL de ambas imágenes para el banner dividido.');
+      setSaving(false);
+      return;
+    }
+    if (!isSplit && !formImageUrl.trim()) {
       setError('Por favor define la URL de la imagen del banner.');
       setSaving(false);
       return;
     }
+
+    const payload = {
+      id: formId,
+      image_url: imageUrl,
+      href: formHref.trim()
+    };
 
     try {
       await saveBannerToStore(payload);
@@ -177,11 +209,23 @@ export default function AdminBannersPage() {
               >
                 {/* Image Preview */}
                 <div className="relative aspect-[21/9] w-full rounded-xl overflow-hidden bg-slate-900 border border-slate-850">
-                  <img 
-                    src={b.image_url} 
-                    alt="Promo Preview" 
-                    className="w-full h-full object-cover" 
-                  />
+                  {b.image_url.includes(',') ? (
+                    (() => {
+                      const [l, r] = b.image_url.split(',');
+                      return (
+                        <div className="grid grid-cols-2 w-full h-full">
+                          <img src={l} alt="Left Preview" className="w-full h-full object-cover border-r border-slate-850" />
+                          <img src={r} alt="Right Preview" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })()
+                  ) : (
+                    <img 
+                      src={b.image_url} 
+                      alt="Promo Preview" 
+                      className="w-full h-full object-cover" 
+                    />
+                  )}
                   <div className="absolute top-2 left-2 bg-slate-950/80 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-mono text-slate-400 border border-white/5">
                     {b.id}
                   </div>
@@ -264,40 +308,135 @@ export default function AdminBannersPage() {
                   />
                 </div>
 
-                {/* Image URL & Upload */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Imagen del Banner (Proporción recomendada: 21:9) *</label>
-                  
-                  <div className="flex items-center gap-2">
-                    <div className="relative flex-grow">
-                      <input
-                        type="text"
-                        value={formImageUrl}
-                        onChange={(e) => setFormImageUrl(e.target.value)}
-                        placeholder="https://enlace-imagen.png"
-                        className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl py-2.5 pl-4 pr-10 text-xs focus:outline-none focus:border-amber-500"
-                        required
-                      />
-                      {uploadingImage && (
-                        <div className="absolute right-3.5 top-3">
-                          <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin" />
-                        </div>
-                      )}
-                    </div>
-                    
-                    <label className="px-4 py-2.5 bg-slate-850 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl cursor-pointer text-xs font-bold shrink-0 flex items-center gap-1.5 transition-colors">
-                      <ImageIcon className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Subir</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        disabled={uploadingImage}
-                      />
-                    </label>
+                {/* Tipo de Banner */}
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tipo de Banner</label>
+                  <div className="flex bg-slate-950 p-1 border border-slate-800 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setIsSplit(false)}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
+                        !isSplit ? 'bg-amber-500 text-slate-900' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Completo (100% Ancho)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsSplit(true)}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
+                        isSplit ? 'bg-amber-500 text-slate-900' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Dividido (50/50)
+                    </button>
                   </div>
                 </div>
+
+                {!isSplit ? (
+                  /* Single Image URL & Upload */
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Imagen del Banner Completo (Proporción recomendada: 21:9) *</label>
+                    <div className="flex items-center gap-2">
+                      <div className="relative flex-grow">
+                        <input
+                          type="text"
+                          value={formImageUrl}
+                          onChange={(e) => setFormImageUrl(e.target.value)}
+                          placeholder="https://enlace-imagen.png"
+                          className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl py-2.5 pl-4 pr-10 text-xs focus:outline-none focus:border-amber-500"
+                          required={!isSplit}
+                        />
+                        {uploadingImage && uploadingTarget === 'single' && (
+                          <div className="absolute right-3.5 top-3">
+                            <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <label className="px-4 py-2.5 bg-slate-850 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl cursor-pointer text-xs font-bold shrink-0 flex items-center gap-1.5 transition-colors">
+                        <ImageIcon className="w-3.5 h-3.5 text-amber-500" />
+                        <span>Subir</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, 'single')}
+                          className="hidden"
+                          disabled={uploadingImage}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                ) : (
+                  /* Split Image URL & Upload (2 fields) */
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Imagen de Mitad Izquierda (50%) *</label>
+                      <div className="flex items-center gap-2">
+                        <div className="relative flex-grow">
+                          <input
+                            type="text"
+                            value={leftImageUrl}
+                            onChange={(e) => setLeftImageUrl(e.target.value)}
+                            placeholder="https://enlace-mitad-izquierda.png"
+                            className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl py-2.5 pl-4 pr-10 text-xs focus:outline-none focus:border-amber-500"
+                            required={isSplit}
+                          />
+                          {uploadingImage && uploadingTarget === 'left' && (
+                            <div className="absolute right-3.5 top-3">
+                              <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <label className="px-4 py-2.5 bg-slate-850 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl cursor-pointer text-xs font-bold shrink-0 flex items-center gap-1.5 transition-colors">
+                          <ImageIcon className="w-3.5 h-3.5 text-amber-500" />
+                          <span>Subir</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileUpload(e, 'left')}
+                            className="hidden"
+                            disabled={uploadingImage}
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Imagen de Mitad Derecha (50%) *</label>
+                      <div className="flex items-center gap-2">
+                        <div className="relative flex-grow">
+                          <input
+                            type="text"
+                            value={rightImageUrl}
+                            onChange={(e) => setRightImageUrl(e.target.value)}
+                            placeholder="https://enlace-mitad-derecha.png"
+                            className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl py-2.5 pl-4 pr-10 text-xs focus:outline-none focus:border-amber-500"
+                            required={isSplit}
+                          />
+                          {uploadingImage && uploadingTarget === 'right' && (
+                            <div className="absolute right-3.5 top-3">
+                              <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <label className="px-4 py-2.5 bg-slate-850 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl cursor-pointer text-xs font-bold shrink-0 flex items-center gap-1.5 transition-colors">
+                          <ImageIcon className="w-3.5 h-3.5 text-amber-500" />
+                          <span>Subir</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileUpload(e, 'right')}
+                            className="hidden"
+                            disabled={uploadingImage}
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Redirection Link */}
                 <div className="space-y-1">
@@ -313,7 +452,7 @@ export default function AdminBannersPage() {
                 </div>
 
                 {/* Banner Live Preview Box */}
-                {formImageUrl && (
+                {!isSplit && formImageUrl && (
                   <div className="space-y-2 pt-2">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Vista Previa del Banner</label>
                     <div className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800">
@@ -322,6 +461,27 @@ export default function AdminBannersPage() {
                         alt="Live Preview" 
                         className="w-full h-full object-cover" 
                       />
+                    </div>
+                  </div>
+                )}
+                {isSplit && (leftImageUrl || rightImageUrl) && (
+                  <div className="space-y-2 pt-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Vista Previa del Banner Dividido</label>
+                    <div className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 grid grid-cols-2">
+                      <div className="relative w-full h-full overflow-hidden border-r border-slate-850 bg-slate-900 flex items-center justify-center">
+                        {leftImageUrl ? (
+                          <img src={leftImageUrl} alt="Left Preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-[9px] text-slate-500 font-bold uppercase">Mitad Izquierda</span>
+                        )}
+                      </div>
+                      <div className="relative w-full h-full overflow-hidden bg-slate-900 flex items-center justify-center">
+                        {rightImageUrl ? (
+                          <img src={rightImageUrl} alt="Right Preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-[9px] text-slate-500 font-bold uppercase">Mitad Derecha</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}

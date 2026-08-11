@@ -95,12 +95,12 @@ export default function ProductDetailClient({ product, related }: Props) {
                     -{discount}% OFF
                   </span>
                 )}
-                {product.countInStock !== undefined && product.countInStock <= 8 && (
+                {/* {product.countInStock !== undefined && product.countInStock <= 8 && (
                   <span className="px-3 py-1 rounded-full text-xs font-bold text-white"
                     style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
                     ¡Últimas {product.countInStock} unidades!
                   </span>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function ProductDetailClient({ product, related }: Props) {
             <div className="flex items-center gap-3">
               <StarRating rating={product.rating} />
               <span className="text-sm font-semibold text-amber-400">{product.rating}</span>
-              <span className="text-sm text-slate-500">· {product.countInStock !== undefined ? `${product.countInStock} en stock` : 'Consultar Stock'}</span>
+              {/* <span className="text-sm text-slate-500">· {product.countInStock !== undefined ? `${product.countInStock} en stock` : 'Consultar Stock'}</span> */}
             </div>
 
             {/* Price block */}
@@ -296,7 +296,7 @@ export default function ProductDetailClient({ product, related }: Props) {
                 { label: 'Marca', value: product.brand },
                 { label: 'Categoría', value: product.category },
                 { label: 'Calificación', value: `${product.rating} / 5 ⭐` },
-                { label: 'Stock disponible', value: product.countInStock !== undefined ? `${product.countInStock} unidades` : 'Consultar' },
+                // { label: 'Stock disponible', value: product.countInStock !== undefined ? `${product.countInStock} unidades` : 'Consultar' },
                 { label: 'Precio regular', value: `S/ ${product.price.toFixed(2)}` },
                 ...(product.isPromo && product.promoPrice ? [
                   { label: 'Precio oferta', value: `S/ ${product.promoPrice.toFixed(2)}` },

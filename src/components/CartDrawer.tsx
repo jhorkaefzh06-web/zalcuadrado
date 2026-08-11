@@ -73,6 +73,7 @@ export default function CartDrawer() {
       const orderId = resData.orderId;
 
       // Build WhatsApp URL (Standard WA chat redirect)
+      /* Original detailed WhatsApp message commented out per request
       let messageText = `¡Hola Hielos & Bebidas Z²! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
       messageText += `👤 *Cliente:* ${clientName.trim()}\n`;
       messageText += `📍 *Dirección:* ${clientAddress.trim()}\n\n`;
@@ -87,6 +88,17 @@ export default function CartDrawer() {
       messageText += `\n💵 *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
       messageText += `🔗 *Ver Estado del Pedido:* ${window.location.origin}/pedido/${orderId}\n\n`;
       messageText += `📍 Quedo a la espera de coordinar la dirección de entrega y medio de pago. ¡Gracias!`;
+      */
+
+      // Simplified WhatsApp message: Lugar (Address), Productos, Monto Total
+      let messageText = `📍 *Lugar de Entrega:* ${clientAddress.trim()}\n\n`;
+      messageText += `🛒 *Productos Comprados:*\n`;
+      cartItems.forEach((item) => {
+        const activePrice = item.product.isPromo && item.product.promoPrice ? item.product.promoPrice : item.product.price;
+        const subtotal = activePrice * item.quantity;
+        messageText += `🔹 *${item.quantity}x* ${item.product.name} - *S/ ${subtotal.toFixed(2)}*\n`;
+      });
+      messageText += `\n💵 *Monto Total del Pedido: S/ ${cartTotal.toFixed(2)}*`;
 
       const encoded = encodeURIComponent(messageText);
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;

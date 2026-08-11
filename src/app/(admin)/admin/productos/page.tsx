@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { PRODUCTS, CATEGORIES, Product } from '@/lib/mockData';
+import { PRODUCTS, Product } from '@/lib/mockData';
+import { useCategories } from '@/hooks/useCategories';
 import { notifyProductsChanged } from '@/lib/productsStore';
 import { Search, Plus, Edit, Trash2, X, AlertTriangle, Check, Loader2, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const { categories } = useCategories();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -366,33 +368,47 @@ export default function AdminProductsPage() {
   });
 
   const getProductGroups = (productList: Product[]) => {
-    const groups: { id: string; name: string; products: Product[] }[] = [
-      { id: 'promociones', name: '⚡ Promociones', products: [] },
-      { id: 'licores', name: '🥃 Licores y Bebidas', products: [] },
-      { id: 'vinos', name: '🍷 Vinos', products: [] },
-      { id: 'cervezas', name: '🍺 Cervezas', products: [] },
-      { id: 'hielo', name: '💎 Hielos', products: [] },
-      { id: 'cigarros', name: '🚬 Cigarros', products: [] },
-      { id: 'otros', name: '📦 Otros', products: [] }
-    ];
+    const groups: { id: string; name: string; products: Product[] }[] = [];
+    
+    // Group 1: Promociones
+    groups.push({ id: 'promociones', name: '⚡ Promociones', products: [] });
+
+    // Group 2: Categories from DB
+    categories.forEach(cat => {
+      let emoji = '📦';
+      const idLower = cat.id.toLowerCase();
+      if (idLower.includes('licor')) emoji = '🥃';
+      else if (idLower.includes('vin')) emoji = '🍷';
+      else if (idLower.includes('cerve')) emoji = '🍺';
+      else if (idLower.includes('hiel')) emoji = '💎';
+      else if (idLower.includes('cigarr')) emoji = '🚬';
+      else if (idLower.includes('gaseos') || idLower.includes('soda') || idLower.includes('bebida')) emoji = '🥤';
+
+      groups.push({
+        id: cat.id,
+        name: `${emoji} ${cat.name}`,
+        products: []
+      });
+    });
+
+    // Group 3: Otros
+    groups.push({ id: 'otros', name: '📦 Otros', products: [] });
 
     productList.forEach(p => {
       if (p.isPromo) {
         groups[0].products.push(p);
       } else {
-        const catId = p.category?.toLowerCase();
-        if (catId === 'licores' || catId === 'bebidas') {
-          groups[1].products.push(p);
-        } else if (catId === 'vinos') {
-          groups[2].products.push(p);
-        } else if (catId === 'cervezas') {
-          groups[3].products.push(p);
-        } else if (catId === 'hielo' || catId === 'hielos') {
-          groups[4].products.push(p);
-        } else if (catId === 'cigarros') {
-          groups[5].products.push(p);
+        const catId = p.category?.toLowerCase() || '';
+        let targetGroup = groups.find(g => g.id.toLowerCase() === catId);
+        if (!targetGroup) {
+          if (catId === 'bebidas') targetGroup = groups.find(g => g.id.toLowerCase() === 'licores');
+          else if (catId === 'hielos') targetGroup = groups.find(g => g.id.toLowerCase() === 'hielo');
+        }
+        
+        if (targetGroup) {
+          targetGroup.products.push(p);
         } else {
-          groups[6].products.push(p);
+          groups[groups.length - 1].products.push(p);
         }
       }
     });
@@ -405,11 +421,23 @@ export default function AdminProductsPage() {
   const tabs = [
     { id: 'todos', name: 'Todos' },
     { id: 'promociones', name: '⚡ Promociones' },
-    { id: 'licores', name: '🥃 Licores' },
-    { id: 'vinos', name: '🍷 Vinos' },
-    { id: 'cervezas', name: '🍺 Cervezas' },
-    { id: 'hielo', name: '💎 Hielos' },
-    { id: 'cigarros', name: '🚬 Cigarros' }
+    ...categories
+      .filter(c => c.id !== 'bebidas')
+      .map(c => {
+        let emoji = '📦';
+        const idLower = c.id.toLowerCase();
+        if (idLower.includes('licor')) emoji = '🥃';
+        else if (idLower.includes('vin')) emoji = '🍷';
+        else if (idLower.includes('cerve')) emoji = '🍺';
+        else if (idLower.includes('hiel')) emoji = '💎';
+        else if (idLower.includes('cigarr')) emoji = '🚬';
+        else if (idLower.includes('gaseos') || idLower.includes('soda') || idLower.includes('bebida')) emoji = '🥤';
+        
+        return {
+          id: c.id,
+          name: `${emoji} ${c.name}`
+        };
+      })
   ];
 
   return (
@@ -698,7 +726,7 @@ export default function AdminProductsPage() {
                     onChange={(e) => setFormCategory(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 text-white py-2.5 px-3 rounded-xl text-xs focus:outline-none focus:border-amber-500"
                   >
-                    {CATEGORIES.map(c => (
+                    {categories.map(c => (
                       <option key={c.id} value={c.id}>{c.name}</option>
                     ))}
                   </select>

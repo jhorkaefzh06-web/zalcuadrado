@@ -96,7 +96,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Categorías', path: '/admin/categorias', icon: Tags },
     { name: 'Banners', path: '/admin/banners', icon: Image },
     { name: 'Inventario', path: '/admin/inventario', icon: Package },
-    { name: 'Historial Stock', path: '/admin/historial-stock', icon: History },
+    // { name: 'Historial Stock', path: '/admin/historial-stock', icon: History },
     { name: 'Almacenes', path: '/admin/almacenes', icon: Warehouse },
     { name: 'Fletes', path: '/admin/fletes', icon: Truck },
   ];

@@ -160,39 +160,58 @@ a.btn:hover::before,
 }
 
 /* Swiper.js premium styles overrides */
+.swiper-button-prev {
+  left: 0 !important;
+  right: auto !important;
+  border-radius: 0 9999px 9999px 0 !important; /* Flat left, rounded right */
+  padding-right: 6px !important;
+  border-left: none !important;
+}
+
+.swiper-button-next {
+  right: 0 !important;
+  left: auto !important;
+  border-radius: 9999px 0 0 9999px !important; /* Rounded left, flat right */
+  padding-left: 6px !important;
+  border-right: none !important;
+}
+
 .swiper-button-next,
 .swiper-button-prev {
   --swiper-navigation-size: 12px !important;
-  color: var(--color-primary-600) !important;
-  background: rgba(255, 255, 255, 0.9);
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 50%;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  transition: all 0.2s ease;
+  color: #ffffff !important;
+  background: rgba(30, 30, 30, 0.85) !important;
+  width: 40px !important;
+  height: 60px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  z-index: 50 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+  cursor: pointer !important;
+}
+
+.swiper-button-next svg,
+.swiper-button-prev svg {
+  width: 12px !important;
+  height: 12px !important;
 }
 
 body .swiper-button-next:after,
 body .swiper-button-prev:after {
   font-size: 12px !important;
-  font-weight: bold;
+  font-weight: 900 !important;
   line-height: 1 !important;
-}
-
-body .swiper-button-next svg,
-body .swiper-button-prev svg {
-  width: 20px !important;
-  height: 20px !important;
+  color: #ffffff !important;
 }
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  background: var(--color-primary-600) !important;
-  color: white !important;
-  transform: scale(1.1);
+  background: #111111 !important;
+  color: #fbbf24 !important; /* Amber-400 on hover */
+  width: 45px !important; /* Expands slightly on hover */
 }
 
 .swiper-pagination-bullet-active {

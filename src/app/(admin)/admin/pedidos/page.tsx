@@ -311,7 +311,7 @@ export default function AdminOrdersPage() {
                             <Loader2 className="w-4 h-4 text-amber-500 animate-spin" />
                           ) : (
                             <>
-                              {ord.status === 'pendiente' && (
+                              {/* {ord.status === 'pendiente' && (
                                 <>
                                   <button
                                     onClick={() => updateOrderStatus(ord.id, 'pagado')}
@@ -328,7 +328,7 @@ export default function AdminOrdersPage() {
                                     <X className="w-3.5 h-3.5 stroke-[3]" />
                                   </button>
                                 </>
-                              )}
+                              )} */}
 
                               {ord.status === 'pagado' && (
                                 <button

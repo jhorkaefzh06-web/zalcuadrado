@@ -148,8 +148,7 @@ export default function ProductsClient() {
           return false;
         }
       } else if (normSelected === 'bebidas') {
-        const allowed = ['bebidas', 'licores', 'vinos', 'espumantes', 'cervezas'];
-        if (!allowed.includes(normProductCat)) {
+        if (normProductCat === 'hielos' || normProductCat === 'hielo') {
           return false;
         }
       } else if (normProductCat !== normSelected) {
@@ -324,11 +323,11 @@ export default function ProductsClient() {
                               -{discount}%
                             </span>
                           )}
-                          {product.countInStock !== undefined && product.countInStock <= 5 && (
+                          {/* {product.countInStock !== undefined && product.countInStock <= 5 && (
                             <span className="absolute top-3 right-3 z-10 px-2 py-0.5 text-[10px] font-bold text-white bg-accent-amber rounded-lg shadow-sm">
                               Solo {product.countInStock} disp.
                             </span>
-                          )}
+                          )} */}
                           <img
                             src={product.image}
                             alt={product.name}
