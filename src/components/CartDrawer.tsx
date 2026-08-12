@@ -23,6 +23,7 @@ export default function CartDrawer() {
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
   const [clientName, setClientName] = useState('');
   const [clientAddress, setClientAddress] = useState('');
+  const [clientReference, setClientReference] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
@@ -53,12 +54,16 @@ export default function CartDrawer() {
         };
       });
 
+      const combinedAddress = clientReference.trim()
+        ? `${clientAddress.trim()} (Ref: ${clientReference.trim()})`
+        : clientAddress.trim();
+
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           clientName: clientName.trim(),
-          clientAddress: clientAddress.trim(),
+          clientAddress: combinedAddress,
           items: orderItems,
           total: cartTotal
         })
@@ -72,33 +77,20 @@ export default function CartDrawer() {
 
       const orderId = resData.orderId;
 
-      // Build WhatsApp URL (Standard WA chat redirect)
-      /* Original detailed WhatsApp message commented out per request
-      let messageText = `¡Hola Hielos & Bebidas Z²! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
-      messageText += `👤 *Cliente:* ${clientName.trim()}\n`;
-      messageText += `📍 *Dirección:* ${clientAddress.trim()}\n\n`;
-      messageText += `🛒 *Detalle del Pedido:*\n`;
+      // Original detailed WhatsApp message without status link (using ASCII escape sequences for bulletproof encoding)
+      let messageText = `\u00A1Hola Hielos & Bebidas Z\u00B2! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
+      messageText += `\uD83D\uDC64 *Cliente:* ${clientName.trim()}\n`;
+      messageText += `\uD83D\uDCCD *Direcci\u00F3n:* ${combinedAddress}\n\n`;
+      messageText += `\uD83D\uDED2 *Detalle del Pedido:*\n`;
 
       cartItems.forEach((item) => {
         const activePrice = item.product.isPromo && item.product.promoPrice ? item.product.promoPrice : item.product.price;
         const subtotal = activePrice * item.quantity;
-        messageText += `🔹 *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
+        messageText += `\uD83D\uDD39 *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
       });
 
-      messageText += `\n💵 *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
-      messageText += `🔗 *Ver Estado del Pedido:* ${window.location.origin}/pedido/${orderId}\n\n`;
-      messageText += `📍 Quedo a la espera de coordinar la dirección de entrega y medio de pago. ¡Gracias!`;
-      */
-
-      // Simplified WhatsApp message: Lugar (Address), Productos, Monto Total
-      let messageText = `📍 *Lugar de Entrega:* ${clientAddress.trim()}\n\n`;
-      messageText += `🛒 *Productos Comprados:*\n`;
-      cartItems.forEach((item) => {
-        const activePrice = item.product.isPromo && item.product.promoPrice ? item.product.promoPrice : item.product.price;
-        const subtotal = activePrice * item.quantity;
-        messageText += `🔹 *${item.quantity}x* ${item.product.name} - *S/ ${subtotal.toFixed(2)}*\n`;
-      });
-      messageText += `\n💵 *Monto Total del Pedido: S/ ${cartTotal.toFixed(2)}*`;
+      messageText += `\n\uD83D\uDCB5 *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
+      messageText += `\uD83D\uDCCD Quedo a la espera de coordinar la direcci\u00F3n de entrega y medio de pago. \u00A1Gracias!`;
 
       const encoded = encodeURIComponent(messageText);
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
@@ -108,6 +100,7 @@ export default function CartDrawer() {
       setShowCheckoutForm(false);
       setClientName('');
       setClientAddress('');
+      setClientReference('');
       setIsCartOpen(false);
 
       // Redirect to WhatsApp
@@ -193,6 +186,18 @@ export default function CartDrawer() {
                       placeholder="Ej: Av. Larco 123, Dpto 402, Miraflores"
                       className="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-amber-400 placeholder:text-brand-500"
                       required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-brand-300 uppercase tracking-wider block pl-1">Referencia (Opcional)</label>
+                    <input
+                      type="text"
+                      value={clientReference}
+                      onChange={(e) => setClientReference(e.target.value)}
+                      placeholder="Ej: Portón verde, frente al parque"
+                      className="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-amber-400 placeholder:text-brand-500"
                       disabled={isSubmitting}
                     />
                   </div>
