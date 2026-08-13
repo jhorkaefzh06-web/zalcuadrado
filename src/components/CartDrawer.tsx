@@ -78,23 +78,22 @@ export default function CartDrawer() {
       const orderId = resData.orderId;
 
       // Original detailed WhatsApp message without status link (using ASCII escape sequences for bulletproof encoding)
-      let messageText = `\u00A1Hola Hielos & Bebidas Z\u00B2! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
-      messageText += `\uD83D\uDC64 *Cliente:* ${clientName.trim()}\n`;
-      messageText += `\uD83D\uDCCD *Direcci\u00F3n:* ${combinedAddress}\n\n`;
-      messageText += `\uD83D\uDED2 *Detalle del Pedido:*\n`;
+      let messageText = `¡Hola Hielos & Bebidas Z²! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
+      messageText += `👤 *Cliente:* ${clientName.trim()}\n`;
+      messageText += `📍 *Dirección:* ${combinedAddress}\n\n`;
+      messageText += `🛒 *Detalle del Pedido:*\n`;
 
       cartItems.forEach((item) => {
         const activePrice = item.product.isPromo && item.product.promoPrice ? item.product.promoPrice : item.product.price;
         const subtotal = activePrice * item.quantity;
-        messageText += `\uD83D\uDD39 *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
+        messageText += `🔹 *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
       });
 
-      messageText += `\n\uD83D\uDCB5 *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
-      messageText += `\uD83D\uDCCD Quedo a la espera de coordinar la direcci\u00F3n de entrega y medio de pago. \u00A1Gracias!`;
+      messageText += `\n💵 *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
+      messageText += `📍 Quedo a la espera de coordinar la dirección de entrega y medio de pago. ¡Gracias!`;
 
-      const encoded = encodeURIComponent(messageText);
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
-      
+      const urlWhatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
+
       // Reset checkout states and clear cart
       clearCart();
       setShowCheckoutForm(false);
@@ -104,7 +103,7 @@ export default function CartDrawer() {
       setIsCartOpen(false);
 
       // Redirect to WhatsApp
-      window.open(url, '_blank', 'noopener,noreferrer');
+      window.open(urlWhatsapp, '_blank', 'noopener,noreferrer');
     } catch (err: any) {
       console.error('Checkout error:', err);
       setCheckoutError(err.message || 'Fallo al procesar el checkout.');
@@ -157,7 +156,7 @@ export default function CartDrawer() {
               {showCheckoutForm ? (
                 <form onSubmit={handleCheckoutSubmit} className="space-y-4 py-2">
                   <h3 className="text-white font-bold text-sm border-b border-white/5 pb-2 mb-2">Tus Datos para el Envío</h3>
-                  
+
                   {checkoutError && (
                     <div className="bg-red-500/10 border border-red-500/25 text-red-400 p-3.5 rounded-xl text-xs leading-relaxed">
                       {checkoutError}
@@ -214,7 +213,7 @@ export default function CartDrawer() {
                   <div>
                     <h3 className="text-white font-bold text-base">¿Tienes sed?</h3>
                     <p className="text-xs text-brand-400 max-w-[240px] mt-1 mx-auto">
-                      Tu carrito está vacío. Agrega tus botellas favoritas y hielos gourmet para empezar.
+                      Tu carrito está vacío. Agrega tus botellas favoritas y hielos  para empezar.
                     </p>
                   </div>
                   <button
@@ -299,7 +298,7 @@ export default function CartDrawer() {
                   <span className="text-brand-300 font-bold">Subtotal</span>
                   <span className="text-white font-black text-lg">S/ {cartTotal.toFixed(2)}</span>
                 </div>
-                
+
                 {!showCheckoutForm ? (
                   <>
                     <div className="p-3 bg-brand-900/25 border border-white/5 rounded-2xl text-[10px] text-brand-400 leading-normal">
@@ -324,7 +323,7 @@ export default function CartDrawer() {
                     >
                       Volver
                     </button>
-                    
+
                     <button
                       type="button"
                       onClick={handleCheckoutSubmit}

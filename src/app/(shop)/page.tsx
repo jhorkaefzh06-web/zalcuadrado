@@ -8,9 +8,11 @@ import { motion } from 'framer-motion';
 import { CATEGORIES, TESTIMONIALS } from '@/lib/mockData';
 import { useProducts } from '@/hooks/useProducts';
 import UnicornStudioHero from '@/components/UnicornStudioHero';
+import { useCart } from '@/context/CartContext';
 
 export default function Home() {
   const { products: PRODUCTS } = useProducts();
+  const { addToCart } = useCart();
   const promoProducts = PRODUCTS.filter(p => p.isPromo);
 
   return (
@@ -82,12 +84,13 @@ export default function Home() {
                       ${product.promoPrice?.toFixed(2)}
                     </span>
                   </div>
-                  <Link
-                    href={`/contacto`}
-                    className="p-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-brand-950 font-bold transition-colors shadow-md"
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="p-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-brand-950 font-bold transition-colors shadow-md cursor-pointer"
+                    aria-label="Agregar al carrito"
                   >
                     <Icons.ShoppingBag className="w-5 h-5" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}

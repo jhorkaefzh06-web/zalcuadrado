@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { LayoutDashboard, Boxes, LogOut, Menu, User, Bell, ChevronDown, Loader2, Tags, Package, Warehouse, Truck, History, ShoppingBag, Image } from 'lucide-react';
+import { LayoutDashboard, Boxes, LogOut, Menu, User, ChevronDown, Loader2, Tags, Package, Warehouse, Truck, History, ShoppingBag, Image } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -190,11 +190,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Header Right Actions */}
           <div className="flex items-center space-x-4">
-            {/* Notification Badge */}
-            <button className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors relative cursor-pointer">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 bg-amber-500 w-2 h-2 rounded-full ring-2 ring-slate-900" />
-            </button>
+
 
             {/* User Dropdown */}
             <div className="relative">
