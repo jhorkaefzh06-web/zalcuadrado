@@ -77,20 +77,20 @@ export default function CartDrawer() {
 
       const orderId = resData.orderId;
 
-      // WhatsApp message — sin emojis para evitar corrupción UTF-8 en wa.me
+      // WhatsApp message con emojis
       let messageText = `¡Hola Hielos & Bebidas Z²! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
-      messageText += `*Cliente:* ${clientName.trim()}\n`;
-      messageText += `*Dirección:* ${combinedAddress}\n\n`;
-      messageText += `*Detalle del Pedido:*\n`;
+      messageText += `\u{1F464} *Cliente:* ${clientName.trim()}\n`;
+      messageText += `\u{1F4CD} *Dirección:* ${combinedAddress}\n\n`;
+      messageText += `\u{1F6D2} *Detalle del Pedido:*\n`;
 
       cartItems.forEach((item) => {
         const activePrice = item.product.isPromo && item.product.promoPrice ? item.product.promoPrice : item.product.price;
         const subtotal = activePrice * item.quantity;
-        messageText += `- *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
+        messageText += `\u{1F539} *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
       });
 
-      messageText += `\n*Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
-      messageText += `Quedo a la espera de coordinar la entrega y medio de pago. ¡Gracias!`;
+      messageText += `\n\u{1F4B5} *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
+      messageText += `\u{1F4CD} Quedo a la espera de coordinar la entrega y medio de pago. ¡Gracias!`;
 
       const urlWhatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
 
