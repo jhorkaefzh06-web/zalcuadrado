@@ -797,6 +797,15 @@ export default function AdminProductsPage() {
                     />
                   </label>
                 </div>
+                {formImage && (
+                  <div className="relative aspect-square w-24 h-24 mt-2 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800">
+                    <img 
+                      src={formImage} 
+                      alt="Vista previa" 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Description */}

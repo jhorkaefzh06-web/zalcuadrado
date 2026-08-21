@@ -61,7 +61,7 @@ export default function AdminEditProductPage() {
 
       if (data.url) {
         setFormImages(prev => {
-          if (prev.length <= 1) {
+          if (prev.length === 1 && (prev[0].includes('unsplash.com') || prev[0].includes('placeholder') || prev[0] === '/logo.png')) {
             return [data.url];
           }
           return [data.url, ...prev];
@@ -168,7 +168,7 @@ export default function AdminEditProductPage() {
         return;
       }
       setFormImages(prev => {
-        if (prev.length <= 1) {
+        if (prev.length === 1 && (prev[0].includes('unsplash.com') || prev[0].includes('placeholder') || prev[0] === '/logo.png')) {
           return [url];
         }
         return [url, ...prev];
@@ -670,7 +670,7 @@ export default function AdminEditProductPage() {
 
                       return (
                         <div
-                          key={idx}
+                          key={`${url}-${idx}`}
                           draggable
                           onDragStart={() => handleDragStart(idx)}
                           onDragOver={(e) => handleDragOver(e, idx)}
