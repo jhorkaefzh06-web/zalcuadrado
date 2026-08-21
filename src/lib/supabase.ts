@@ -2,9 +2,10 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const disableSupabase = process.env.NEXT_PUBLIC_DISABLE_SUPABASE === 'true';
 
-// Initialize client only if variables are provided
-export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
+// Initialize client only if variables are provided and not explicitly disabled
+export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey) && !disableSupabase;
 
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)

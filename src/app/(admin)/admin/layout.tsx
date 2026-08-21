@@ -15,6 +15,77 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [userEmail, setUserEmail] = useState<string>('admin@z2.com');
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+  // Evitar que errores de conexión (antivirus Kaspersky o fallos de red de Supabase) bloqueen la pantalla con overlays en desarrollo
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') return;
+
+    const originalError = console.error;
+    console.error = (...args) => {
+      const errorStr = args.map(arg => String(arg || '')).join(' ');
+      
+      // Filtrar errores de Kaspersky y fallos de conexión a Supabase
+      if (
+        errorStr.includes('kaspersky') ||
+        errorStr.includes('Failed to fetch') ||
+        errorStr.includes('AuthRetryableFetchError') ||
+        args.some(arg => {
+          if (!arg) return false;
+          const msg = arg.message || '';
+          const name = arg.name || '';
+          const stack = arg.stack || '';
+          return (
+            msg.includes('Failed to fetch') ||
+            name.includes('AuthRetryableFetchError') ||
+            stack.includes('kaspersky') ||
+            stack.includes('AuthRetryableFetchError')
+          );
+        })
+      ) {
+        // Redirigir a advertencia para no disparar el overlay de Next.js
+        console.warn('[DevOverlay bypass]', ...args);
+        return;
+      }
+      originalError(...args);
+    };
+
+    const handleWindowError = (event: ErrorEvent) => {
+      const errorMsg = event.message || '';
+      const filename = event.filename || '';
+      const stack = event.error?.stack || '';
+      
+      if (
+        (errorMsg.includes('Failed to fetch') || errorMsg.includes('AuthRetryableFetchError')) &&
+        (filename.includes('kaspersky') || stack.includes('kaspersky') || stack.includes('AuthRetryableFetchError'))
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    };
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const reason = event.reason;
+      const reasonStr = String(reason || '');
+      const stack = reason?.stack || '';
+      
+      if (
+        (reasonStr.includes('Failed to fetch') || reasonStr.includes('AuthRetryableFetchError') || reason?.message?.includes('Failed to fetch')) &&
+        (stack.includes('kaspersky') || stack.includes('AuthRetryableFetchError') || reasonStr.includes('kaspersky'))
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    };
+
+    window.addEventListener('error', handleWindowError, true);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection, true);
+
+    return () => {
+      console.error = originalError;
+      window.removeEventListener('error', handleWindowError, true);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection, true);
+    };
+  }, []);
+
   useEffect(() => {
     const checkAuth = async () => {
       // If we are on the login page, don't execute guard

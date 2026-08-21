@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Star, StarHalf, ShoppingBag, MessageCircle, ChevronLeft,
@@ -11,6 +11,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/lib/mockData';
 import { useCart } from '@/context/CartContext';
+import { useProducts } from '@/hooks/useProducts';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 const WHATSAPP_NUMBER = '51960871790';
 
@@ -37,20 +39,35 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default function ProductDetailClient({ product, related }: Props) {
-  const [selectedImage, setSelectedImage] = useState(product.image);
+  const { products } = useProducts();
+  const [currentProduct, setCurrentProduct] = useState<Product>(product);
+  const [selectedImage, setSelectedImage] = useState(currentProduct.image);
   const [qty, setQty] = useState(1);
   const { addToCart } = useCart();
 
-  const activePrice = product.isPromo && product.promoPrice ? product.promoPrice : product.price;
-  const discount = product.isPromo && product.promoPrice
-    ? Math.round(((product.price - product.promoPrice) / product.price) * 100)
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      const found = products.find(p => p.id === product.id);
+      if (found) {
+        setCurrentProduct(found);
+      }
+    }
+  }, [products, product.id]);
+
+  useEffect(() => {
+    setSelectedImage(currentProduct.image);
+  }, [currentProduct.image]);
+
+  const activePrice = currentProduct.isPromo && currentProduct.promoPrice ? currentProduct.promoPrice : currentProduct.price;
+  const discount = currentProduct.isPromo && currentProduct.promoPrice
+    ? Math.round(((currentProduct.price - currentProduct.promoPrice) / currentProduct.price) * 100)
     : null;
 
   const buildWhatsAppUrl = (msg: string) => {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   };
 
-  const whatsappMsg = `¡Hola! Quiero hacer un pedido de:\n\n*${product.name}*\nMarca: ${product.brand}\nPrecio: S/ ${activePrice.toFixed(2)}\n\nPor favor, indíquenme los pasos para coordinar la entrega y el pago.`;
+  const whatsappMsg = `¡Hola! Quiero hacer un pedido de:\n\n*${currentProduct.name}*\nMarca: ${currentProduct.brand}\nPrecio: S/ ${activePrice.toFixed(2)}\n\nPor favor, indíquenme los pasos para coordinar la entrega y el pago.`;
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--background)' }}>
@@ -62,7 +79,7 @@ export default function ProductDetailClient({ product, related }: Props) {
           <span>/</span>
           <Link href="/productos" className="hover:text-primary-500 transition-colors">Productos</Link>
           <span>/</span>
-          <span className="text-slate-300 truncate max-w-[200px]">{product.name}</span>
+          <span className="text-slate-300 truncate max-w-[200px]">{currentProduct.name}</span>
         </nav>
       </div>
 
@@ -81,7 +98,7 @@ export default function ProductDetailClient({ product, related }: Props) {
             <div className="relative rounded-2xl overflow-hidden aspect-square glass">
               <Image
                 src={selectedImage}
-                alt={product.name}
+                alt={currentProduct.name}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -89,24 +106,18 @@ export default function ProductDetailClient({ product, related }: Props) {
               />
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {product.isPromo && discount && (
+                {currentProduct.isPromo && discount && (
                   <span className="px-3 py-1 rounded-full text-xs font-bold text-white"
                     style={{ background: 'linear-gradient(135deg, #f43f5e, #ec4899)' }}>
                     -{discount}% OFF
                   </span>
                 )}
-                {/* {product.countInStock !== undefined && product.countInStock <= 8 && (
-                  <span className="px-3 py-1 rounded-full text-xs font-bold text-white"
-                    style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
-                    ¡Últimas {product.countInStock} unidades!
-                  </span>
-                )} */}
               </div>
             </div>
 
-            {/* Thumbnail strip (same image repeated for demo) */}
-            <div className="flex gap-3">
-              {[product.image, product.image, product.image].map((img, idx) => (
+            {/* Thumbnail strip */}
+            <div className="flex flex-wrap gap-3">
+              {(currentProduct.images && currentProduct.images.length > 0 ? currentProduct.images : [currentProduct.image]).map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(img)}
@@ -132,33 +143,32 @@ export default function ProductDetailClient({ product, related }: Props) {
             {/* Brand + Category */}
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/10 text-primary-400 border border-primary-500/20">
-                {product.brand}
+                {currentProduct.brand}
               </span>
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700 capitalize">
-                {product.category}
+                {currentProduct.category}
               </span>
             </div>
 
             {/* Name */}
             <h1 className="text-2xl sm:text-3xl xl:text-4xl font-bold leading-tight"
               style={{ color: 'var(--foreground)' }}>
-              {product.name}
+              {currentProduct.name}
             </h1>
 
             {/* Rating */}
             <div className="flex items-center gap-3">
-              <StarRating rating={product.rating} />
-              <span className="text-sm font-semibold text-amber-400">{product.rating}</span>
-              {/* <span className="text-sm text-slate-500">· {product.countInStock !== undefined ? `${product.countInStock} en stock` : 'Consultar Stock'}</span> */}
+              <StarRating rating={currentProduct.rating} />
+              <span className="text-sm font-semibold text-amber-400">{currentProduct.rating}</span>
             </div>
 
             {/* Price block */}
             <div className="rounded-2xl p-5 glass space-y-1">
-              {product.isPromo && product.promoPrice ? (
+              {currentProduct.isPromo && currentProduct.promoPrice ? (
                 <>
                   <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-extrabold text-primary-400">
-                      S/ {product.promoPrice.toFixed(2)}
+                      S/ {currentProduct.promoPrice.toFixed(2)}
                     </span>
                     {discount && (
                       <span className="px-2 py-0.5 rounded-md text-sm font-bold text-white"
@@ -168,15 +178,15 @@ export default function ProductDetailClient({ product, related }: Props) {
                     )}
                   </div>
                   <p className="text-sm text-slate-500 line-through">
-                    Antes: S/ {product.price.toFixed(2)}
+                    Antes: S/ {currentProduct.price.toFixed(2)}
                   </p>
                   <p className="text-sm text-green-400 font-medium">
-                    Ahorras S/ {(product.price - product.promoPrice).toFixed(2)}
+                    Ahorras S/ {(currentProduct.price - currentProduct.promoPrice).toFixed(2)}
                   </p>
                 </>
               ) : (
                 <span className="text-4xl font-extrabold text-primary-400">
-                  S/ {product.price.toFixed(2)}
+                  S/ {currentProduct.price.toFixed(2)}
                 </span>
               )}
             </div>
@@ -187,7 +197,7 @@ export default function ProductDetailClient({ product, related }: Props) {
                 Descripción
               </h2>
               <p className="text-slate-300 leading-relaxed text-base">
-                {product.description}
+                {currentProduct.description}
               </p>
             </div>
 
@@ -197,7 +207,7 @@ export default function ProductDetailClient({ product, related }: Props) {
                 Características principales
               </h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {product.features.map((feat, i) => (
+                {currentProduct.features.map((feat, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-300">
                     <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-primary-400" />
                     {feat}
@@ -227,7 +237,7 @@ export default function ProductDetailClient({ product, related }: Props) {
 
               {/* Add to Cart button */}
               <button
-                onClick={() => addToCart(product, qty)}
+                onClick={() => addToCart(currentProduct, qty)}
                 className="flex-1 flex items-center justify-center gap-2.5 py-4 px-6 rounded-2xl font-bold text-brand-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 hover:scale-[1.02] active:scale-[0.98] shadow-lg transition-all cursor-pointer"
               >
                 <ShoppingBag className="w-5 h-5 fill-brand-950 text-brand-950" />
@@ -293,13 +303,13 @@ export default function ProductDetailClient({ product, related }: Props) {
             </h2>
             <dl className="space-y-3">
               {[
-                { label: 'Marca', value: product.brand },
-                { label: 'Categoría', value: product.category },
-                { label: 'Calificación', value: `${product.rating} / 5 ⭐` },
-                // { label: 'Stock disponible', value: product.countInStock !== undefined ? `${product.countInStock} unidades` : 'Consultar' },
-                { label: 'Precio regular', value: `S/ ${product.price.toFixed(2)}` },
-                ...(product.isPromo && product.promoPrice ? [
-                  { label: 'Precio oferta', value: `S/ ${product.promoPrice.toFixed(2)}` },
+                { label: 'Marca', value: currentProduct.brand },
+                { label: 'Categoría', value: currentProduct.category },
+                { label: 'Calificación', value: `${currentProduct.rating} / 5 ⭐` },
+                // { label: 'Stock disponible', value: currentProduct.countInStock !== undefined ? `${currentProduct.countInStock} unidades` : 'Consultar' },
+                { label: 'Precio regular', value: `S/ ${currentProduct.price.toFixed(2)}` },
+                ...(currentProduct.isPromo && currentProduct.promoPrice ? [
+                  { label: 'Precio oferta', value: `S/ ${currentProduct.promoPrice.toFixed(2)}` },
                   { label: 'Descuento', value: `${discount}%` },
                 ] : []),
               ].map(({ label, value }) => (

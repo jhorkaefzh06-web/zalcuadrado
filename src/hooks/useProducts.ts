@@ -10,14 +10,16 @@ export function useProducts() {
   const loadProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/products');
-      if (res.ok) {
-        const data = await res.json();
-        setProducts(data);
-      } else {
-        const data = await fetchAllProducts();
-        setProducts(data);
+      if (isSupabaseConfigured) {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          setProducts(data);
+          return;
+        }
       }
+      const data = await fetchAllProducts();
+      setProducts(data);
     } catch (err) {
       console.warn('API fetch error, using local fallback:', err);
       const data = await fetchAllProducts();

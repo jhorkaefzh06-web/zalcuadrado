@@ -8,6 +8,34 @@ const supabase = (supabaseUrl && supabaseServiceRoleKey)
   ? createClient(supabaseUrl, supabaseServiceRoleKey)
   : null;
 
+const MOCK_ORDERS = [
+  {
+    id: 'ord_9f8e7d6c5b',
+    created_at: new Date().toISOString(),
+    client_name: 'Juan Pérez',
+    whatsapp_number: '987654321',
+    address: 'Av. Larco 123, Miraflores',
+    total: 85.00,
+    status: 'pendiente',
+    items: [
+      { name: 'Hielo Gourmet Esferas 6x', quantity: 2, price: 15.00 },
+      { name: 'Pisco Portón Mosto Verde', quantity: 1, price: 55.00 }
+    ]
+  },
+  {
+    id: 'ord_1a2b3c4d5e',
+    created_at: new Date(Date.now() - 3600000).toISOString(),
+    client_name: 'María Rodriguez',
+    whatsapp_number: '912345678',
+    address: 'Calle Las Flores 456, San Isidro',
+    total: 120.00,
+    status: 'pagado',
+    items: [
+      { name: 'Whisky Johnnie Walker Black Label', quantity: 1, price: 120.00 }
+    ]
+  }
+];
+
 export async function POST(req: Request) {
   try {
     const { clientName, clientAddress, items, total } = await req.json();
@@ -171,28 +199,43 @@ export async function GET(req: Request) {
     const id = searchParams.get('id');
 
     if (!supabase) {
-      return NextResponse.json({ error: 'Supabase no configurado' }, { status: 500 });
+      if (id) {
+        const order = MOCK_ORDERS.find(o => o.id === id);
+        if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 });
+        return NextResponse.json(order);
+      }
+      return NextResponse.json(MOCK_ORDERS);
     }
 
     if (id) {
-      const { data: order, error } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('id', id)
-        .single();
+      try {
+        const { data: order, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('id', id)
+          .single();
 
-      if (error) {
-        return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 });
+        if (error) throw error;
+        return NextResponse.json(order);
+      } catch (dbError) {
+        console.warn('Fallo al obtener pedido de Supabase, usando fallback mock:', dbError);
+        const order = MOCK_ORDERS.find(o => o.id === id);
+        if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 });
+        return NextResponse.json(order);
       }
-      return NextResponse.json(order);
     } else {
-      const { data: orders, error } = await supabase
-        .from('orders')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        const { data: orders, error } = await supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      return NextResponse.json(orders);
+        if (error) throw error;
+        return NextResponse.json(orders);
+      } catch (dbError) {
+        console.warn('Fallo al obtener pedidos de Supabase, usando fallback mock:', dbError);
+        return NextResponse.json(MOCK_ORDERS);
+      }
     }
   } catch (error: any) {
     console.error('Get Orders API error:', error);

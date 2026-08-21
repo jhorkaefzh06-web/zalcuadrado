@@ -27,27 +27,45 @@ export default function AdminLoginPage() {
     }
 
     try {
+      let loggedIn = false;
+
       if (isSupabaseConfigured && supabase) {
-        // Try authenticating with Supabase
-        const { error: authError } = await supabase.auth.signInWithPassword({
-          email: emailTrim,
-          password: passwordTrim,
-        });
+        try {
+          // Try authenticating with Supabase
+          const { error: authError } = await supabase.auth.signInWithPassword({
+            email: emailTrim,
+            password: passwordTrim,
+          });
 
-        if (authError) {
-          throw authError;
+          if (authError) {
+            throw authError;
+          }
+
+          // Set session cookie for root checking
+          document.cookie = 'z2_admin_session=true; path=/; max-age=7200';
+          router.push('/admin');
+          loggedIn = true;
+        } catch (authErr: any) {
+          const isNetworkError = 
+            authErr.message?.includes('Failed to fetch') || 
+            authErr.message?.includes('fetch failed') ||
+            authErr.name === 'AuthRetryableFetchError';
+
+          if (isNetworkError) {
+            console.warn('Supabase offline. Intentando autenticación local mock...');
+          } else {
+            throw authErr;
+          }
         }
+      }
 
-        // Set session cookie for root checking
-        document.cookie = 'z2_admin_session=true; path=/; max-age=7200';
-        router.push('/admin');
-      } else {
+      if (!loggedIn) {
         // Fallback Mock Authentication
         // Simulate network delay
         await new Promise((resolve) => setTimeout(resolve, 800));
 
         if (
-          (emailTrim === 'admin@z2.com' && passwordTrim === 'admin123') ||
+          (emailTrim === 'admin@z2.com' && passwordTrim === 'admin') ||
           (emailTrim === 'jhorkaefzh06@gmail.com' && passwordTrim === 'admin')
         ) {
           // Set simulated session in localStorage & cookies (for layout check)

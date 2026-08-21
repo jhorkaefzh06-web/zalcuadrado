@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: 'jcjdyezyvyksngrgsokd.supabase.co',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
     ],
   },
 };
