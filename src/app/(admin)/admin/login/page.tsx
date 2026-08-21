@@ -29,9 +29,24 @@ export default function AdminLoginPage() {
     try {
       let loggedIn = false;
 
-      if (isSupabaseConfigured && supabase) {
+      // 1. Check mock credentials first for easy development bypass
+      if (
+        (emailTrim === 'admin@z2.com' && passwordTrim === 'admin') ||
+        (emailTrim === 'jhorkaefzh06@gmail.com' && passwordTrim === 'admin')
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        localStorage.setItem('z2_admin_session', JSON.stringify({
+          user: { email: emailTrim, role: 'admin' },
+          expires_at: Date.now() + 2 * 3600 * 1000 // 2 hours
+        }));
+        document.cookie = 'z2_admin_session=true; path=/; max-age=7200';
+        router.push('/admin');
+        loggedIn = true;
+      }
+
+      // 2. If not mock and Supabase is configured, check Supabase
+      if (!loggedIn && isSupabaseConfigured && supabase) {
         try {
-          // Try authenticating with Supabase
           const { error: authError } = await supabase.auth.signInWithPassword({
             email: emailTrim,
             password: passwordTrim,
@@ -41,7 +56,6 @@ export default function AdminLoginPage() {
             throw authError;
           }
 
-          // Set session cookie for root checking
           document.cookie = 'z2_admin_session=true; path=/; max-age=7200';
           router.push('/admin');
           loggedIn = true;
@@ -60,24 +74,7 @@ export default function AdminLoginPage() {
       }
 
       if (!loggedIn) {
-        // Fallback Mock Authentication
-        // Simulate network delay
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        if (
-          (emailTrim === 'admin@z2.com' && passwordTrim === 'admin') ||
-          (emailTrim === 'jhorkaefzh06@gmail.com' && passwordTrim === 'admin')
-        ) {
-          // Set simulated session in localStorage & cookies (for layout check)
-          localStorage.setItem('z2_admin_session', JSON.stringify({
-            user: { email: emailTrim, role: 'admin' },
-            expires_at: Date.now() + 2 * 3600 * 1000 // 2 hours
-          }));
-          document.cookie = 'z2_admin_session=true; path=/; max-age=7200';
-          router.push('/admin');
-        } else {
-          setError('Credenciales incorrectas. Usa admin@z2.com o tu usuario configurado.');
-        }
+        setError('Credenciales incorrectas. Usa admin@z2.com o tu usuario configurado.');
       }
     } catch (err: any) {
       console.error('Error logging in:', err);

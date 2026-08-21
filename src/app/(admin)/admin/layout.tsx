@@ -95,32 +95,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }
 
       try {
-        if (isSupabaseConfigured && supabase) {
-          // Check Supabase session
-          const { data: { session } } = await supabase.auth.getSession();
-          if (!session) {
-            router.push('/admin/login');
-            return;
-          }
-          setUserEmail(session.user?.email || 'admin@z2.com');
-        } else {
-          // Check mock session in localStorage
-          const stored = localStorage.getItem('z2_admin_session');
-          if (!stored) {
-            router.push('/admin/login');
-            return;
-          }
-          
+        // 1. Check mock session in localStorage first
+        const stored = localStorage.getItem('z2_admin_session');
+        if (stored) {
           const sessionObj = JSON.parse(stored);
-          if (Date.now() > sessionObj.expires_at) {
+          if (Date.now() < sessionObj.expires_at) {
+            setUserEmail(sessionObj.user?.email || 'admin@z2.com');
+            setCheckingAuth(false);
+            return;
+          } else {
             localStorage.removeItem('z2_admin_session');
             document.cookie = 'z2_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-            router.push('/admin/login');
+          }
+        }
+
+        // 2. Check Supabase session if configured
+        if (isSupabaseConfigured && supabase) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            setUserEmail(session.user?.email || 'admin@z2.com');
+            setCheckingAuth(false);
             return;
           }
-          setUserEmail(sessionObj.user?.email || 'admin@z2.com');
         }
-        setCheckingAuth(false);
+
+        // 3. If neither valid, redirect to login
+        router.push('/admin/login');
       } catch (e) {
         console.error('Auth check error:', e);
         router.push('/admin/login');
