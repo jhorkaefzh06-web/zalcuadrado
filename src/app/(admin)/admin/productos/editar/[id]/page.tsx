@@ -60,7 +60,12 @@ export default function AdminEditProductPage() {
       }
 
       if (data.url) {
-        setFormImages(prev => [...prev, data.url]);
+        setFormImages(prev => {
+          if (prev.length <= 1) {
+            return [data.url];
+          }
+          return [data.url, ...prev];
+        });
         setSuccess('Imagen subida y agregada con éxito.');
         setTimeout(() => setSuccess(null), 3000);
       }
@@ -162,7 +167,12 @@ export default function AdminEditProductPage() {
         setError('Esta URL de imagen ya está agregada.');
         return;
       }
-      setFormImages([...formImages, url]);
+      setFormImages(prev => {
+        if (prev.length <= 1) {
+          return [url];
+        }
+        return [url, ...prev];
+      });
       setImageUrlInput('');
       setError(null);
     }
