@@ -55,6 +55,10 @@ export default function ProductDetailClient({ product, related }: Props) {
   }, [products, product.id]);
 
   useEffect(() => {
+    setCurrentProduct(product);
+  }, [product]);
+
+  useEffect(() => {
     setSelectedImage(currentProduct.image);
   }, [currentProduct.image]);
 

@@ -8,7 +8,14 @@ const disableSupabase = process.env.NEXT_PUBLIC_DISABLE_SUPABASE === 'true';
 export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey) && !disableSupabase;
 
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: false,
+      },
+      global: {
+        fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' }),
+      },
+    })
   : null;
 
 /**
