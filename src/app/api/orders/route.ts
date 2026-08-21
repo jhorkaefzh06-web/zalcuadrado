@@ -3,8 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const disableSupabase = process.env.NEXT_PUBLIC_DISABLE_SUPABASE === 'true';
 
-const supabase = (supabaseUrl && supabaseServiceRoleKey)
+const supabase = (supabaseUrl && supabaseServiceRoleKey && !disableSupabase)
   ? createClient(supabaseUrl, supabaseServiceRoleKey, {
       auth: {
         persistSession: false,
