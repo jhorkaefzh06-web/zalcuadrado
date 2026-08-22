@@ -78,21 +78,36 @@ export default function CartDrawer() {
       const orderId = resData.orderId;
 
       // WhatsApp message con emojis
+      const E = {
+        user: String.fromCodePoint(0x1F464),   // 👤
+        pin:  String.fromCodePoint(0x1F4CD),   // 📍
+        cart: String.fromCodePoint(0x1F6D2),   // 🛒
+        dot:  String.fromCodePoint(0x1F539),   // 🔹
+        cash: String.fromCodePoint(0x1F4B5),   // 💵
+      };
+
       let messageText = `¡Hola Hielos & Bebidas Z²! Acabo de generar mi pedido *#${orderId.slice(0, 8).toUpperCase()}*:\n\n`;
-      messageText += `\u{1F464} *Cliente:* ${clientName.trim()}\n`;
-      messageText += `\u{1F4CD} *Dirección:* ${combinedAddress}\n\n`;
-      messageText += `\u{1F6D2} *Detalle del Pedido:*\n`;
+      messageText += `${E.user} *Cliente:* ${clientName.trim()}\n`;
+      messageText += `${E.pin} *Dirección:* ${combinedAddress}\n\n`;
+      messageText += `${E.cart} *Detalle del Pedido:*\n`;
 
       cartItems.forEach((item) => {
         const activePrice = item.product.isPromo && item.product.promoPrice ? item.product.promoPrice : item.product.price;
         const subtotal = activePrice * item.quantity;
-        messageText += `\u{1F539} *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
+        messageText += `${E.dot} *${item.quantity}x* ${item.product.name} (S/ ${activePrice.toFixed(2)} c/u) - *S/ ${subtotal.toFixed(2)}*\n`;
       });
 
-      messageText += `\n\u{1F4B5} *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
-      messageText += `\u{1F4CD} Quedo a la espera de coordinar la entrega y medio de pago. ¡Gracias!`;
+      messageText += `\n${E.cash} *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
+      messageText += `${E.pin} Quedo a la espera de coordinar la entrega y medio de pago. ¡Gracias!`;
 
-      const urlWhatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
+      // Encode cada carácter individualmente: emojis (>0xFFFF) se dejan raw para que el
+      // navegador los envíe como UTF-8 nativamente; el resto se encodeURIComponent
+      const encoded = Array.from(messageText).map(ch => {
+        const cp = ch.codePointAt(0)!;
+        return cp > 0xFFFF ? ch : encodeURIComponent(ch);
+      }).join('');
+
+      const urlWhatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 
       // Reset checkout states and clear cart
       clearCart();
