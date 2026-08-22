@@ -100,14 +100,15 @@ export default function CartDrawer() {
       messageText += `\n${E.cash} *Total: S/ ${cartTotal.toFixed(2)}*\n\n`;
       messageText += `${E.pin} Quedo a la espera de coordinar la entrega y medio de pago. ¡Gracias!`;
 
-      // Encode cada carácter individualmente: emojis (>0xFFFF) se dejan raw para que el
-      // navegador los envíe como UTF-8 nativamente; el resto se encodeURIComponent
-      const encoded = Array.from(messageText).map(ch => {
-        const cp = ch.codePointAt(0)!;
-        return cp > 0xFFFF ? ch : encodeURIComponent(ch);
-      }).join('');
+      const encodedText = encodeURIComponent(messageText);
 
-      const urlWhatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+      // En móvil: wa.me abre la app directamente (emojis OK)
+      // En desktop: web.whatsapp.com/send abre WhatsApp Web directo,
+      //             evitando la página preview de api.whatsapp.com que no renderiza emoji > U+FFFF
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const urlWhatsapp = isMobile
+        ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedText}`
+        : `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedText}`;
 
       // Reset checkout states and clear cart
       clearCart();
